@@ -1,10 +1,6 @@
 .invitation-page {
   min-height: 100vh;
-  background: #f5e6d3;
-  background-image: url('/light-marble-background-with-gold-red-veins.jpeg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: transparent;
   padding: 40px 20px;
   display: flex;
   flex-direction: column;
