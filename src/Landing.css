@@ -159,6 +159,7 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
+  overflow: hidden;
 }
 
 .back-photo-card.active,
@@ -227,11 +228,9 @@
 .front-wedding-info {
   width: 100%;
   text-align: center;
-  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: 0;
+  justify-content: flex-start;
 }
 
 .back-photo-card-only {
@@ -271,9 +270,8 @@
 
 .back-details-card {
   padding: 30px 50px;
-  overflow: hidden;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
@@ -318,8 +316,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 30px;
   align-items: start;
-  max-height: 100%;
-  overflow: hidden;
+  width: 100%;
 }
 
 .info-title {
@@ -479,6 +476,14 @@
 
   .back-details-card {
     padding: 25px 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  .back-details-card::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
   }
 
   .wedding-info {
@@ -509,6 +514,18 @@
 
   .prev-button {
     left: 10px;
+  }
+
+  .front-content-with-info {
+    overflow-y: auto;
+    overflow-x: hidden;
+    justify-content: flex-start;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  .front-content-with-info::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
   }
 }
 

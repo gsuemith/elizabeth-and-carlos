@@ -7,7 +7,7 @@ function SaveTheDateCard({ onBack }) {
   return (
     <div className="invitation-page">
       <button className="back-button" onClick={onBack}>
-        ← Back to Website
+        ← Return to Website
       </button>
       <div className="invitation-container">
         <div 
