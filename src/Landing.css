@@ -453,6 +453,11 @@
     height: 500px;
   }
 
+  .invitation-card.portrait {
+    height: calc(100vh - 60px);
+    max-height: 100vh;
+  }
+
   .front-content {
     flex-direction: column;
     padding: 30px 40px;
@@ -526,6 +531,16 @@
 
   .front-content-with-info::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
+  }
+
+  .portrait .card-front {
+    overflow: hidden;
+  }
+
+  .portrait .front-content-with-info {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 
