@@ -7,6 +7,10 @@ function Landing({ onBack }) {
   const photoCardRef = useRef(null)
 
   useEffect(() => {
+    // Only enable panning on desktop (screen width > 768px)
+    const isMobile = window.innerWidth <= 768
+    if (isMobile) return
+
     if (isOpen && backPage === 'photo' && photoCardRef.current) {
       const card = photoCardRef.current
       let scrollPosition = 0
