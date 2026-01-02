@@ -1,0 +1,36 @@
+.app {
+  min-height: 100vh;
+}
+
+.main-nav {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-button {
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #5a4a3a;
+  color: #5a4a3a;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Georgia', serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nav-button:hover {
+  background: #5a4a3a;
+  color: #f5e6d3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+

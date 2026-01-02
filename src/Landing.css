@@ -1,0 +1,514 @@
+.invitation-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #5a4a3a;
+  color: #5a4a3a;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Georgia', serif;
+  z-index: 10;
+}
+
+.back-button:hover {
+  background: #5a4a3a;
+  color: #f5e6d3;
+  transform: translateX(-3px);
+}
+
+.invitation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+  width: 100%;
+}
+
+.invitation-card {
+  width: 100%;
+  max-width: 1400px;
+  height: 700px;
+  position: relative;
+  cursor: pointer;
+  perspective: 2000px;
+  margin-bottom: 20px;
+}
+
+.invitation-card.portrait {
+  max-width: 600px;
+  height: 900px;
+}
+
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 8px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.card-front {
+  background: #f5f1e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.front-content {
+  text-align: center;
+  padding: 60px 80px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  transition: transform 0.8s ease;
+  transform-origin: top center;
+}
+
+.front-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.invitation-names {
+  font-size: 4.5rem;
+  font-weight: 300;
+  letter-spacing: 10px;
+  color: #5a4a3a;
+  margin-bottom: 40px;
+  font-family: 'Georgia', serif;
+}
+
+.invitation-date {
+  font-size: 2.2rem;
+  color: #7a6a5a;
+  font-weight: 400;
+}
+
+.invitation-seated-photo {
+  max-width: 700px;
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  object-fit: cover;
+}
+
+.card-back {
+  background: transparent;
+  transform-origin: top center;
+  transform: rotateX(180deg);
+  transition: transform 0.8s ease;
+  z-index: 1;
+  position: relative;
+}
+
+.invitation-card.open .card-back {
+  transform: rotateX(0deg);
+  z-index: 2;
+}
+
+.invitation-card.open .card-front {
+  transform: rotateX(-180deg);
+  z-index: 1;
+}
+
+.card-front {
+  transition: transform 0.8s ease;
+  transform-origin: top center;
+  z-index: 2;
+}
+
+.back-photo-card,
+.back-details-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f5f1e8;
+  border-radius: 8px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.back-photo-card.active,
+.back-details-card.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.back-photo-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  cursor: pointer;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.back-photo-card::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.invitation-back-photo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: top center;
+  transform: translateY(0);
+}
+
+.portrait .back-photo-card-only .invitation-back-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.front-content-with-info {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 30px 40px;
+  overflow: hidden;
+}
+
+.front-photo-section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invitation-front-photo {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  max-height: 300px;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  object-fit: cover;
+}
+
+.front-wedding-info {
+  width: 100%;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.back-photo-card-only {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f5f1e8;
+  border-radius: 8px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transform-origin: top center;
+  transform: rotateX(180deg);
+  transition: transform 0.8s ease;
+  z-index: 1;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.back-photo-card-only::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.invitation-card.open .back-photo-card-only {
+  transform: rotateX(0deg);
+  z-index: 2;
+}
+
+.invitation-card.open .card-front .front-content {
+  transform: rotateX(-180deg);
+  z-index: 1;
+}
+
+.back-details-card {
+  padding: 30px 50px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #5a4a3a;
+  color: #5a4a3a;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Georgia', serif;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-nav-button:hover {
+  background: #5a4a3a;
+  color: #f5e6d3;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.next-button {
+  right: 20px;
+}
+
+.prev-button {
+  left: 20px;
+}
+
+.wedding-info {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: start;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.info-title {
+  font-size: 1.8rem;
+  color: #5a4a3a;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  font-family: 'Georgia', serif;
+  grid-column: 1 / -1;
+}
+
+.portrait .info-title {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+}
+
+.info-section {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e8d5c4;
+}
+
+.portrait .info-section {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+}
+
+.info-section:last-of-type {
+  border-bottom: 1px solid #e8d5c4;
+}
+
+.info-heading {
+  font-size: 1.3rem;
+  color: #5a4a3a;
+  margin-bottom: 12px;
+  font-weight: 500;
+  font-family: 'Georgia', serif;
+}
+
+.portrait .info-heading {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.info-venue,
+.info-dress {
+  font-size: 1.1rem;
+  color: #5a4a3a;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.info-date {
+  font-size: 1rem;
+  color: #7a6a5a;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.info-address,
+.info-dress-note {
+  font-size: 1rem;
+  color: #7a6a5a;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.info-address {
+  color: #5a4a3a;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  display: inline-block;
+}
+
+.info-address:hover {
+  color: #7a6a5a;
+}
+
+.info-time {
+  font-size: 1.2rem;
+  color: #5a4a3a;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.info-schedule {
+  font-size: 1rem;
+  color: #7a6a5a;
+  margin-bottom: 6px;
+  line-height: 1.8;
+}
+
+.info-closing {
+  font-size: 1rem;
+  color: #5a4a3a;
+  text-align: center;
+  margin: 20px 0 15px;
+  font-style: italic;
+  grid-column: 1 / -1;
+}
+
+.portrait .info-closing {
+  font-size: 1rem;
+  margin: 20px 0 15px;
+}
+
+.info-signature {
+  font-size: 1rem;
+  color: #5a4a3a;
+  text-align: center;
+  font-family: 'Georgia', serif;
+  margin-top: 15px;
+  grid-column: 1 / -1;
+}
+
+.portrait .info-signature {
+  font-size: 1rem;
+  margin-top: 15px;
+}
+
+.invitation-hint {
+  color: #7a6a5a;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .invitation-card {
+    max-width: 95%;
+    height: 500px;
+  }
+
+  .front-content {
+    flex-direction: column;
+    padding: 30px 40px;
+    gap: 30px;
+  }
+
+  .invitation-seated-photo {
+    max-width: 100%;
+    max-height: 300px;
+  }
+
+  .invitation-names {
+    font-size: 2.2rem;
+    letter-spacing: 4px;
+    margin-bottom: 15px;
+  }
+
+  .invitation-date {
+    font-size: 1.3rem;
+  }
+
+  .back-details-card {
+    padding: 25px 20px;
+  }
+
+  .wedding-info {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .info-title {
+    font-size: 1.5rem;
+  }
+
+  .back-button {
+    top: 10px;
+    left: 10px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  .page-nav-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .next-button {
+    right: 10px;
+  }
+
+  .prev-button {
+    left: 10px;
+  }
+}
+
