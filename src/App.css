@@ -15,11 +15,11 @@
 }
 
 .nav-button {
-  background: rgba(255, 255, 255, 0.95);
-  border: 2px solid #5a4a3a;
+  background: linear-gradient(135deg, #ffffff 0%, #ede5d8 100%);
+  border: none;
   color: #5a4a3a;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 0;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
