@@ -1,12 +1,121 @@
 .app {
   min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background: #f5e6d3;
+  background-image: url('/light-marble-background-with-gold-red-veins.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.landing-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease-in-out;
+  transform: translateX(0);
+}
+
+.landing-container.slide-out-left {
+  transform: translateX(-100%);
+}
+
+.landing-container.slide-out-right {
+  animation: slideOutToRight 0.6s ease-in-out;
+}
+
+.landing-container.slide-in-left {
+  animation: slideInFromLeft 0.6s ease-in-out;
+}
+
+.landing-container.slide-in-right {
+  animation: slideInFromRight 0.6s ease-in-out;
+}
+
+.save-date-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.save-date-container.slide-in-right {
+  animation: slideInFromRight 0.6s ease-in-out;
+}
+
+.save-date-container.slide-out-right {
+  animation: slideOutToRight 0.6s ease-in-out;
+}
+
+.rsvp-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.rsvp-container.slide-in-left {
+  animation: slideInFromLeft 0.6s ease-in-out;
+}
+
+.rsvp-container.slide-out-left {
+  animation: slideOutToLeft 0.6s ease-in-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 .main-nav {
-  position: fixed;
+  position: absolute;
   top: 20px;
-  right: 20px;
   z-index: 100;
+}
+
+.main-nav-right {
+  right: 20px;
+}
+
+.main-nav-left {
+  left: 20px;
 }
 
 .nav-buttons {
@@ -15,11 +124,11 @@
 }
 
 .nav-button {
-  background: rgba(255, 255, 255, 0.95);
-  border: 2px solid #5a4a3a;
+  background: linear-gradient(135deg, #ffffff 0%, #ede5d8 100%);
+  border: none;
   color: #5a4a3a;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 0;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
