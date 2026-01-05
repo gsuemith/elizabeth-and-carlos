@@ -30,6 +30,15 @@
   transform: translateX(-3px);
 }
 
+.back-button-right {
+  left: auto;
+  right: 20px;
+}
+
+.back-button-right:hover {
+  transform: translateX(3px);
+}
+
 .invitation-container {
   display: flex;
   flex-direction: column;
