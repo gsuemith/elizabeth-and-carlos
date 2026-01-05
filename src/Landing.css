@@ -578,7 +578,6 @@
   overflow-x: hidden;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
-  padding: 20px;
   display: flex;
   flex-direction: column;
   background: transparent;
@@ -612,7 +611,7 @@
 .rsvp-section-card {
   background: linear-gradient(135deg, #ffffff 0%, #ede5d8 100%);
   border-radius: 0;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   padding: 30px 40px;
   width: 100%;
   margin-bottom: 30px;
