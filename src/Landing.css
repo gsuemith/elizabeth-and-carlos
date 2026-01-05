@@ -46,6 +46,8 @@
   justify-content: center;
   min-height: calc(100vh - 80px);
   width: 100%;
+  background: transparent;
+  box-shadow: none;
 }
 
 .invitation-card {
@@ -563,6 +565,279 @@
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+  }
+}
+
+/* RSVP Card Styles */
+.rsvp-scroll-container {
+  width: 100%;
+  max-width: 1000px;
+  height: calc(100vh - 120px);
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  background-color: rgba(0,0,0,0) !important;
+  box-shadow: none !important;
+  filter: none;
+  border: none;
+  outline: none;
+}
+
+.rsvp-scroll-container::before,
+.rsvp-scroll-container::after {
+  display: none;
+  box-shadow: none;
+}
+
+.rsvp-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.rsvp-page-title {
+  font-size: 1.8rem;
+  color: #5a4a3a;
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  font-family: 'Georgia', serif;
+}
+
+.rsvp-section-card {
+  background: linear-gradient(135deg, #ffffff 0%, #ede5d8 100%);
+  border-radius: 0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  padding: 30px 40px;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.rsvp-section-card:last-of-type {
+  margin-bottom: 0;
+}
+
+.rsvp-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.rsvp-field-group {
+  margin-bottom: 12px;
+}
+
+.rsvp-input,
+.rsvp-select {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 1rem;
+  color: #5a4a3a;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #e8d5c4;
+  border-radius: 0;
+  font-family: 'Georgia', serif;
+  transition: all 0.3s ease;
+}
+
+.rsvp-input:focus,
+.rsvp-select:focus {
+  outline: none;
+  border-color: #5a4a3a;
+  background: rgba(255, 255, 255, 1);
+}
+
+.rsvp-address-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+}
+
+.rsvp-guest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e8d5c4;
+}
+
+.rsvp-guest-title {
+  font-size: 1.3rem;
+  color: #5a4a3a;
+  font-weight: 500;
+  font-family: 'Georgia', serif;
+  margin: 0;
+}
+
+.rsvp-remove-guest {
+  background: #8b6f5e;
+  color: #f5e6d3;
+  border: none;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-family: 'Georgia', serif;
+  cursor: pointer;
+  border-radius: 0;
+  transition: all 0.3s ease;
+}
+
+.rsvp-remove-guest:hover {
+  background: #6b4f3e;
+}
+
+.rsvp-events-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.rsvp-toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.rsvp-event-label {
+  font-size: 0.85rem;
+  color: #7a6a5a;
+  font-family: 'Georgia', serif;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.rsvp-toggle-button {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  font-family: 'Georgia', serif;
+  color: #5a4a3a;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #e8d5c4;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.rsvp-toggle-button:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: #5a4a3a;
+}
+
+.rsvp-toggle-button.active {
+  background: #5a4a3a;
+  color: #f5e6d3;
+  border-color: #5a4a3a;
+}
+
+.rsvp-add-guest {
+  background: #5a4a3a;
+  color: #f5e6d3;
+  border: none;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-family: 'Georgia', serif;
+  cursor: pointer;
+  border-radius: 0;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+
+.rsvp-add-guest:hover {
+  background: #7a6a5a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.rsvp-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  margin-top: 20px;
+  padding: 20px 0;
+}
+
+.rsvp-submit-button {
+  background: #5a4a3a;
+  color: #f5e6d3;
+  border: none;
+  padding: 14px 32px;
+  font-size: 1.1rem;
+  font-family: 'Georgia', serif;
+  cursor: pointer;
+  border-radius: 0;
+  transition: all 0.3s ease;
+  min-width: 200px;
+}
+
+.rsvp-submit-button:hover {
+  background: #7a6a5a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .rsvp-scroll-container {
+    max-width: 95%;
+    height: calc(100vh - 100px);
+    max-height: calc(100vh - 100px);
+    padding: 15px;
+  }
+
+  .rsvp-section-card {
+    padding: 20px 25px;
+    margin-bottom: 25px;
+  }
+
+  .rsvp-page-title {
+    font-size: 1.6rem;
+  }
+
+  .rsvp-address-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .rsvp-events-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .rsvp-toggle-button {
+    font-size: 0.75rem;
+    padding: 8px 10px;
+  }
+
+  .rsvp-event-label {
+    font-size: 0.8rem;
+  }
+
+  .rsvp-input {
+    font-size: 0.95rem;
+    padding: 10px 12px;
+  }
+
+  .rsvp-submit-button {
+    font-size: 1rem;
+    padding: 12px 24px;
+    min-width: 180px;
+  }
+
+  .rsvp-guest-section {
+    padding: 15px;
   }
 }
 
