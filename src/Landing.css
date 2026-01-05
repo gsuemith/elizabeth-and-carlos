@@ -335,6 +335,19 @@
   margin-bottom: 20px;
 }
 
+.info-website {
+  font-size: 1rem;
+  color: #5a4a3a;
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: 'Georgia', serif;
+}
+
+.portrait .info-website {
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
 .info-section {
   margin-bottom: 20px;
   padding-bottom: 15px;
