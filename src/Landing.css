@@ -660,6 +660,12 @@
   gap: 12px;
 }
 
+.rsvp-contact-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
 .rsvp-guest-header {
   display: flex;
   justify-content: space-between;
@@ -788,6 +794,39 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+.rsvp-submit-button:disabled,
+.rsvp-add-guest:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.rsvp-submit-button:disabled:hover,
+.rsvp-add-guest:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.rsvp-message {
+  padding: 15px 20px;
+  border-radius: 0;
+  margin: 20px 0;
+  text-align: center;
+  font-family: 'Georgia', serif;
+  font-size: 1rem;
+}
+
+.rsvp-success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.rsvp-error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
 @media (max-width: 768px) {
   .rsvp-scroll-container {
     max-width: 95%;
@@ -806,6 +845,11 @@
   }
 
   .rsvp-address-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .rsvp-contact-row {
     grid-template-columns: 1fr;
     gap: 12px;
   }

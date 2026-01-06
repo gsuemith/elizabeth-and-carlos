@@ -1,13 +1,28 @@
 import { useState } from 'react'
 import './Landing.css'
 
+const API_BASE_URL = 'https://wedding-rsvp-one-gamma.vercel.app'
+const MAIN_EVENT_ID = '010e9472-8ea4-4239-9882-f8c3fe676f2b'
+const EVENT_IDS = {
+  welcomeGathering: '3d8d906d-2f37-4fb9-9e93-52c3cfbaaf28',
+  ceremony: '3d6f9509-9f01-4ed6-bb56-caaeb4989128',
+  reception: 'b2d1a136-7ac4-4df9-83f2-ce8ab7be6dfa',
+  brunch: 'c727c901-c122-46f9-8c2a-fa6fb845f80a'
+}
+
 function RSVP({ onBack }) {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState(null)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
   const [address, setAddress] = useState({
     line1: '',
     line2: '',
     city: '',
     state: '',
-    postalCode: ''
+    postalCode: '',
+    phone: '',
+    email: '',
+    password: ''
   })
 
   const [guests, setGuests] = useState([
@@ -48,10 +63,128 @@ function RSVP({ onBack }) {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log({ address, guests })
+    setIsSubmitting(true)
+    setSubmitError(null)
+    setSubmitSuccess(false)
+
+    try {
+      // Step 1: Create/register the invitee
+      const inviteeData = {
+        names: guests.map(guest => guest.name),
+        mailing_address: {
+          address_line_1: address.line1,
+          address_line_2: address.line2 || undefined,
+          city: address.city,
+          state: address.state,
+          postal_code: address.postalCode
+        },
+        email: address.email,
+        password: address.password,
+        phone_number: address.phone
+      }
+
+      // Register or login the invitee
+      const inviteeResponse = await fetch(`${API_BASE_URL}/guest/event/${MAIN_EVENT_ID}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(inviteeData)
+      })
+
+      if (!inviteeResponse.ok) {
+        const errorData = await inviteeResponse.json()
+        throw new Error(errorData.detail || 'Failed to create invitee')
+      }
+
+      const inviteeResult = await inviteeResponse.json()
+      
+      // Extract mailing_address_id and invitee IDs from response
+      // The response structure may vary, but typically contains mailing_address_id and invitees array
+      const mailingAddressId = inviteeResult.mailing_address_id || inviteeResult.mailing_address?.id
+      const invitees = inviteeResult.invitees || []
+      
+      if (!mailingAddressId) {
+        throw new Error('Failed to get mailing address ID from response')
+      }
+
+      // Step 2: Loop over sub-events and post RSVPs
+      for (const [eventKey, eventId] of Object.entries(EVENT_IDS)) {
+        // Build invitees array with RSVP responses for this event
+        const inviteesWithRSVP = guests.map((guest, index) => {
+          // Find matching invitee by name
+          const matchingInvitee = invitees.find(inv => 
+            inv.full_name === guest.name || inv.name === guest.name
+          )
+          
+          if (!matchingInvitee) {
+            // If no match found, use index-based matching (assuming order is preserved)
+            const invitee = invitees[index]
+            if (!invitee) return null
+            
+            return {
+              invitee_id: invitee.id || invitee.invitee_id,
+              rsvp_response: guest[eventKey] === 'yes' ? 'yes' : 'no'
+            }
+          }
+          
+          return {
+            invitee_id: matchingInvitee.id || matchingInvitee.invitee_id,
+            rsvp_response: guest[eventKey] === 'yes' ? 'yes' : 'no'
+          }
+        }).filter(inv => inv !== null) // Remove any null entries
+
+        // Post RSVP for this event
+        const rsvpData = {
+          mailing_address_id: mailingAddressId,
+          event_id: eventId,
+          invitees: inviteesWithRSVP
+        }
+
+        const rsvpResponse = await fetch(`${API_BASE_URL}/rsvp`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(rsvpData)
+        })
+
+        if (!rsvpResponse.ok) {
+          const errorData = await rsvpResponse.json()
+          throw new Error(errorData.detail || `Failed to create RSVP for ${eventKey}`)
+        }
+      }
+
+      setSubmitSuccess(true)
+      // Reset form after successful submission
+      setTimeout(() => {
+        setAddress({
+          line1: '',
+          line2: '',
+          city: '',
+          state: '',
+          postalCode: '',
+          phone: '',
+          email: '',
+          password: ''
+        })
+        setGuests([{
+          name: '',
+          welcomeGathering: 'no',
+          ceremony: 'yes',
+          reception: 'yes',
+          brunch: 'no'
+        }])
+        setSubmitSuccess(false)
+      }, 3000)
+    } catch (error) {
+      console.error('RSVP submission error:', error)
+      setSubmitError(error.message || 'Failed to submit RSVP. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -113,6 +246,38 @@ function RSVP({ onBack }) {
                     placeholder="Postal Code"
                     value={address.postalCode}
                     onChange={(e) => handleAddressChange('postalCode', e.target.value)}
+                    className="rsvp-input"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="rsvp-contact-row">
+                <div className="rsvp-field-group">
+                  <input
+                    type="tel"
+                    placeholder="Phone"
+                    value={address.phone}
+                    onChange={(e) => handleAddressChange('phone', e.target.value)}
+                    className="rsvp-input"
+                    required
+                  />
+                </div>
+                <div className="rsvp-field-group">
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={address.email}
+                    onChange={(e) => handleAddressChange('email', e.target.value)}
+                    className="rsvp-input"
+                    required
+                  />
+                </div>
+                <div className="rsvp-field-group">
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    value={address.password}
+                    onChange={(e) => handleAddressChange('password', e.target.value)}
                     className="rsvp-input"
                     required
                   />
@@ -190,16 +355,31 @@ function RSVP({ onBack }) {
               </div>
             ))}
 
+            {submitError && (
+              <div className="rsvp-message rsvp-error">
+                {submitError}
+              </div>
+            )}
+            {submitSuccess && (
+              <div className="rsvp-message rsvp-success">
+                RSVP submitted successfully! Thank you for responding.
+              </div>
+            )}
             <div className="rsvp-actions">
               <button
                 type="button"
                 onClick={addGuest}
                 className="rsvp-add-guest"
+                disabled={isSubmitting}
               >
                 + Add Guest
               </button>
-              <button type="submit" className="rsvp-submit-button">
-                Submit RSVP
+              <button 
+                type="submit" 
+                className="rsvp-submit-button"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Submitting...' : 'Submit RSVP'}
               </button>
             </div>
           </form>
