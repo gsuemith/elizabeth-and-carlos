@@ -324,41 +324,45 @@ function RSVP({ onBack }) {
                 </div>
                 <div className="rsvp-events-row">
                   <div className="rsvp-toggle-group">
-                    <label className="rsvp-event-label">Welcome Gathering</label>
+                    <label className="rsvp-event-label" data-tooltip="July 16th, 7pm">Welcome Gathering</label>
                     <button
                       type="button"
                       onClick={() => handleGuestChange(index, 'welcomeGathering', guest.welcomeGathering === 'yes' ? 'no' : 'yes')}
                       className={`rsvp-toggle-button ${guest.welcomeGathering === 'yes' ? 'active' : ''}`}
+                      data-tooltip="July 16th, 7pm"
                     >
                       {guest.welcomeGathering === 'yes' ? 'Attending' : 'Not Attending'}
                     </button>
                   </div>
                   <div className="rsvp-toggle-group">
-                    <label className="rsvp-event-label">Ceremony</label>
+                    <label className="rsvp-event-label" data-tooltip="July 17th, 5:30pm">Ceremony</label>
                     <button
                       type="button"
                       onClick={() => handleGuestChange(index, 'ceremony', guest.ceremony === 'yes' ? 'no' : 'yes')}
                       className={`rsvp-toggle-button ${guest.ceremony === 'yes' ? 'active' : ''}`}
+                      data-tooltip="July 17th, 5:30pm"
                     >
                       {guest.ceremony === 'yes' ? 'Attending' : 'Not Attending'}
                     </button>
                   </div>
                   <div className="rsvp-toggle-group">
-                    <label className="rsvp-event-label">Reception</label>
+                    <label className="rsvp-event-label" data-tooltip="July 17th, 6:30pm">Reception</label>
                     <button
                       type="button"
                       onClick={() => handleGuestChange(index, 'reception', guest.reception === 'yes' ? 'no' : 'yes')}
                       className={`rsvp-toggle-button ${guest.reception === 'yes' ? 'active' : ''}`}
+                      data-tooltip="July 17th, 6:30pm"
                     >
                       {guest.reception === 'yes' ? 'Attending' : 'Not Attending'}
                     </button>
                   </div>
                   <div className="rsvp-toggle-group">
-                    <label className="rsvp-event-label">Brunch</label>
+                    <label className="rsvp-event-label" data-tooltip="July 18th, Time TBD">Brunch</label>
                     <button
                       type="button"
                       onClick={() => handleGuestChange(index, 'brunch', guest.brunch === 'yes' ? 'no' : 'yes')}
                       className={`rsvp-toggle-button ${guest.brunch === 'yes' ? 'active' : ''}`}
+                      data-tooltip="July 18th, Time TBD"
                     >
                       {guest.brunch === 'yes' ? 'Attending' : 'Not Attending'}
                     </button>
