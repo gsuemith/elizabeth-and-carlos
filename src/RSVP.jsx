@@ -1,6 +1,15 @@
 import { useState } from 'react'
 import './Landing.css'
 
+const API_BASE_URL = 'https://wedding-rsvp-one-gamma.vercel.app'
+const MAIN_EVENT_ID = '010e9472-8ea4-4239-9882-f8c3fe676f2b'
+const EVENT_IDS = {
+  welcomeGathering: '3d8d906d-2f37-4fb9-9e93-52c3cfbaaf28',
+  ceremony: '3d6f9509-9f01-4ed6-bb56-caaeb4989128',
+  reception: 'b2d1a136-7ac4-4df9-83f2-ce8ab7be6dfa',
+  brunch: 'c727c901-c122-46f9-8c2a-fa6fb845f80a'
+}
+
 function RSVP({ onBack }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
