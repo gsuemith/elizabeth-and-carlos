@@ -6,6 +6,14 @@
   flex-direction: column;
   align-items: center;
   position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.invitation-page::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .back-button {
@@ -662,7 +670,13 @@
 
 .rsvp-contact-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.rsvp-password-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
 }
 
@@ -771,7 +785,6 @@
   flex-direction: column;
   gap: 15px;
   align-items: center;
-  margin-top: 20px;
   padding: 20px 0;
 }
 
@@ -854,6 +867,11 @@
     gap: 12px;
   }
 
+  .rsvp-password-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
   .rsvp-events-row {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
@@ -881,6 +899,118 @@
 
   .rsvp-guest-section {
     padding: 15px;
+  }
+}
+
+/* Story Page Styles */
+.story-content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  gap: 30px;
+}
+
+.story-cards-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  width: 100%;
+  max-width: 1400px;
+}
+
+.story-card {
+  background: linear-gradient(135deg, #ffffff 0%, #ede5d8 100%);
+  border-radius: 0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.story-card-full {
+  width: 100%;
+  max-width: 1400px;
+}
+
+.story-image-placeholder {
+  width: 100%;
+  height: 500px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.story-image-gradient {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #9e9e9e 0%, #616161 50%, #424242 100%);
+}
+
+.story-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.story-title {
+  font-size: 2rem;
+  color: #5a4a3a;
+  margin: 0;
+  font-weight: 500;
+  font-family: 'Georgia', serif;
+  text-align: center;
+}
+
+.story-text {
+  font-size: 1rem;
+  color: #5a4a3a;
+  line-height: 1.8;
+  margin: 0;
+  font-family: 'Georgia', serif;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .story-content-container {
+    padding: 15px 10px;
+    gap: 15px;
+  }
+
+  .story-cards-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .story-card {
+    padding: 20px 15px;
+    gap: 15px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .story-image-placeholder {
+    height: 250px;
+    aspect-ratio: 1;
+  }
+
+  .story-content {
+    gap: 12px;
+  }
+
+  .story-title {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+
+  .story-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 }
 

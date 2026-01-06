@@ -3,14 +3,18 @@ import './App.css'
 import Landing from './Landing'
 import SaveTheDateCard from './SaveTheDateCard'
 import RSVP from './RSVP'
+import Story from './Story'
 
 function App() {
   const [showSaveTheDate, setShowSaveTheDate] = useState(false)
   const [showRSVP, setShowRSVP] = useState(false)
+  const [showStory, setShowStory] = useState(false)
   const [isSliding, setIsSliding] = useState(false)
   const [isSlidingBack, setIsSlidingBack] = useState(false)
   const [isSlidingRSVP, setIsSlidingRSVP] = useState(false)
   const [isSlidingBackRSVP, setIsSlidingBackRSVP] = useState(false)
+  const [isSlidingStory, setIsSlidingStory] = useState(false)
+  const [isSlidingBackStory, setIsSlidingBackStory] = useState(false)
 
   const handleSaveTheDateClick = () => {
     setIsSliding(true)
@@ -44,6 +48,22 @@ function App() {
     }, 600) // Match animation duration
   }
 
+  const handleStoryClick = () => {
+    setIsSlidingStory(true)
+    setTimeout(() => {
+      setShowStory(true)
+      setIsSlidingStory(false)
+    }, 600) // Match animation duration
+  }
+
+  const handleStoryBackClick = () => {
+    setIsSlidingBackStory(true)
+    setTimeout(() => {
+      setShowStory(false)
+      setIsSlidingBackStory(false)
+    }, 600) // Match animation duration
+  }
+
   if (showRSVP) {
     return (
       <div className="app">
@@ -53,6 +73,49 @@ function App() {
         {isSlidingBackRSVP && (
           <div className="landing-container slide-in-right">
             <nav className="main-nav main-nav-right">
+              <button 
+                className="nav-button"
+                onClick={handleStoryClick}
+              >
+                Story
+              </button>
+              <button 
+                className="nav-button"
+                onClick={handleSaveTheDateClick}
+              >
+                Save the Date
+              </button>
+            </nav>
+            <nav className="main-nav main-nav-left">
+              <button 
+                className="nav-button"
+                onClick={handleRSVPClick}
+              >
+                RSVP
+              </button>
+            </nav>
+            <Landing onBack={() => {}} />
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  if (showStory) {
+    return (
+      <div className="app">
+        <div className={`story-container ${isSlidingBackStory ? 'slide-out-right' : ''}`}>
+          <Story onBack={handleStoryBackClick} />
+        </div>
+        {isSlidingBackStory && (
+          <div className="landing-container slide-in-left">
+            <nav className="main-nav main-nav-right">
+              <button 
+                className="nav-button"
+                onClick={handleStoryClick}
+              >
+                Story
+              </button>
               <button 
                 className="nav-button"
                 onClick={handleSaveTheDateClick}
@@ -86,6 +149,12 @@ function App() {
             <nav className="main-nav main-nav-right">
               <button 
                 className="nav-button"
+                onClick={handleStoryClick}
+              >
+                Story
+              </button>
+              <button 
+                className="nav-button"
                 onClick={handleSaveTheDateClick}
               >
                 Save the Date Card
@@ -108,13 +177,19 @@ function App() {
 
   return (
     <div className="app">
-      <div className={`landing-container ${isSliding ? 'slide-out-left' : isSlidingRSVP ? 'slide-out-right' : ''}`}>
+      <div className={`landing-container ${isSliding ? 'slide-out-left' : isSlidingRSVP ? 'slide-out-right' : isSlidingStory ? 'slide-out-left' : ''}`}>
         <nav className="main-nav main-nav-right">
+          <button 
+            className="nav-button"
+            onClick={handleStoryClick}
+          >
+            Our Story
+          </button>
           <button 
             className="nav-button"
             onClick={handleSaveTheDateClick}
           >
-            Save the Date Card
+            Save the Date
           </button>
         </nav>
         <nav className="main-nav main-nav-left">
@@ -135,6 +210,11 @@ function App() {
       {isSlidingRSVP && (
         <div className="rsvp-container slide-in-left">
           <RSVP onBack={() => {}} />
+        </div>
+      )}
+      {isSlidingStory && (
+        <div className="story-container slide-in-right">
+          <Story onBack={() => {}} />
         </div>
       )}
     </div>

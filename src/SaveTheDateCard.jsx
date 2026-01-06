@@ -24,8 +24,8 @@ function SaveTheDateCard({ onBack }) {
                 />
               </div>
               <div className="front-wedding-info">
-                <h2 className="info-title">Save the Date!</h2>
                 <p className="info-website">www.CarlosAndElizabeth2026.com</p>
+                <h2 className="info-title">Save the Date!</h2>
                 
                 <div className="info-section">
                   <h3 className="info-heading">Welcome Gathering, Location TBD</h3>

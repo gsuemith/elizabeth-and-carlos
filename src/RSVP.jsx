@@ -1,15 +1,6 @@
 import { useState } from 'react'
 import './Landing.css'
 
-const API_BASE_URL = 'https://wedding-rsvp-one-gamma.vercel.app'
-const MAIN_EVENT_ID = '010e9472-8ea4-4239-9882-f8c3fe676f2b'
-const EVENT_IDS = {
-  welcomeGathering: '3d8d906d-2f37-4fb9-9e93-52c3cfbaaf28',
-  ceremony: '3d6f9509-9f01-4ed6-bb56-caaeb4989128',
-  reception: 'b2d1a136-7ac4-4df9-83f2-ce8ab7be6dfa',
-  brunch: 'c727c901-c122-46f9-8c2a-fa6fb845f80a'
-}
-
 function RSVP({ onBack }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
@@ -22,7 +13,8 @@ function RSVP({ onBack }) {
     postalCode: '',
     phone: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   })
 
   const [guests, setGuests] = useState([
@@ -68,6 +60,13 @@ function RSVP({ onBack }) {
     setIsSubmitting(true)
     setSubmitError(null)
     setSubmitSuccess(false)
+
+    // Validate password match
+    if (address.password !== address.confirmPassword) {
+      setSubmitError('Passwords do not match. Please try again.')
+      setIsSubmitting(false)
+      return
+    }
 
     try {
       // Step 1: Create/register the invitee
@@ -168,7 +167,8 @@ function RSVP({ onBack }) {
           postalCode: '',
           phone: '',
           email: '',
-          password: ''
+          password: '',
+          confirmPassword: ''
         })
         setGuests([{
           name: '',
@@ -272,12 +272,24 @@ function RSVP({ onBack }) {
                     required
                   />
                 </div>
+              </div>
+              <div className="rsvp-password-row">
                 <div className="rsvp-field-group">
                   <input
                     type="password"
                     placeholder="Password"
                     value={address.password}
                     onChange={(e) => handleAddressChange('password', e.target.value)}
+                    className="rsvp-input"
+                    required
+                  />
+                </div>
+                <div className="rsvp-field-group">
+                  <input
+                    type="password"
+                    placeholder="Confirm Password"
+                    value={address.confirmPassword}
+                    onChange={(e) => handleAddressChange('confirmPassword', e.target.value)}
                     className="rsvp-input"
                     required
                   />
