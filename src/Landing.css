@@ -1134,6 +1134,10 @@
     min-width: 180px;
   }
 
+  .rsvp-actions {
+    gap: 5px;
+  }
+
   .rsvp-cancel-button {
     font-size: 1rem;
     padding: 12px 24px;
