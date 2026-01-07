@@ -133,8 +133,8 @@ export const translations = {
     rsvpUpdated: '¡RSVP actualizado exitosamente!',
     // Navigation
     ourStory: 'Nuestra Historia',
-    saveTheDate: 'Reserva la Fecha',
-    saveTheDateCard: 'Tarjeta de Reserva la Fecha',
+    saveTheDate: 'Reserve la Fecha',
+    saveTheDateCard: 'Tarjeta de Reserve la Fecha',
     // Story page
     howWeMet: 'Cómo Nos Conocimos',
     returnToWebsiteStory: '← Volver al Sitio Web',

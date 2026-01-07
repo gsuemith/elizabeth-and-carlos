@@ -138,7 +138,7 @@ function AppContent() {
                 className="nav-button"
                 onClick={toggleLanguage}
               >
-                {language === 'en' ? 'En Español?' : 'In English?'}
+                {language === 'en' ? 'Español' : 'English'}
               </button>
             </nav>
             <Landing onBack={() => {}} />
@@ -181,7 +181,7 @@ function AppContent() {
                 className="nav-button"
                 onClick={toggleLanguage}
               >
-                {language === 'en' ? 'En Español?' : 'In English?'}
+                {language === 'en' ? 'Español' : 'English'}
               </button>
             </nav>
             <Landing onBack={() => {}} />
@@ -224,7 +224,7 @@ function AppContent() {
                 className="nav-button"
                 onClick={toggleLanguage}
               >
-                {language === 'en' ? 'En Español?' : 'In English?'}
+                {language === 'en' ? 'Español' : 'English'}
               </button>
             </nav>
             <Landing onBack={() => {}} />
@@ -267,7 +267,7 @@ function AppContent() {
                 className="nav-button"
                 onClick={toggleLanguage}
               >
-                {language === 'en' ? 'En Español?' : 'In English?'}
+                {language === 'en' ? 'Español' : 'English'}
               </button>
             </nav>
             <Landing onBack={() => {}} />
@@ -305,7 +305,7 @@ function AppContent() {
             className="nav-button"
             onClick={toggleLanguage}
           >
-            {language === 'en' ? 'En Español?' : 'In English?'}
+            {language === 'en' ? 'Español' : 'English'}
           </button>
         </nav>
         <Landing onBack={() => {}} />
