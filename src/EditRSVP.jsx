@@ -25,9 +25,34 @@ function EditRSVP({ onBack }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+
+  const formatPhoneNumber = (value) => {
+    // Remove all non-digit characters
+    const digits = value.replace(/\D/g, '')
+    
+    // Limit to 10 digits
+    const limitedDigits = digits.slice(0, 10)
+    
+    // Format as (***) ***-****
+    if (limitedDigits.length === 0) return ''
+    if (limitedDigits.length <= 3) return `(${limitedDigits}`
+    if (limitedDigits.length <= 6) return `(${limitedDigits.slice(0, 3)}) ${limitedDigits.slice(3)}`
+    return `(${limitedDigits.slice(0, 3)}) ${limitedDigits.slice(3, 6)}-${limitedDigits.slice(6)}`
+  }
+
+  const getDigitsOnly = (value) => {
+    return value.replace(/\D/g, '')
+  }
 
   const handleCredentialChange = (field, value) => {
-    setCredentials(prev => ({ ...prev, [field]: value }))
+    if (field === 'phone') {
+      // Store only digits, but display formatted
+      const digitsOnly = getDigitsOnly(value)
+      setCredentials(prev => ({ ...prev, [field]: digitsOnly }))
+    } else {
+      setCredentials(prev => ({ ...prev, [field]: value }))
+    }
   }
 
   const handleExistingGuestRSVPChange = (guestId, eventKey, value) => {
@@ -57,10 +82,19 @@ function EditRSVP({ onBack }) {
   }
 
   const handleAddressChange = (field, value) => {
-    setMailingAddress(prev => ({
-      ...prev,
-      [field]: value
-    }))
+    if (field === 'phone_number') {
+      // Store only digits, but display formatted
+      const digitsOnly = getDigitsOnly(value)
+      setMailingAddress(prev => ({
+        ...prev,
+        [field]: digitsOnly
+      }))
+    } else {
+      setMailingAddress(prev => ({
+        ...prev,
+        [field]: value
+      }))
+    }
   }
 
   const addNewGuest = () => {
@@ -359,21 +393,29 @@ function EditRSVP({ onBack }) {
                     <input
                       type="tel"
                       placeholder="Phone"
-                      value={credentials.phone}
+                      value={formatPhoneNumber(credentials.phone)}
                       onChange={(e) => handleCredentialChange('phone', e.target.value)}
                       className="rsvp-input"
                       required
                     />
                   </div>
-                  <div className="rsvp-field-group">
+                  <div className="rsvp-field-group rsvp-password-field">
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Password"
                       value={credentials.password}
                       onChange={(e) => handleCredentialChange('password', e.target.value)}
                       className="rsvp-input"
                       required
                     />
+                    <button
+                      type="button"
+                      className="rsvp-password-toggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? "👁️" : "👁️‍🗨️"}
+                    </button>
                   </div>
                 </div>
                 {authError && (
@@ -466,7 +508,7 @@ function EditRSVP({ onBack }) {
                         <input
                           type="tel"
                           placeholder="Phone"
-                          value={mailingAddress.phone_number || ''}
+                          value={formatPhoneNumber(mailingAddress.phone_number || '')}
                           onChange={(e) => handleAddressChange('phone_number', e.target.value)}
                           className="rsvp-input"
                           required

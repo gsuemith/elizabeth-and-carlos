@@ -14,6 +14,9 @@ function RSVP({ onBack, onEditRSVP }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [isDuplicateEmail, setIsDuplicateEmail] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [address, setAddress] = useState({
     line1: '',
     line2: '',
@@ -36,8 +39,37 @@ function RSVP({ onBack, onEditRSVP }) {
     }
   ])
 
+  const formatPhoneNumber = (value) => {
+    // Remove all non-digit characters
+    const digits = value.replace(/\D/g, '')
+    
+    // Limit to 10 digits
+    const limitedDigits = digits.slice(0, 10)
+    
+    // Format as (***) ***-****
+    if (limitedDigits.length === 0) return ''
+    if (limitedDigits.length <= 3) return `(${limitedDigits}`
+    if (limitedDigits.length <= 6) return `(${limitedDigits.slice(0, 3)}) ${limitedDigits.slice(3)}`
+    return `(${limitedDigits.slice(0, 3)}) ${limitedDigits.slice(3, 6)}-${limitedDigits.slice(6)}`
+  }
+
+  const getDigitsOnly = (value) => {
+    return value.replace(/\D/g, '')
+  }
+
   const handleAddressChange = (field, value) => {
-    setAddress(prev => ({ ...prev, [field]: value }))
+    if (field === 'phone') {
+      // Store only digits, but display formatted
+      const digitsOnly = getDigitsOnly(value)
+      setAddress(prev => ({ ...prev, [field]: digitsOnly }))
+    } else {
+      setAddress(prev => ({ ...prev, [field]: value }))
+      // Clear duplicate email error if email is changed
+      if (field === 'email' && isDuplicateEmail) {
+        setIsDuplicateEmail(false)
+        setSubmitError(null)
+      }
+    }
   }
 
   const handleGuestChange = (index, field, value) => {
@@ -107,7 +139,23 @@ function RSVP({ onBack, onEditRSVP }) {
 
       if (!inviteeResponse.ok) {
         const errorData = await inviteeResponse.json()
-        throw new Error(errorData.detail || 'Failed to create invitee')
+        const errorMessage = errorData.detail || 'Failed to create invitee'
+        
+        // Check if it's a duplicate email error
+        const isDuplicate = inviteeResponse.status === 400 || 
+                           inviteeResponse.status === 409 ||
+                           errorMessage.toLowerCase().includes('email') ||
+                           errorMessage.toLowerCase().includes('already exists') ||
+                           errorMessage.toLowerCase().includes('duplicate')
+        
+        if (isDuplicate) {
+          setIsDuplicateEmail(true)
+          setSubmitError('We already have a response from this email. Would you like to Edit your RSVP?')
+          setIsSubmitting(false)
+          return
+        }
+        
+        throw new Error(errorMessage)
       }
 
       const inviteeResult = await inviteeResponse.json()
@@ -196,6 +244,7 @@ function RSVP({ onBack, onEditRSVP }) {
       }, 3000)
     } catch (error) {
       console.error('RSVP submission error:', error)
+      setIsDuplicateEmail(false)
       setSubmitError(error.message || 'Failed to submit RSVP. Please try again.')
     } finally {
       setIsSubmitting(false)
@@ -276,7 +325,7 @@ function RSVP({ onBack, onEditRSVP }) {
                   <input
                     type="tel"
                     placeholder="Phone"
-                    value={address.phone}
+                    value={formatPhoneNumber(address.phone)}
                     onChange={(e) => handleAddressChange('phone', e.target.value)}
                     className="rsvp-input"
                     required
@@ -294,25 +343,41 @@ function RSVP({ onBack, onEditRSVP }) {
                 </div>
               </div>
               <div className="rsvp-password-row">
-                <div className="rsvp-field-group">
+                <div className="rsvp-field-group rsvp-password-field">
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     value={address.password}
                     onChange={(e) => handleAddressChange('password', e.target.value)}
                     className="rsvp-input"
                     required
                   />
+                  <button
+                    type="button"
+                    className="rsvp-password-toggle"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? "👁️" : "👁️‍🗨️"}
+                  </button>
                 </div>
-                <div className="rsvp-field-group">
+                <div className="rsvp-field-group rsvp-password-field">
                   <input
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm Password"
                     value={address.confirmPassword}
                     onChange={(e) => handleAddressChange('confirmPassword', e.target.value)}
                     className="rsvp-input"
                     required
                   />
+                  <button
+                    type="button"
+                    className="rsvp-password-toggle"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                  >
+                    {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
+                  </button>
                 </div>
               </div>
             </div>
@@ -392,7 +457,11 @@ function RSVP({ onBack, onEditRSVP }) {
             ))}
 
             {submitError && (
-              <div className="rsvp-message rsvp-error">
+              <div 
+                className={`rsvp-message rsvp-error ${isDuplicateEmail ? 'rsvp-error-clickable' : ''}`}
+                onClick={isDuplicateEmail && onEditRSVP ? onEditRSVP : undefined}
+                style={isDuplicateEmail ? { cursor: 'pointer', textDecoration: 'underline' } : {}}
+              >
                 {submitError}
               </div>
             )}

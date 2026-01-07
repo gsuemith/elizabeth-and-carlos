@@ -735,6 +735,37 @@
 
 .rsvp-field-group {
   margin-bottom: 12px;
+  position: relative;
+}
+
+.rsvp-password-field {
+  position: relative;
+}
+
+.rsvp-password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.rsvp-password-toggle:hover {
+  opacity: 1;
+}
+
+.rsvp-password-field .rsvp-input {
+  padding-right: 40px;
 }
 
 .rsvp-input,
@@ -929,9 +960,7 @@
 .rsvp-actions {
   display: flex;
   flex-direction: column;
-  gap: 15px;
   align-items: center;
-  padding: 20px 0;
 }
 
 .rsvp-auth-actions {
@@ -1022,6 +1051,17 @@
   background: #f8d7da;
   color: #721c24;
   border: 1px solid #f5c6cb;
+}
+
+.rsvp-error-clickable {
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all 0.3s ease;
+}
+
+.rsvp-error-clickable:hover {
+  background: #f1b0b7;
+  color: #5a1419;
 }
 
 @media (max-width: 768px) {
