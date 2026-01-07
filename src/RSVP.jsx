@@ -257,14 +257,16 @@ function RSVP({ onBack, onEditRSVP }) {
 
   return (
     <div className="invitation-page">
-      <button className="back-button back-button-right" onClick={onBack}>
-        {t.returnToWebsite}
-      </button>
-      {onEditRSVP && (
-        <button className="back-button edit-rsvp-button" onClick={onEditRSVP}>
-          {t.editRSVP}
+      <div className="rsvp-page-buttons">
+        {onEditRSVP && (
+          <button className="back-button edit-rsvp-button" onClick={onEditRSVP}>
+            {t.editRSVP}
+          </button>
+        )}
+        <button className="back-button back-button-right" onClick={onBack}>
+          {t.returnToWebsite}
         </button>
-      )}
+      </div>
       <div className="invitation-container">
         <div className="rsvp-scroll-container">
           <h2 className="rsvp-page-title">{t.rsvp}</h2>
@@ -347,7 +349,7 @@ function RSVP({ onBack, onEditRSVP }) {
                 </div>
               </div>
               <div className="rsvp-password-row">
-                <div className="rsvp-field-group rsvp-password-field">
+                <div className="rsvp-field-group rsvp-password-field" data-tooltip={t.passwordTooltip}>
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder={t.password}
@@ -365,7 +367,7 @@ function RSVP({ onBack, onEditRSVP }) {
                     {showPassword ? "👁️" : "👁️‍🗨️"}
                   </button>
                 </div>
-                <div className="rsvp-field-group rsvp-password-field">
+                <div className="rsvp-field-group rsvp-password-field" data-tooltip={t.passwordTooltip}>
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder={t.confirmPassword}

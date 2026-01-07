@@ -31,6 +31,7 @@ export const translations = {
     email: 'Email',
     password: 'Password',
     confirmPassword: 'Confirm Password',
+    passwordTooltip: 'Please remember your password so you can edit your RSVP later.',
     fullName: 'Full Name',
     attending: 'Attending',
     notAttending: 'Not Attending',
@@ -100,6 +101,7 @@ export const translations = {
     email: 'Correo Electrónico',
     password: 'Contraseña',
     confirmPassword: 'Confirmar Contraseña',
+    passwordTooltip: 'Por favor recuerda tu contraseña para que puedas editar tu RSVP más tarde.',
     fullName: 'Nombre Completo',
     attending: 'Asistiré',
     notAttending: 'No Asistiré',
@@ -135,7 +137,13 @@ export const translations = {
     saveTheDateCard: 'Tarjeta de Reserva la Fecha',
     // Story page
     howWeMet: 'Cómo Nos Conocimos',
-    returnToWebsiteStory: '← Volver al Sitio Web'
+    returnToWebsiteStory: '← Volver al Sitio Web',
+    story: {
+        p0: "SERENDIPITY ON THE DANCE FLOOR:",
+        p1: "TWO SALSA DANCERS CROSS PATHS AT RENEGADE IN ARLINGTON, VIRGINIA, IGNITING AN UNEXPECTED CONNECTION THROUGH RHYTHM AND PASSION.",
+        p2: "On a lively evening at The Renegade in Arlington, Virginia, two salsa dancers. Carlos and Honour, found themselves unexpectedly sharing the dance floor. Neither had planned for such a moment, yet the chemistry between them was undeniable. As the music flowed, their movements became a seamless blend of rhythm, creating an instant connection.",
+        p3: "The crowd watched as the two lost themselves bailando with La Rumbera Mayor and song such as Idilio. What began as a chance encounter quickly blossomed into an unforgettable dance that neither would forget, proving that sometimes, the best connections happen when least expected. In that moment, The Renegade became a sacred place for them.",
+    }
   }
 }
 

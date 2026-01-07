@@ -52,6 +52,33 @@
   left: 20px;
 }
 
+/* Clear separation for RSVP page buttons */
+.rsvp-page-buttons {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 20px;
+  z-index: 10;
+  gap: 20px;
+}
+
+.rsvp-page-buttons .back-button,
+.rsvp-page-buttons .edit-rsvp-button {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  flex-shrink: 0;
+}
+
+.rsvp-page-buttons .back-button-right {
+  margin-left: auto;
+}
+
 .rsvp-edit-form-container {
   width: 100%;
   height: 100%;
@@ -574,6 +601,21 @@
   margin-top: 10px;
 }
 
+@media (max-width: 950px) {
+  .front-content {
+    padding: 40px 50px;
+  }
+
+  .invitation-names {
+    font-size: 3.5rem;
+    letter-spacing: 6px;
+  }
+
+  .invitation-seated-photo {
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .invitation-card {
     max-width: 95%;
@@ -632,6 +674,10 @@
     left: 10px;
     padding: 8px 16px;
     font-size: 0.9rem;
+  }
+
+  .rsvp-page-buttons .back-button {
+    font-size: 1.08rem;
   }
 
   .page-nav-button {
@@ -740,6 +786,7 @@
 
 .rsvp-password-field {
   position: relative;
+  overflow: visible;
 }
 
 .rsvp-password-toggle {
@@ -897,6 +944,27 @@
   border-radius: 0;
 }
 
+.rsvp-password-field[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #ffffff 0%, #ede5d8 100%);
+  color: #5a4a3a;
+  font-family: 'Georgia', serif;
+  font-size: 0.9rem;
+  white-space: normal;
+  width: max-content;
+  max-width: min(250px, calc(100vw - 40px));
+  border: 1px solid #e8d5c4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  pointer-events: none;
+  border-radius: 0;
+}
+
 .rsvp-event-label[data-tooltip]:hover::before,
 .rsvp-toggle-button[data-tooltip]:hover::before {
   content: '';
@@ -904,6 +972,18 @@
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
+  margin-bottom: 2px;
+  border: 6px solid transparent;
+  border-top-color: #ede5d8;
+  z-index: 1001;
+  pointer-events: none;
+}
+
+.rsvp-password-field[data-tooltip]:hover::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 20px;
   margin-bottom: 2px;
   border: 6px solid transparent;
   border-top-color: #ede5d8;
@@ -1116,7 +1196,8 @@
   }
 
   .rsvp-event-label[data-tooltip]:hover::after,
-  .rsvp-toggle-button[data-tooltip]:hover::after {
+  .rsvp-toggle-button[data-tooltip]:hover::after,
+  .rsvp-password-field[data-tooltip]:hover::after {
     font-size: 0.8rem;
     padding: 8px 12px;
     white-space: normal;
@@ -1136,6 +1217,7 @@
 
   .rsvp-actions {
     gap: 5px;
+    margin-top: 5px;
   }
 
   .rsvp-cancel-button {
@@ -1201,7 +1283,8 @@
 .story-image-gradient {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #9e9e9e 0%, #616161 50%, #424242 100%);
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 .story-content {

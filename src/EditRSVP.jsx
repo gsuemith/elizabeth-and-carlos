@@ -372,9 +372,11 @@ function EditRSVP({ onBack }) {
 
   return (
     <div className="invitation-page">
-      <button className="back-button back-button-right" onClick={onBack}>
-        {t.returnToWebsite}
-      </button>
+      <div className="rsvp-page-buttons">
+        <button className="back-button back-button-right" onClick={onBack}>
+          {t.returnToWebsite}
+        </button>
+      </div>
       <div className="invitation-container">
         {!showEditForm ? (
           <div className="rsvp-scroll-container">
@@ -403,7 +405,7 @@ function EditRSVP({ onBack }) {
                       required
                     />
                   </div>
-                  <div className="rsvp-field-group rsvp-password-field">
+                  <div className="rsvp-field-group rsvp-password-field" data-tooltip={t.passwordTooltip}>
                     <input
                       type={showPassword ? "text" : "password"}
                       placeholder={t.password}
