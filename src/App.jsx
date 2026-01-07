@@ -1,12 +1,14 @@
 import { useState } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import './App.css'
 import Landing from './Landing'
 import SaveTheDateCard from './SaveTheDateCard'
 import RSVP from './RSVP'
 import Story from './Story'
 import EditRSVP from './EditRSVP'
+import GuestList from './GuestList'
 
-function App() {
+function AppContent() {
   const [showSaveTheDate, setShowSaveTheDate] = useState(false)
   const [showRSVP, setShowRSVP] = useState(false)
   const [showStory, setShowStory] = useState(false)
@@ -295,6 +297,15 @@ function App() {
         </div>
       )}
     </div>
+  )
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/guest-list" element={<GuestList />} />
+      <Route path="*" element={<AppContent />} />
+    </Routes>
   )
 }
 
