@@ -9,7 +9,7 @@ function Story({ onBack }) {
   return (
     <div className="invitation-page">
       <button className="back-button" onClick={onBack}>
-        {t.returnToWebsite}
+        {t.returnToWebsiteStory}
       </button>
       <div className="story-content-container">
         <div className="story-card story-card-full">

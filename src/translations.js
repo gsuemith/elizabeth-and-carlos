@@ -66,7 +66,7 @@ export const translations = {
     saveTheDateCard: 'Save the Date Card',
     // Story page
     howWeMet: 'How We Met',
-    returnToWebsite: '← Return to Website'
+    returnToWebsiteStory: '← Return to Website'
   },
   es: {
     // Landing page
@@ -135,7 +135,7 @@ export const translations = {
     saveTheDateCard: 'Tarjeta de Reserva la Fecha',
     // Story page
     howWeMet: 'Cómo Nos Conocimos',
-    returnToWebsite: '← Volver al Sitio Web'
+    returnToWebsiteStory: '← Volver al Sitio Web'
   }
 }
 
