@@ -17,31 +17,14 @@ function GuestList() {
         setIsLoading(true)
         setError(null)
 
-        // First, fetch the main event to get the guest_list
-        const eventResponse = await fetch(`${API_BASE_URL}/event`)
-        if (!eventResponse.ok) {
-          throw new Error('Failed to fetch main event')
+        // Fetch guest list from the new single endpoint
+        const response = await fetch(`${API_BASE_URL}/event/${MAIN_EVENT_ID}/guest-list`)
+        if (!response.ok) {
+          throw new Error('Failed to fetch guest list')
         }
-        const events = await eventResponse.json()
-        const eventData = events.find(event => event.id === MAIN_EVENT_ID)
         
-        if (!eventData.guest_list || eventData.guest_list.length === 0) {
-          setGuests([])
-          setIsLoading(false)
-          return
-        }
-
-        // Fetch data for each guest
-        const guestPromises = eventData.guest_list.map(async (guestId) => {
-          const guestResponse = await fetch(`${API_BASE_URL}/guest/${guestId}`)
-          if (!guestResponse.ok) {
-            throw new Error(`Failed to fetch guest ${guestId}`)
-          }
-          return guestResponse.json()
-        })
-
-        const guestDataArray = await Promise.all(guestPromises)
-        setGuests(guestDataArray)
+        const guestDataArray = await response.json()
+        setGuests(guestDataArray || [])
       } catch (err) {
         console.error('Error fetching guest data:', err)
         setError(err.message || 'Failed to load guest data')
@@ -52,22 +35,6 @@ function GuestList() {
 
     fetchGuestData()
   }, [])
-
-  const getEventRSVP = (guest, eventId) => {
-    const event = guest.events?.find(e => e.id === eventId)
-    if (!event || !event.guests) return 'N/A'
-    
-    // Find the guest in this event's guests array by matching full_name
-    // or by matching mailing_address if available
-    const guestRSVP = event.guests.find(g => {
-      if (g.mailing_address === guest.mailing_address?.id) {
-        return true
-      }
-      // Fallback: match by name if mailing_address doesn't match
-      return g.full_name === guest.full_name
-    })
-    return guestRSVP?.rsvp_response || 'N/A'
-  }
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A'
