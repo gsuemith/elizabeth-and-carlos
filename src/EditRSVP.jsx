@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import './Landing.css'
+import { useLanguage } from './LanguageContext'
+import { translations } from './translations'
 
 const API_BASE_URL = 'https://wedding-rsvp-one-gamma.vercel.app'
 const MAIN_EVENT_ID = '010e9472-8ea4-4239-9882-f8c3fe676f2b'
@@ -11,6 +13,8 @@ const EVENT_IDS = {
 }
 
 function EditRSVP({ onBack }) {
+  const { language } = useLanguage()
+  const t = translations[language]
   const [credentials, setCredentials] = useState({
     phone: '',
     email: '',
@@ -369,19 +373,19 @@ function EditRSVP({ onBack }) {
   return (
     <div className="invitation-page">
       <button className="back-button back-button-right" onClick={onBack}>
-        Return to Website →
+        {t.returnToWebsite}
       </button>
       <div className="invitation-container">
         {!showEditForm ? (
           <div className="rsvp-scroll-container">
-            <h2 className="rsvp-page-title">Edit RSVP</h2>
+            <h2 className="rsvp-page-title">{t.editRSVP}</h2>
             <form className="rsvp-form" onSubmit={handleAuthSubmit}>
               <div className="rsvp-section-card">
-                <h3 className="info-heading">Enter Your Information</h3>
+                <h3 className="info-heading">{t.enterYourInfo}</h3>
                 <div className="rsvp-field-group">
                   <input
                     type="email"
-                    placeholder="Email"
+                    placeholder={t.email}
                     value={credentials.email}
                     onChange={(e) => handleCredentialChange('email', e.target.value)}
                     className="rsvp-input"
@@ -392,7 +396,7 @@ function EditRSVP({ onBack }) {
                   <div className="rsvp-field-group">
                     <input
                       type="tel"
-                      placeholder="Phone"
+                      placeholder={t.phone}
                       value={formatPhoneNumber(credentials.phone)}
                       onChange={(e) => handleCredentialChange('phone', e.target.value)}
                       className="rsvp-input"
@@ -402,7 +406,7 @@ function EditRSVP({ onBack }) {
                   <div className="rsvp-field-group rsvp-password-field">
                     <input
                       type={showPassword ? "text" : "password"}
-                      placeholder="Password"
+                      placeholder={t.password}
                       value={credentials.password}
                       onChange={(e) => handleCredentialChange('password', e.target.value)}
                       className="rsvp-input"
@@ -430,14 +434,14 @@ function EditRSVP({ onBack }) {
                     className="rsvp-cancel-button"
                     disabled={isLoading}
                   >
-                    Cancel
+                    {t.cancel}
                   </button>
                   <button
                     type="submit"
                     className="rsvp-submit-button"
                     disabled={isLoading}
                   >
-                    {isLoading ? 'Loading...' : 'Continue'}
+                    {isLoading ? t.loading : t.continue}
                   </button>
                 </div>
               </div>
@@ -446,16 +450,16 @@ function EditRSVP({ onBack }) {
         ) : (
           <div className="rsvp-edit-form-container slide-up">
             <div className="rsvp-scroll-container">
-              <h2 className="rsvp-page-title">Edit Your RSVP</h2>
+              <h2 className="rsvp-page-title">{t.editRSVP}</h2>
               <form className="rsvp-form" onSubmit={handleEditSubmit}>
                 {/* Address Card */}
                 {mailingAddress && (
                   <div className="rsvp-section-card">
-                    <h3 className="info-heading">Address</h3>
+                    <h3 className="info-heading">{t.address}</h3>
                     <div className="rsvp-field-group">
                       <input
                         type="text"
-                        placeholder="Address Line 1"
+                        placeholder={t.addressLine1}
                         value={mailingAddress.address_line_1 || ''}
                         onChange={(e) => handleAddressChange('address_line_1', e.target.value)}
                         className="rsvp-input"
@@ -465,7 +469,7 @@ function EditRSVP({ onBack }) {
                     <div className="rsvp-field-group">
                       <input
                         type="text"
-                        placeholder="Address Line 2 (optional)"
+                        placeholder={t.addressLine2}
                         value={mailingAddress.address_line_2 || ''}
                         onChange={(e) => handleAddressChange('address_line_2', e.target.value)}
                         className="rsvp-input"
@@ -475,7 +479,7 @@ function EditRSVP({ onBack }) {
                       <div className="rsvp-field-group">
                         <input
                           type="text"
-                          placeholder="City"
+                          placeholder={t.city}
                           value={mailingAddress.city || ''}
                           onChange={(e) => handleAddressChange('city', e.target.value)}
                           className="rsvp-input"
@@ -485,7 +489,7 @@ function EditRSVP({ onBack }) {
                       <div className="rsvp-field-group">
                         <input
                           type="text"
-                          placeholder="State"
+                          placeholder={t.state}
                           value={mailingAddress.state || ''}
                           onChange={(e) => handleAddressChange('state', e.target.value)}
                           className="rsvp-input"
@@ -495,7 +499,7 @@ function EditRSVP({ onBack }) {
                       <div className="rsvp-field-group">
                         <input
                           type="text"
-                          placeholder="Postal Code"
+                          placeholder={t.postalCode}
                           value={mailingAddress.postal_code || ''}
                           onChange={(e) => handleAddressChange('postal_code', e.target.value)}
                           className="rsvp-input"
@@ -507,7 +511,7 @@ function EditRSVP({ onBack }) {
                       <div className="rsvp-field-group">
                         <input
                           type="tel"
-                          placeholder="Phone"
+                          placeholder={t.phone}
                           value={formatPhoneNumber(mailingAddress.phone_number || '')}
                           onChange={(e) => handleAddressChange('phone_number', e.target.value)}
                           className="rsvp-input"
@@ -517,7 +521,7 @@ function EditRSVP({ onBack }) {
                       <div className="rsvp-field-group">
                         <input
                           type="email"
-                          placeholder="Email"
+                          placeholder={t.email}
                           value={mailingAddress.email || ''}
                           onChange={(e) => handleAddressChange('email', e.target.value)}
                           className="rsvp-input"
@@ -532,12 +536,12 @@ function EditRSVP({ onBack }) {
                 {existingGuests.map((guest) => (
                   <div key={guest.id} className="rsvp-section-card">
                     <div className="rsvp-guest-header">
-                      <h3 className="rsvp-guest-title">Guest</h3>
+                      <h3 className="rsvp-guest-title">{t.guest}</h3>
                     </div>
                     <div className="rsvp-field-group">
                       <input
                         type="text"
-                        placeholder="Full Name"
+                        placeholder={t.fullName}
                         value={guest.full_name}
                         onChange={(e) => handleExistingGuestNameChange(guest.id, e.target.value)}
                         className="rsvp-input"
@@ -546,47 +550,47 @@ function EditRSVP({ onBack }) {
                     </div>
                     <div className="rsvp-events-row">
                       <div className="rsvp-toggle-group">
-                        <label className="rsvp-event-label" data-tooltip="July 16th, 7pm">Welcome Gathering</label>
+                        <label className="rsvp-event-label" data-tooltip={language === 'es' ? '16 de julio, 7pm' : 'July 16th, 7pm'}>{t.welcomeGatheringEvent}</label>
                         <button
                           type="button"
                           onClick={() => handleExistingGuestRSVPChange(guest.id, 'welcomeGathering', guest.welcomeGathering === 'yes' ? 'no' : 'yes')}
                           className={`rsvp-toggle-button ${guest.welcomeGathering === 'yes' ? 'active' : ''}`}
-                          data-tooltip="July 16th, 7pm"
+                          data-tooltip={language === 'es' ? '16 de julio, 7pm' : 'July 16th, 7pm'}
                         >
-                          {guest.welcomeGathering === 'yes' ? 'Attending' : 'Not Attending'}
+                          {guest.welcomeGathering === 'yes' ? t.attending : t.notAttending}
                         </button>
                       </div>
                       <div className="rsvp-toggle-group">
-                        <label className="rsvp-event-label" data-tooltip="July 17th, 5:30pm">Ceremony</label>
+                        <label className="rsvp-event-label" data-tooltip={language === 'es' ? '17 de julio, 5:30pm' : 'July 17th, 5:30pm'}>{t.ceremonyEvent}</label>
                         <button
                           type="button"
                           onClick={() => handleExistingGuestRSVPChange(guest.id, 'ceremony', guest.ceremony === 'yes' ? 'no' : 'yes')}
                           className={`rsvp-toggle-button ${guest.ceremony === 'yes' ? 'active' : ''}`}
-                          data-tooltip="July 17th, 5:30pm"
+                          data-tooltip={language === 'es' ? '17 de julio, 5:30pm' : 'July 17th, 5:30pm'}
                         >
-                          {guest.ceremony === 'yes' ? 'Attending' : 'Not Attending'}
+                          {guest.ceremony === 'yes' ? t.attending : t.notAttending}
                         </button>
                       </div>
                       <div className="rsvp-toggle-group">
-                        <label className="rsvp-event-label" data-tooltip="July 17th, 6:30pm">Reception</label>
+                        <label className="rsvp-event-label" data-tooltip={language === 'es' ? '17 de julio, 6:30pm' : 'July 17th, 6:30pm'}>{t.receptionEvent}</label>
                         <button
                           type="button"
                           onClick={() => handleExistingGuestRSVPChange(guest.id, 'reception', guest.reception === 'yes' ? 'no' : 'yes')}
                           className={`rsvp-toggle-button ${guest.reception === 'yes' ? 'active' : ''}`}
-                          data-tooltip="July 17th, 6:30pm"
+                          data-tooltip={language === 'es' ? '17 de julio, 6:30pm' : 'July 17th, 6:30pm'}
                         >
-                          {guest.reception === 'yes' ? 'Attending' : 'Not Attending'}
+                          {guest.reception === 'yes' ? t.attending : t.notAttending}
                         </button>
                       </div>
                       <div className="rsvp-toggle-group">
-                        <label className="rsvp-event-label" data-tooltip="July 18th, Time TBD">Brunch</label>
+                        <label className="rsvp-event-label" data-tooltip={language === 'es' ? '18 de julio, Hora por determinar' : 'July 18th, Time TBD'}>{t.brunchEvent}</label>
                         <button
                           type="button"
                           onClick={() => handleExistingGuestRSVPChange(guest.id, 'brunch', guest.brunch === 'yes' ? 'no' : 'yes')}
                           className={`rsvp-toggle-button ${guest.brunch === 'yes' ? 'active' : ''}`}
-                          data-tooltip="July 18th, Time TBD"
+                          data-tooltip={language === 'es' ? '18 de julio, Hora por determinar' : 'July 18th, Time TBD'}
                         >
-                          {guest.brunch === 'yes' ? 'Attending' : 'Not Attending'}
+                          {guest.brunch === 'yes' ? t.attending : t.notAttending}
                         </button>
                       </div>
                     </div>
@@ -597,19 +601,19 @@ function EditRSVP({ onBack }) {
                 {newGuests.map((guest, index) => (
                   <div key={`new-${index}`} className="rsvp-section-card">
                     <div className="rsvp-guest-header">
-                      <h3 className="rsvp-guest-title">New Guest {index + 1}</h3>
+                      <h3 className="rsvp-guest-title">{t.newGuest} {index + 1}</h3>
                       <button
                         type="button"
                         onClick={() => removeNewGuest(index)}
                         className="rsvp-remove-guest"
                       >
-                        Remove
+                        {t.remove}
                       </button>
                     </div>
                     <div className="rsvp-field-group">
                       <input
                         type="text"
-                        placeholder="Full Name"
+                        placeholder={t.fullName}
                         value={guest.name}
                         onChange={(e) => handleNewGuestChange(index, 'name', e.target.value)}
                         className="rsvp-input"
@@ -618,47 +622,47 @@ function EditRSVP({ onBack }) {
                     </div>
                     <div className="rsvp-events-row">
                       <div className="rsvp-toggle-group">
-                        <label className="rsvp-event-label" data-tooltip="July 16th, 7pm">Welcome Gathering</label>
+                        <label className="rsvp-event-label" data-tooltip={language === 'es' ? '16 de julio, 7pm' : 'July 16th, 7pm'}>{t.welcomeGatheringEvent}</label>
                         <button
                           type="button"
                           onClick={() => handleNewGuestChange(index, 'welcomeGathering', guest.welcomeGathering === 'yes' ? 'no' : 'yes')}
                           className={`rsvp-toggle-button ${guest.welcomeGathering === 'yes' ? 'active' : ''}`}
-                          data-tooltip="July 16th, 7pm"
+                          data-tooltip={language === 'es' ? '16 de julio, 7pm' : 'July 16th, 7pm'}
                         >
-                          {guest.welcomeGathering === 'yes' ? 'Attending' : 'Not Attending'}
+                          {guest.welcomeGathering === 'yes' ? t.attending : t.notAttending}
                         </button>
                       </div>
                       <div className="rsvp-toggle-group">
-                        <label className="rsvp-event-label" data-tooltip="July 17th, 5:30pm">Ceremony</label>
+                        <label className="rsvp-event-label" data-tooltip={language === 'es' ? '17 de julio, 5:30pm' : 'July 17th, 5:30pm'}>{t.ceremonyEvent}</label>
                         <button
                           type="button"
                           onClick={() => handleNewGuestChange(index, 'ceremony', guest.ceremony === 'yes' ? 'no' : 'yes')}
                           className={`rsvp-toggle-button ${guest.ceremony === 'yes' ? 'active' : ''}`}
-                          data-tooltip="July 17th, 5:30pm"
+                          data-tooltip={language === 'es' ? '17 de julio, 5:30pm' : 'July 17th, 5:30pm'}
                         >
-                          {guest.ceremony === 'yes' ? 'Attending' : 'Not Attending'}
+                          {guest.ceremony === 'yes' ? t.attending : t.notAttending}
                         </button>
                       </div>
                       <div className="rsvp-toggle-group">
-                        <label className="rsvp-event-label" data-tooltip="July 17th, 6:30pm">Reception</label>
+                        <label className="rsvp-event-label" data-tooltip={language === 'es' ? '17 de julio, 6:30pm' : 'July 17th, 6:30pm'}>{t.receptionEvent}</label>
                         <button
                           type="button"
                           onClick={() => handleNewGuestChange(index, 'reception', guest.reception === 'yes' ? 'no' : 'yes')}
                           className={`rsvp-toggle-button ${guest.reception === 'yes' ? 'active' : ''}`}
-                          data-tooltip="July 17th, 6:30pm"
+                          data-tooltip={language === 'es' ? '17 de julio, 6:30pm' : 'July 17th, 6:30pm'}
                         >
-                          {guest.reception === 'yes' ? 'Attending' : 'Not Attending'}
+                          {guest.reception === 'yes' ? t.attending : t.notAttending}
                         </button>
                       </div>
                       <div className="rsvp-toggle-group">
-                        <label className="rsvp-event-label" data-tooltip="July 18th, Time TBD">Brunch</label>
+                        <label className="rsvp-event-label" data-tooltip={language === 'es' ? '18 de julio, Hora por determinar' : 'July 18th, Time TBD'}>{t.brunchEvent}</label>
                         <button
                           type="button"
                           onClick={() => handleNewGuestChange(index, 'brunch', guest.brunch === 'yes' ? 'no' : 'yes')}
                           className={`rsvp-toggle-button ${guest.brunch === 'yes' ? 'active' : ''}`}
-                          data-tooltip="July 18th, Time TBD"
+                          data-tooltip={language === 'es' ? '18 de julio, Hora por determinar' : 'July 18th, Time TBD'}
                         >
-                          {guest.brunch === 'yes' ? 'Attending' : 'Not Attending'}
+                          {guest.brunch === 'yes' ? t.attending : t.notAttending}
                         </button>
                       </div>
                     </div>
@@ -671,7 +675,7 @@ function EditRSVP({ onBack }) {
                     onClick={addNewGuest}
                     className="rsvp-add-guest"
                   >
-                    + Add Guest
+                    {t.addGuest}
                   </button>
                 </div>
 
@@ -682,7 +686,7 @@ function EditRSVP({ onBack }) {
                 )}
                 {submitSuccess && (
                   <div className="rsvp-message rsvp-success">
-                    RSVP updated successfully!
+                    {t.rsvpUpdated}
                   </div>
                 )}
                 <div className="rsvp-actions">
@@ -691,7 +695,7 @@ function EditRSVP({ onBack }) {
                     className="rsvp-submit-button"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? 'Updating...' : 'Update RSVP'}
+                    {isSubmitting ? t.updating : t.updateRSVP}
                   </button>
                 </div>
               </form>

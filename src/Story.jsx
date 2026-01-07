@@ -1,10 +1,15 @@
 import './Landing.css'
+import { useLanguage } from './LanguageContext'
+import { translations } from './translations'
 
 function Story({ onBack }) {
+  const { language } = useLanguage()
+  const t = translations[language]
+  
   return (
     <div className="invitation-page">
       <button className="back-button" onClick={onBack}>
-        ← Return to Website
+        {t.returnToWebsite}
       </button>
       <div className="story-content-container">
         <div className="story-card story-card-full">
@@ -12,7 +17,7 @@ function Story({ onBack }) {
             <div className="story-image-gradient"></div>
           </div>
           <div className="story-content">
-            <h2 className="story-title">How We Met</h2>
+            <h2 className="story-title">{t.howWeMet}</h2>
             <p className="story-text">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
             </p>

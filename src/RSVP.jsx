@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import './Landing.css'
+import { useLanguage } from './LanguageContext'
+import { translations } from './translations'
 
 const API_BASE_URL = 'https://wedding-rsvp-one-gamma.vercel.app'
 const MAIN_EVENT_ID = '010e9472-8ea4-4239-9882-f8c3fe676f2b'
@@ -11,6 +13,8 @@ const EVENT_IDS = {
 }
 
 function RSVP({ onBack, onEditRSVP }) {
+  const { language } = useLanguage()
+  const t = translations[language]
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
@@ -150,7 +154,7 @@ function RSVP({ onBack, onEditRSVP }) {
         
         if (isDuplicate) {
           setIsDuplicateEmail(true)
-          setSubmitError('We already have a response from this email. Would you like to Edit your RSVP?')
+          setSubmitError(t.duplicateEmail)
           setIsSubmitting(false)
           return
         }
@@ -254,25 +258,25 @@ function RSVP({ onBack, onEditRSVP }) {
   return (
     <div className="invitation-page">
       <button className="back-button back-button-right" onClick={onBack}>
-        Return to Website →
+        {t.returnToWebsite}
       </button>
       {onEditRSVP && (
         <button className="back-button edit-rsvp-button" onClick={onEditRSVP}>
-          Edit RSVP
+          {t.editRSVP}
         </button>
       )}
       <div className="invitation-container">
         <div className="rsvp-scroll-container">
-          <h2 className="rsvp-page-title">RSVP</h2>
+          <h2 className="rsvp-page-title">{t.rsvp}</h2>
           
           <form className="rsvp-form" onSubmit={handleSubmit}>
             {/* Address Card */}
             <div className="rsvp-section-card">
-              <h3 className="info-heading">Address</h3>
+              <h3 className="info-heading">{t.address}</h3>
               <div className="rsvp-field-group">
                 <input
                   type="text"
-                  placeholder="Address Line 1"
+                  placeholder={t.addressLine1}
                   value={address.line1}
                   onChange={(e) => handleAddressChange('line1', e.target.value)}
                   className="rsvp-input"
@@ -282,7 +286,7 @@ function RSVP({ onBack, onEditRSVP }) {
               <div className="rsvp-field-group">
                 <input
                   type="text"
-                  placeholder="Address Line 2 (optional)"
+                  placeholder={t.addressLine2}
                   value={address.line2}
                   onChange={(e) => handleAddressChange('line2', e.target.value)}
                   className="rsvp-input"
@@ -292,7 +296,7 @@ function RSVP({ onBack, onEditRSVP }) {
                 <div className="rsvp-field-group rsvp-field-city">
                   <input
                     type="text"
-                    placeholder="City"
+                    placeholder={t.city}
                     value={address.city}
                     onChange={(e) => handleAddressChange('city', e.target.value)}
                     className="rsvp-input"
@@ -302,7 +306,7 @@ function RSVP({ onBack, onEditRSVP }) {
                 <div className="rsvp-field-group rsvp-field-state">
                   <input
                     type="text"
-                    placeholder="State"
+                    placeholder={t.state}
                     value={address.state}
                     onChange={(e) => handleAddressChange('state', e.target.value)}
                     className="rsvp-input"
@@ -312,7 +316,7 @@ function RSVP({ onBack, onEditRSVP }) {
                 <div className="rsvp-field-group rsvp-field-postal">
                   <input
                     type="text"
-                    placeholder="Postal Code"
+                    placeholder={t.postalCode}
                     value={address.postalCode}
                     onChange={(e) => handleAddressChange('postalCode', e.target.value)}
                     className="rsvp-input"
@@ -324,7 +328,7 @@ function RSVP({ onBack, onEditRSVP }) {
                 <div className="rsvp-field-group">
                   <input
                     type="tel"
-                    placeholder="Phone"
+                    placeholder={t.phone}
                     value={formatPhoneNumber(address.phone)}
                     onChange={(e) => handleAddressChange('phone', e.target.value)}
                     className="rsvp-input"
@@ -334,7 +338,7 @@ function RSVP({ onBack, onEditRSVP }) {
                 <div className="rsvp-field-group">
                   <input
                     type="email"
-                    placeholder="Email"
+                    placeholder={t.email}
                     value={address.email}
                     onChange={(e) => handleAddressChange('email', e.target.value)}
                     className="rsvp-input"
@@ -346,7 +350,7 @@ function RSVP({ onBack, onEditRSVP }) {
                 <div className="rsvp-field-group rsvp-password-field">
                   <input
                     type={showPassword ? "text" : "password"}
-                    placeholder="Password"
+                    placeholder={t.password}
                     value={address.password}
                     onChange={(e) => handleAddressChange('password', e.target.value)}
                     className="rsvp-input"
@@ -364,7 +368,7 @@ function RSVP({ onBack, onEditRSVP }) {
                 <div className="rsvp-field-group rsvp-password-field">
                   <input
                     type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm Password"
+                    placeholder={t.confirmPassword}
                     value={address.confirmPassword}
                     onChange={(e) => handleAddressChange('confirmPassword', e.target.value)}
                     className="rsvp-input"
@@ -386,21 +390,21 @@ function RSVP({ onBack, onEditRSVP }) {
             {guests.map((guest, index) => (
               <div key={index} className="rsvp-section-card">
                 <div className="rsvp-guest-header">
-                  <h3 className="rsvp-guest-title">Guest {index + 1}</h3>
+                  <h3 className="rsvp-guest-title">{t.guest} {index + 1}</h3>
                   {guests.length > 1 && (
                     <button
                       type="button"
                       onClick={() => removeGuest(index)}
                       className="rsvp-remove-guest"
                     >
-                      Remove
+                      {t.remove}
                     </button>
                   )}
                 </div>
                 <div className="rsvp-field-group">
                   <input
                     type="text"
-                    placeholder="Full Name"
+                    placeholder={t.fullName}
                     value={guest.name}
                     onChange={(e) => handleGuestChange(index, 'name', e.target.value)}
                     className="rsvp-input"
@@ -409,47 +413,47 @@ function RSVP({ onBack, onEditRSVP }) {
                 </div>
                 <div className="rsvp-events-row">
                   <div className="rsvp-toggle-group">
-                    <label className="rsvp-event-label" data-tooltip="July 16th, 7pm">Welcome Gathering</label>
+                    <label className="rsvp-event-label" data-tooltip={language === 'es' ? '16 de julio, 7pm' : 'July 16th, 7pm'}>{t.welcomeGatheringEvent}</label>
                     <button
                       type="button"
                       onClick={() => handleGuestChange(index, 'welcomeGathering', guest.welcomeGathering === 'yes' ? 'no' : 'yes')}
                       className={`rsvp-toggle-button ${guest.welcomeGathering === 'yes' ? 'active' : ''}`}
-                      data-tooltip="July 16th, 7pm"
+                      data-tooltip={language === 'es' ? '16 de julio, 7pm' : 'July 16th, 7pm'}
                     >
-                      {guest.welcomeGathering === 'yes' ? 'Attending' : 'Not Attending'}
+                      {guest.welcomeGathering === 'yes' ? t.attending : t.notAttending}
                     </button>
                   </div>
                   <div className="rsvp-toggle-group">
-                    <label className="rsvp-event-label" data-tooltip="July 17th, 5:30pm">Ceremony</label>
+                    <label className="rsvp-event-label" data-tooltip={language === 'es' ? '17 de julio, 5:30pm' : 'July 17th, 5:30pm'}>{t.ceremonyEvent}</label>
                     <button
                       type="button"
                       onClick={() => handleGuestChange(index, 'ceremony', guest.ceremony === 'yes' ? 'no' : 'yes')}
                       className={`rsvp-toggle-button ${guest.ceremony === 'yes' ? 'active' : ''}`}
-                      data-tooltip="July 17th, 5:30pm"
+                      data-tooltip={language === 'es' ? '17 de julio, 5:30pm' : 'July 17th, 5:30pm'}
                     >
-                      {guest.ceremony === 'yes' ? 'Attending' : 'Not Attending'}
+                      {guest.ceremony === 'yes' ? t.attending : t.notAttending}
                     </button>
                   </div>
                   <div className="rsvp-toggle-group">
-                    <label className="rsvp-event-label" data-tooltip="July 17th, 6:30pm">Reception</label>
+                    <label className="rsvp-event-label" data-tooltip={language === 'es' ? '17 de julio, 6:30pm' : 'July 17th, 6:30pm'}>{t.receptionEvent}</label>
                     <button
                       type="button"
                       onClick={() => handleGuestChange(index, 'reception', guest.reception === 'yes' ? 'no' : 'yes')}
                       className={`rsvp-toggle-button ${guest.reception === 'yes' ? 'active' : ''}`}
-                      data-tooltip="July 17th, 6:30pm"
+                      data-tooltip={language === 'es' ? '17 de julio, 6:30pm' : 'July 17th, 6:30pm'}
                     >
-                      {guest.reception === 'yes' ? 'Attending' : 'Not Attending'}
+                      {guest.reception === 'yes' ? t.attending : t.notAttending}
                     </button>
                   </div>
                   <div className="rsvp-toggle-group">
-                    <label className="rsvp-event-label" data-tooltip="July 18th, Time TBD">Brunch</label>
+                    <label className="rsvp-event-label" data-tooltip={language === 'es' ? '18 de julio, Hora por determinar' : 'July 18th, Time TBD'}>{t.brunchEvent}</label>
                     <button
                       type="button"
                       onClick={() => handleGuestChange(index, 'brunch', guest.brunch === 'yes' ? 'no' : 'yes')}
                       className={`rsvp-toggle-button ${guest.brunch === 'yes' ? 'active' : ''}`}
-                      data-tooltip="July 18th, Time TBD"
+                      data-tooltip={language === 'es' ? '18 de julio, Hora por determinar' : 'July 18th, Time TBD'}
                     >
-                      {guest.brunch === 'yes' ? 'Attending' : 'Not Attending'}
+                      {guest.brunch === 'yes' ? t.attending : t.notAttending}
                     </button>
                   </div>
                 </div>
@@ -467,7 +471,7 @@ function RSVP({ onBack, onEditRSVP }) {
             )}
             {submitSuccess && (
               <div className="rsvp-message rsvp-success">
-                RSVP submitted successfully! Thank you for responding.
+                {t.rsvpSubmitted}
               </div>
             )}
             <div className="rsvp-actions">
@@ -477,14 +481,14 @@ function RSVP({ onBack, onEditRSVP }) {
                 className="rsvp-add-guest"
                 disabled={isSubmitting}
               >
-                + Add Guest
+                {t.addGuest}
               </button>
               <button 
                 type="submit" 
                 className="rsvp-submit-button"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Submitting...' : 'Submit RSVP'}
+                {isSubmitting ? t.submitting : t.submitRSVP}
               </button>
             </div>
           </form>

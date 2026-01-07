@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import './App.css'
+import { useLanguage } from './LanguageContext'
+import { translations } from './translations'
 import Landing from './Landing'
 import SaveTheDateCard from './SaveTheDateCard'
 import RSVP from './RSVP'
@@ -9,6 +11,8 @@ import EditRSVP from './EditRSVP'
 import GuestList from './GuestList'
 
 function AppContent() {
+  const { language, toggleLanguage } = useLanguage()
+  const t = translations[language]
   const [showSaveTheDate, setShowSaveTheDate] = useState(false)
   const [showRSVP, setShowRSVP] = useState(false)
   const [showStory, setShowStory] = useState(false)
@@ -114,13 +118,13 @@ function AppContent() {
                 className="nav-button"
                 onClick={handleStoryClick}
               >
-                Story
+                {t.ourStory}
               </button>
               <button 
                 className="nav-button"
                 onClick={handleSaveTheDateClick}
               >
-                Save the Date Card
+                {t.saveTheDateCard}
               </button>
             </nav>
             <nav className="main-nav main-nav-left">
@@ -129,6 +133,12 @@ function AppContent() {
                 onClick={handleRSVPClick}
               >
                 RSVP
+              </button>
+              <button 
+                className="nav-button"
+                onClick={toggleLanguage}
+              >
+                {language === 'en' ? 'En Español?' : 'In English?'}
               </button>
             </nav>
             <Landing onBack={() => {}} />
@@ -151,7 +161,7 @@ function AppContent() {
                 className="nav-button"
                 onClick={handleStoryClick}
               >
-                Story
+                {t.ourStory}
               </button>
               <button 
                 className="nav-button"
@@ -166,6 +176,12 @@ function AppContent() {
                 onClick={handleRSVPClick}
               >
                 RSVP
+              </button>
+              <button 
+                className="nav-button"
+                onClick={toggleLanguage}
+              >
+                {language === 'en' ? 'En Español?' : 'In English?'}
               </button>
             </nav>
             <Landing onBack={() => {}} />
@@ -188,13 +204,13 @@ function AppContent() {
                 className="nav-button"
                 onClick={handleStoryClick}
               >
-                Story
+                {t.ourStory}
               </button>
               <button 
                 className="nav-button"
                 onClick={handleSaveTheDateClick}
               >
-                Save the Date Card
+                {t.saveTheDateCard}
               </button>
             </nav>
             <nav className="main-nav main-nav-left">
@@ -203,6 +219,12 @@ function AppContent() {
                 onClick={handleRSVPClick}
               >
                 RSVP
+              </button>
+              <button 
+                className="nav-button"
+                onClick={toggleLanguage}
+              >
+                {language === 'en' ? 'En Español?' : 'In English?'}
               </button>
             </nav>
             <Landing onBack={() => {}} />
@@ -225,13 +247,13 @@ function AppContent() {
                 className="nav-button"
                 onClick={handleStoryClick}
               >
-                Story
+                {t.ourStory}
               </button>
               <button 
                 className="nav-button"
                 onClick={handleSaveTheDateClick}
               >
-                Save the Date Card
+                {t.saveTheDateCard}
               </button>
             </nav>
             <nav className="main-nav main-nav-left">
@@ -240,6 +262,12 @@ function AppContent() {
                 onClick={handleRSVPClick}
               >
                 RSVP
+              </button>
+              <button 
+                className="nav-button"
+                onClick={toggleLanguage}
+              >
+                {language === 'en' ? 'En Español?' : 'In English?'}
               </button>
             </nav>
             <Landing onBack={() => {}} />
@@ -257,13 +285,13 @@ function AppContent() {
             className="nav-button"
             onClick={handleStoryClick}
           >
-            Our Story
+            {t.ourStory}
           </button>
           <button 
             className="nav-button"
             onClick={handleSaveTheDateClick}
           >
-            Save the Date
+            {t.saveTheDate}
           </button>
         </nav>
         <nav className="main-nav main-nav-left">
@@ -272,6 +300,12 @@ function AppContent() {
             onClick={handleRSVPClick}
           >
             RSVP
+          </button>
+          <button 
+            className="nav-button"
+            onClick={toggleLanguage}
+          >
+            {language === 'en' ? 'En Español?' : 'In English?'}
           </button>
         </nav>
         <Landing onBack={() => {}} />
