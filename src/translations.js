@@ -67,7 +67,13 @@ export const translations = {
     saveTheDateCard: 'Save the Date Card',
     // Story page
     howWeMet: 'How We Met',
-    returnToWebsiteStory: '← Return to Website'
+    returnToWebsiteStory: '← Return to Website',
+    story: {
+      p0: "SERENDIPITY ON THE DANCE FLOOR:",
+      p1: "TWO SALSA DANCERS CROSS PATHS AT RENEGADE IN ARLINGTON, VIRGINIA, IGNITING AN UNEXPECTED CONNECTION THROUGH RHYTHM AND PASSION.",
+      p2: "On a lively evening at The Renegade in Arlington, Virginia, two salsa dancers. Carlos and Honour, found themselves unexpectedly sharing the dance floor. Neither had planned for such a moment, yet the chemistry between them was undeniable. As the music flowed, their movements became a seamless blend of rhythm, creating an instant connection.",
+      p3: "The crowd watched as the two lost themselves bailando with La Rumbera Mayor and song such as Idilio. What began as a chance encounter quickly blossomed into an unforgettable dance that neither would forget, proving that sometimes, the best connections happen when least expected. In that moment, The Renegade became a sacred place for them.",
+    }
   },
   es: {
     // Landing page

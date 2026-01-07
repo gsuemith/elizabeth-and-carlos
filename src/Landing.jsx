@@ -82,7 +82,7 @@ function Landing({ onBack }) {
                   <h3 className="info-heading">{t.welcomeGathering}</h3>
                   <p className="info-venue">{t.locationTBD}</p>
                   <a 
-                    href="https://www.google.com/calendar/render?action=TEMPLATE&text=Welcome+Gathering+-+Elizabeth+%26+Carlos+Wedding&dates=20260716T230000/20260717T000000&details=Welcome+Gathering+for+Elizabeth+%26+Carlos+Wedding&location=Location+TBD"
+                    href="https://www.google.com/calendar/render?action=TEMPLATE&text=Welcome+Gathering+-+Elizabeth+%26+Carlos+Wedding&dates=20260716T190000/20260716T200000&details=Welcome+Gathering+for+Elizabeth+%26+Carlos+Wedding&location=Location+TBD"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="info-date info-date-link"
@@ -127,7 +127,7 @@ function Landing({ onBack }) {
                     <span className="info-address-text">Chapel Dr., Lake Junaluska, NC 28745</span>
                   </div>
                   <a 
-                    href="https://www.google.com/calendar/render?action=TEMPLATE&text=Ceremony+-+Elizabeth+%26+Carlos+Wedding&dates=20260717T213000/20260717T223000&details=Ceremony+for+Elizabeth+%26+Carlos+Wedding&location=Memorial+Chapel%2C+Chapel+Dr.%2C+Lake+Junaluska%2C+NC+28745"
+                    href="https://www.google.com/calendar/render?action=TEMPLATE&text=Ceremony+-+Elizabeth+%26+Carlos+Wedding&dates=20260717T173000/20260717T183000&details=Ceremony+for+Elizabeth+%26+Carlos+Wedding&location=Memorial+Chapel%2C+Chapel+Dr.%2C+Lake+Junaluska%2C+NC+28745"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="info-date info-date-link"
@@ -158,7 +158,7 @@ function Landing({ onBack }) {
                     <span className="info-address-text">575 North Lake Shore Dr., Lake Junaluska, NC 28745</span>
                   </div>
                   <a 
-                    href="https://www.google.com/calendar/render?action=TEMPLATE&text=Reception+-+Elizabeth+%26+Carlos+Wedding&dates=20260717T223000/20260718T010000&details=Reception+for+Elizabeth+%26+Carlos+Wedding%0ACocktail+Attire%3A+Semi-formal%2C+elegant+attire+in+bright+summer+colors&location=Warren+Center%2C+575+North+Lake+Shore+Dr.%2C+Lake+Junaluska%2C+NC+28745"
+                    href="https://www.google.com/calendar/render?action=TEMPLATE&text=Reception+-+Elizabeth+%26+Carlos+Wedding&dates=20260717T183000/20260717T210000&details=Reception+for+Elizabeth+%26+Carlos+Wedding%0ACocktail+Attire%3A+Semi-formal%2C+elegant+attire+in+bright+summer+colors&location=Warren+Center%2C+575+North+Lake+Shore+Dr.%2C+Lake+Junaluska%2C+NC+28745"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="info-date info-date-link"
