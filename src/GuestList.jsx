@@ -8,6 +8,8 @@ function GuestList() {
   const [guests, setGuests] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [showGuestList, setShowGuestList] = useState(false)
+  const [selectedEventId, setSelectedEventId] = useState(null)
 
   useEffect(() => {
     const fetchGuestData = async () => {
@@ -145,6 +147,90 @@ function GuestList() {
     return totals
   }
 
+  const generateExcelList = () => {
+    // Generate tab-separated values for Excel
+    const lines = ['Guest Names\tAddress\tCity\tState\tZip Code']
+    
+    guests.forEach(guest => {
+      const names = formatPartyNames(guest)
+      const address = guest.mailing_address
+      
+      // Combine address lines 1 and 2 if both exist
+      const addressLines = [
+        address?.address_line_1 || '',
+        address?.address_line_2 || ''
+      ].filter(Boolean).join(', ')
+      
+      const city = address?.city || ''
+      const state = address?.state || ''
+      const zipCode = address?.postal_code || ''
+      
+      lines.push(`${names}\t${addressLines}\t${city}\t${state}\t${zipCode}`)
+    })
+    
+    return lines.join('\n')
+  }
+
+  const generateEventNameList = (eventId) => {
+    if (!guests || guests.length === 0) return ''
+    
+    const names = []
+    
+    guests.forEach(guest => {
+      const event = guest.events?.find(e => e.id === eventId)
+      if (!event || !event.guests) return
+      
+      // Get party members from main event
+      const mainEvent = guest.events?.find(e => e.id === MAIN_EVENT_ID)
+      const partyMembers = mainEvent?.guests || []
+      
+      // For each party member who RSVP'd "yes" to this event, add their name
+      partyMembers.forEach(partyMember => {
+        const memberRSVP = event.guests?.find(g => g.id === partyMember.id)
+        if (memberRSVP?.rsvp_response === 'yes') {
+          names.push(partyMember.full_name)
+        }
+      })
+    })
+    
+    return names.join('\n')
+  }
+
+  const getSelectedEventName = () => {
+    if (!selectedEventId || !guests || guests.length === 0) return 'Guest List'
+    
+    const subEvents = guests[0]?.events?.filter(e => e.id !== MAIN_EVENT_ID) || []
+    const selectedEvent = subEvents.find(e => e.id === selectedEventId)
+    return selectedEvent?.name || 'Guest List'
+  }
+
+  const getModalContent = () => {
+    if (selectedEventId) {
+      return generateEventNameList(selectedEventId)
+    }
+    return generateExcelList()
+  }
+
+  const handleCopyToClipboard = () => {
+    const text = getModalContent()
+    const message = selectedEventId 
+      ? 'Attendee list copied to clipboard!'
+      : 'Guest list copied to clipboard! You can paste it into Excel.'
+    
+    navigator.clipboard.writeText(text).then(() => {
+      alert(message)
+    }).catch(err => {
+      console.error('Failed to copy:', err)
+      // Fallback: select the textarea content
+      const textarea = document.getElementById('guest-list-textarea')
+      if (textarea) {
+        textarea.select()
+        document.execCommand('copy')
+        alert(message)
+      }
+    })
+  }
+
   if (isLoading) {
     return (
       <div className="guest-list-container">
@@ -174,12 +260,27 @@ function GuestList() {
       <div className="guest-list-card">
         <h1 className="guest-list-title">Guest List Dashboard</h1>
         <div className="guest-list-stats">
-          <div className="guest-stat">
-            <span className="guest-stat-label">Total Guests:</span>
+          <div 
+            className="guest-stat guest-stat-clickable" 
+            onClick={() => {
+              setSelectedEventId(null)
+              setShowGuestList(true)
+            }}
+            title="Click to view Excel-copiable list"
+          >
+            <span className="guest-stat-label">Total Parties:</span>
             <span className="guest-stat-value">{guests.length}</span>
           </div>
-          {Object.values(eventTotals).map((eventTotal) => (
-            <div key={eventTotal.name} className="guest-stat">
+          {Object.entries(eventTotals).map(([eventId, eventTotal]) => (
+            <div 
+              key={eventId} 
+              className="guest-stat guest-stat-clickable"
+              onClick={() => {
+                setSelectedEventId(eventId)
+                setShowGuestList(true)
+              }}
+              title={`Click to view list of ${eventTotal.name} attendees`}
+            >
               <span className="guest-stat-label">{eventTotal.name}:</span>
               <span className="guest-stat-value">{eventTotal.count}</span>
             </div>
@@ -252,6 +353,56 @@ function GuestList() {
           ))}
         </div>
       </div>
+      
+      {showGuestList && (
+        <div className="guest-list-modal-overlay" onClick={() => {
+          setShowGuestList(false)
+          setSelectedEventId(null)
+        }}>
+          <div className="guest-list-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="guest-list-modal-header">
+              <h2 className="guest-list-modal-title">
+                {selectedEventId ? `${getSelectedEventName()} Attendees` : 'Guest List (Excel Format)'}
+              </h2>
+              <button 
+                className="guest-list-modal-close"
+                onClick={() => {
+                  setShowGuestList(false)
+                  setSelectedEventId(null)
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <div className="guest-list-modal-content">
+              <textarea
+                id="guest-list-textarea"
+                className="guest-list-textarea"
+                value={getModalContent()}
+                readOnly
+                onClick={(e) => e.target.select()}
+              />
+              <div className="guest-list-modal-actions">
+                <button 
+                  className="guest-list-copy-button"
+                  onClick={handleCopyToClipboard}
+                >
+                  Copy to Clipboard
+                </button>
+                <button 
+                  className="guest-list-close-button"
+                  onClick={() => {
+                    setShowGuestList(false)
+                    setSelectedEventId(null)
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
