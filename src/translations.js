@@ -79,7 +79,7 @@ export const translations = {
     reception: 'Recepción',
     cocktailAttire: 'Vestimenta de Cóctel',
     cocktailAttireNote: 'Semi-formal, atuendo elegante en colores brillantes de verano',
-    closing: '¡No podemos esperar para celebrar contigo!',
+    closing: '¡Estamos ansiosos por celebrar contigo!',
     navigate: 'Navegar',
     addToCalendar: 'Agregar al Calendario',
     locationTBD: 'Ubicación por determinar',
