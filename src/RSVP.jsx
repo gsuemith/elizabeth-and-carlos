@@ -10,7 +10,7 @@ const EVENT_IDS = {
   brunch: 'c727c901-c122-46f9-8c2a-fa6fb845f80a'
 }
 
-function RSVP({ onBack }) {
+function RSVP({ onBack, onEditRSVP }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
@@ -86,7 +86,10 @@ function RSVP({ onBack }) {
           address_line_2: address.line2 || undefined,
           city: address.city,
           state: address.state,
-          postal_code: address.postalCode
+          postal_code: address.postalCode,
+          email: address.email,
+          phone_number: address.phone,
+          password: address.password,
         },
         email: address.email,
         password: address.password,
@@ -166,7 +169,7 @@ function RSVP({ onBack }) {
       }
 
       setSubmitSuccess(true)
-      // Reset form after successful submission
+      // Reset form and return to landing page after successful submission
       setTimeout(() => {
         setAddress({
           line1: '',
@@ -187,6 +190,9 @@ function RSVP({ onBack }) {
           brunch: 'no'
         }])
         setSubmitSuccess(false)
+        if (onBack) {
+          onBack()
+        }
       }, 3000)
     } catch (error) {
       console.error('RSVP submission error:', error)
@@ -201,6 +207,11 @@ function RSVP({ onBack }) {
       <button className="back-button back-button-right" onClick={onBack}>
         Return to Website →
       </button>
+      {onEditRSVP && (
+        <button className="back-button edit-rsvp-button" onClick={onEditRSVP}>
+          Edit RSVP
+        </button>
+      )}
       <div className="invitation-container">
         <div className="rsvp-scroll-container">
           <h2 className="rsvp-page-title">RSVP</h2>

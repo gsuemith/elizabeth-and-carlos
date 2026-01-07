@@ -47,6 +47,36 @@
   transform: translateX(3px);
 }
 
+.edit-rsvp-button {
+  top: 20px;
+  left: 20px;
+}
+
+.rsvp-edit-form-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 40px;
+}
+
+.rsvp-edit-form-container.slide-up {
+  animation: slideUpFromBottom 0.6s ease-in-out;
+}
+
+@keyframes slideUpFromBottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .invitation-container {
   display: flex;
   flex-direction: column;
@@ -727,6 +757,13 @@
   background: rgba(255, 255, 255, 1);
 }
 
+.rsvp-input:disabled {
+  background: rgba(237, 229, 216, 0.5);
+  color: #7a6a5a;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
 .rsvp-address-row {
   display: grid;
   grid-template-columns: 2.07fr .75fr 1.25fr;
@@ -740,6 +777,12 @@
 }
 
 .rsvp-password-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.rsvp-phone-password-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
@@ -891,6 +934,44 @@
   padding: 20px 0;
 }
 
+.rsvp-auth-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 0;
+}
+
+.rsvp-cancel-button {
+  background: rgba(255, 255, 255, 0.8);
+  color: #5a4a3a;
+  border: 1px solid #e8d5c4;
+  padding: 14px 32px;
+  font-size: 1.1rem;
+  font-family: 'Georgia', serif;
+  cursor: pointer;
+  border-radius: 0;
+  transition: all 0.3s ease;
+  min-width: 200px;
+}
+
+.rsvp-cancel-button:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: #5a4a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.rsvp-cancel-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.rsvp-cancel-button:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 .rsvp-submit-button {
   background: #5a4a3a;
   color: #f5e6d3;
@@ -975,6 +1056,11 @@
     gap: 0;
   }
 
+  .rsvp-phone-password-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
   .rsvp-events-row {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
@@ -1006,6 +1092,17 @@
     font-size: 1rem;
     padding: 12px 24px;
     min-width: 180px;
+  }
+
+  .rsvp-cancel-button {
+    font-size: 1rem;
+    padding: 12px 24px;
+    min-width: 180px;
+  }
+
+  .rsvp-auth-actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .rsvp-guest-section {

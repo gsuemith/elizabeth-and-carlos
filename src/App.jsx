@@ -4,17 +4,21 @@ import Landing from './Landing'
 import SaveTheDateCard from './SaveTheDateCard'
 import RSVP from './RSVP'
 import Story from './Story'
+import EditRSVP from './EditRSVP'
 
 function App() {
   const [showSaveTheDate, setShowSaveTheDate] = useState(false)
   const [showRSVP, setShowRSVP] = useState(false)
   const [showStory, setShowStory] = useState(false)
+  const [showEditRSVP, setShowEditRSVP] = useState(false)
   const [isSliding, setIsSliding] = useState(false)
   const [isSlidingBack, setIsSlidingBack] = useState(false)
   const [isSlidingRSVP, setIsSlidingRSVP] = useState(false)
   const [isSlidingBackRSVP, setIsSlidingBackRSVP] = useState(false)
   const [isSlidingStory, setIsSlidingStory] = useState(false)
   const [isSlidingBackStory, setIsSlidingBackStory] = useState(false)
+  const [isSlidingEditRSVP, setIsSlidingEditRSVP] = useState(false)
+  const [isSlidingBackEditRSVP, setIsSlidingBackEditRSVP] = useState(false)
 
   const handleSaveTheDateClick = () => {
     setIsSliding(true)
@@ -64,11 +68,79 @@ function App() {
     }, 600) // Match animation duration
   }
 
-  if (showRSVP) {
+  const handleEditRSVPClick = () => {
+    setIsSlidingEditRSVP(true)
+    setTimeout(() => {
+      setShowRSVP(false)
+      setShowEditRSVP(true)
+      setIsSlidingEditRSVP(false)
+    }, 600) // Match animation duration
+  }
+
+  const handleEditRSVPBackClick = () => {
+    setIsSlidingBackEditRSVP(true)
+    setTimeout(() => {
+      setShowEditRSVP(false)
+      setShowRSVP(false)
+      setIsSlidingBackEditRSVP(false)
+    }, 600) // Match animation duration
+  }
+
+  if (showRSVP && isSlidingEditRSVP) {
+    return (
+      <div className="app">
+        <div className="rsvp-container slide-out-right">
+          <RSVP onBack={handleRSVPBackClick} onEditRSVP={handleEditRSVPClick} />
+        </div>
+        <div className="edit-rsvp-container slide-in-left">
+          <EditRSVP onBack={() => {}} />
+        </div>
+      </div>
+    )
+  }
+
+  if (showEditRSVP && !isSlidingEditRSVP) {
+    return (
+      <div className="app">
+        <div className={`edit-rsvp-container ${isSlidingBackEditRSVP ? 'slide-out-left' : ''}`}>
+          <EditRSVP onBack={handleEditRSVPBackClick} />
+        </div>
+        {isSlidingBackEditRSVP && (
+          <div className="landing-container slide-in-right">
+            <nav className="main-nav main-nav-right">
+              <button 
+                className="nav-button"
+                onClick={handleStoryClick}
+              >
+                Story
+              </button>
+              <button 
+                className="nav-button"
+                onClick={handleSaveTheDateClick}
+              >
+                Save the Date Card
+              </button>
+            </nav>
+            <nav className="main-nav main-nav-left">
+              <button 
+                className="nav-button"
+                onClick={handleRSVPClick}
+              >
+                RSVP
+              </button>
+            </nav>
+            <Landing onBack={() => {}} />
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  if (showRSVP && !isSlidingEditRSVP) {
     return (
       <div className="app">
         <div className={`rsvp-container ${isSlidingBackRSVP ? 'slide-out-left' : ''}`}>
-          <RSVP onBack={handleRSVPBackClick} />
+          <RSVP onBack={handleRSVPBackClick} onEditRSVP={handleEditRSVPClick} />
         </div>
         {isSlidingBackRSVP && (
           <div className="landing-container slide-in-right">
@@ -209,12 +281,17 @@ function App() {
       )}
       {isSlidingRSVP && (
         <div className="rsvp-container slide-in-left">
-          <RSVP onBack={() => {}} />
+          <RSVP onBack={() => {}} onEditRSVP={handleEditRSVPClick} />
         </div>
       )}
       {isSlidingStory && (
         <div className="story-container slide-in-right">
           <Story onBack={() => {}} />
+        </div>
+      )}
+      {isSlidingEditRSVP && (
+        <div className="edit-rsvp-container slide-in-left">
+          <EditRSVP onBack={() => {}} />
         </div>
       )}
     </div>
