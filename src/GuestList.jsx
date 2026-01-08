@@ -279,15 +279,11 @@ function GuestList() {
                 </div>
               </div>
 
-              <div className="guest-rsvp-section">
-                <h3 className="guest-section-title">RSVP Responses</h3>
-              </div>
-
               {(() => {
                 // Find the main event (Carlos & Elizabeth)
                 const mainEvent = guest.events?.find(e => e.id === MAIN_EVENT_ID)
-                // Show party members if there are multiple guests with the same mailing address
-                if (mainEvent?.guests && mainEvent.guests.length > 1) {
+                // Show party members for all parties
+                if (mainEvent?.guests && mainEvent.guests.length > 0) {
                   return (
                     <div className="guest-party-section">
                       <h3 className="guest-section-title">Party Members</h3>

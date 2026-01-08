@@ -29,19 +29,11 @@ function SaveTheDateCard({ onBack }) {
                 
                 <div className="info-section">
                   <h3 className="info-heading">Welcome Gathering, Location TBD</h3>
-                  <a 
-                    href="https://www.google.com/calendar/render?action=TEMPLATE&text=Welcome+Gathering+-+Elizabeth+%26+Carlos+Wedding&dates=20260716T190000/20260716T200000&details=Welcome+Gathering+for+Elizabeth+%26+Carlos+Wedding&location=Location+TBD"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="info-date info-date-link"
-                    data-tooltip="Add to Calendar"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <span>Thursday, July 16th</span> <span className="info-time">7:00 PM</span>
-                  </a>
+                  <p className="info-date">Thursday, July 16th</p>
+                  <p className="info-time">7:00 PM</p>
                 </div>
 
-                <div className="info-section ceremony-section">
+                <div className="info-section">
                   <h3 className="info-heading">Ceremony at Memorial Chapel</h3>
                   <a 
                     href="https://www.google.com/maps/search/?api=1&query=Memorial+Chapel+Chapel+Dr+Lake+Junaluska+NC+28745"
@@ -51,16 +43,8 @@ function SaveTheDateCard({ onBack }) {
                   >
                     Chapel Dr., Lake Junaluska, NC 28745
                   </a>
-                  <a 
-                    href="https://www.google.com/calendar/render?action=TEMPLATE&text=Ceremony+-+Elizabeth+%26+Carlos+Wedding&dates=20260717T173000/20260717T183000&details=Ceremony+for+Elizabeth+%26+Carlos+Wedding&location=Memorial+Chapel%2C+Chapel+Dr.%2C+Lake+Junaluska%2C+NC+28745"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="info-date info-date-link"
-                    data-tooltip="Add to Calendar"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <span>Friday, July 17th</span> <span className="info-time">5:30 PM</span>
-                  </a>
+                  <p className="info-date">Friday, July 17th</p>
+                  <p className="info-time">5:30 PM</p>
                 </div>
 
                 <p className="info-closing">We can't wait to celebrate with you!</p>
