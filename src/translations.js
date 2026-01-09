@@ -65,6 +65,7 @@ export const translations = {
     ourStory: 'Our Story',
     saveTheDate: 'Save the Date',
     saveTheDateCard: 'Save the Date Card',
+    guestBook: 'Guest Book',
     // Story page
     howWeMet: 'How We Met',
     returnToWebsiteStory: '← Return to Website',
@@ -141,6 +142,7 @@ export const translations = {
     ourStory: 'Nuestra Historia',
     saveTheDate: 'Reserve la Fecha',
     saveTheDateCard: 'Tarjeta de Reserve la Fecha',
+    guestBook: 'Libro de Invitados',
     // Story page
     howWeMet: 'Cómo Nos Conocimos',
     returnToWebsiteStory: '← Volver al Sitio Web',

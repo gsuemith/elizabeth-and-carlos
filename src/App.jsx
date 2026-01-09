@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import './App.css'
 import { useLanguage } from './LanguageContext'
 import { translations } from './translations'
@@ -9,10 +9,12 @@ import RSVP from './RSVP'
 import Story from './Story'
 import EditRSVP from './EditRSVP'
 import GuestList from './GuestList'
+import GuestBook from './GuestBook'
 
 function AppContent() {
   const { language, toggleLanguage } = useLanguage()
   const t = translations[language]
+  const navigate = useNavigate()
   const [showSaveTheDate, setShowSaveTheDate] = useState(false)
   const [showRSVP, setShowRSVP] = useState(false)
   const [showStory, setShowStory] = useState(false)
@@ -126,6 +128,12 @@ function AppContent() {
               >
                 {t.saveTheDateCard}
               </button>
+              <button 
+                className="nav-button"
+                onClick={() => navigate('/guest-book')}
+              >
+                {t.guestBook}
+              </button>
             </nav>
             <nav className="main-nav main-nav-left">
               <button 
@@ -168,6 +176,12 @@ function AppContent() {
                 onClick={handleSaveTheDateClick}
               >
                 Save the Date
+              </button>
+              <button 
+                className="nav-button"
+                onClick={() => navigate('/guest-book')}
+              >
+                {t.guestBook}
               </button>
             </nav>
             <nav className="main-nav main-nav-left">
@@ -212,6 +226,12 @@ function AppContent() {
               >
                 {t.saveTheDateCard}
               </button>
+              <button 
+                className="nav-button"
+                onClick={() => navigate('/guest-book')}
+              >
+                {t.guestBook}
+              </button>
             </nav>
             <nav className="main-nav main-nav-left">
               <button 
@@ -255,6 +275,12 @@ function AppContent() {
               >
                 {t.saveTheDateCard}
               </button>
+              <button 
+                className="nav-button"
+                onClick={() => navigate('/guest-book')}
+              >
+                {t.guestBook}
+              </button>
             </nav>
             <nav className="main-nav main-nav-left">
               <button 
@@ -292,6 +318,12 @@ function AppContent() {
             onClick={handleSaveTheDateClick}
           >
             {t.saveTheDate}
+          </button>
+          <button 
+            className="nav-button"
+            onClick={() => navigate('/guest-book')}
+          >
+            {t.guestBook}
           </button>
         </nav>
         <nav className="main-nav main-nav-left">
@@ -338,6 +370,7 @@ function App() {
   return (
     <Routes>
       <Route path="/guest-list" element={<GuestList />} />
+      <Route path="/guest-book" element={<GuestBook />} />
       <Route path="*" element={<AppContent />} />
     </Routes>
   )
