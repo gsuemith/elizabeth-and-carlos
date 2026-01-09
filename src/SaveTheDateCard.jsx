@@ -3,6 +3,11 @@ import './Landing.css'
 
 function SaveTheDateCard({ onBack }) {
   const [isOpen, setIsOpen] = useState(false)
+  
+  const handleWebsiteClick = (e) => {
+    e.stopPropagation() // Prevent card from opening when clicking the website
+    onBack()
+  }
 
   return (
     <div className="invitation-page">
@@ -24,8 +29,14 @@ function SaveTheDateCard({ onBack }) {
                 />
               </div>
               <div className="front-wedding-info">
+                <p 
+                  className="info-website" 
+                  onClick={handleWebsiteClick}
+                  style={{ cursor: 'pointer' }}
+                >
+                  www.CarlosAndElizabeth2026.com
+                </p>
                 <h2 className="info-title">Save the Date!</h2>
-                <p className="info-website">www.CarlosAndElizabeth2026.com</p>
                 
                 <div className="info-section">
                   <h3 className="info-heading">Welcome Gathering, Location TBD</h3>

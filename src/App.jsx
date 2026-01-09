@@ -1,16 +1,32 @@
 import { useState } from 'react'
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import './App.css'
+import { useLanguage } from './LanguageContext'
+import { translations } from './translations'
 import Landing from './Landing'
 import SaveTheDateCard from './SaveTheDateCard'
 import RSVP from './RSVP'
+import Story from './Story'
+import EditRSVP from './EditRSVP'
+import GuestList from './GuestList'
+import GuestBook from './GuestBook'
 
-function App() {
+function AppContent() {
+  const { language, toggleLanguage } = useLanguage()
+  const t = translations[language]
+  const navigate = useNavigate()
   const [showSaveTheDate, setShowSaveTheDate] = useState(false)
   const [showRSVP, setShowRSVP] = useState(false)
+  const [showStory, setShowStory] = useState(false)
+  const [showEditRSVP, setShowEditRSVP] = useState(false)
   const [isSliding, setIsSliding] = useState(false)
   const [isSlidingBack, setIsSlidingBack] = useState(false)
   const [isSlidingRSVP, setIsSlidingRSVP] = useState(false)
   const [isSlidingBackRSVP, setIsSlidingBackRSVP] = useState(false)
+  const [isSlidingStory, setIsSlidingStory] = useState(false)
+  const [isSlidingBackStory, setIsSlidingBackStory] = useState(false)
+  const [isSlidingEditRSVP, setIsSlidingEditRSVP] = useState(false)
+  const [isSlidingBackEditRSVP, setIsSlidingBackEditRSVP] = useState(false)
 
   const handleSaveTheDateClick = () => {
     setIsSliding(true)
@@ -44,20 +60,79 @@ function App() {
     }, 600) // Match animation duration
   }
 
-  if (showRSVP) {
+  const handleStoryClick = () => {
+    setIsSlidingStory(true)
+    setTimeout(() => {
+      setShowStory(true)
+      setIsSlidingStory(false)
+    }, 600) // Match animation duration
+  }
+
+  const handleStoryBackClick = () => {
+    setIsSlidingBackStory(true)
+    setTimeout(() => {
+      setShowStory(false)
+      setIsSlidingBackStory(false)
+    }, 600) // Match animation duration
+  }
+
+  const handleEditRSVPClick = () => {
+    setIsSlidingEditRSVP(true)
+    setTimeout(() => {
+      setShowRSVP(false)
+      setShowEditRSVP(true)
+      setIsSlidingEditRSVP(false)
+    }, 600) // Match animation duration
+  }
+
+  const handleEditRSVPBackClick = () => {
+    setIsSlidingBackEditRSVP(true)
+    setTimeout(() => {
+      setShowEditRSVP(false)
+      setShowRSVP(false)
+      setIsSlidingBackEditRSVP(false)
+    }, 600) // Match animation duration
+  }
+
+  if (showRSVP && isSlidingEditRSVP) {
     return (
       <div className="app">
-        <div className={`rsvp-container ${isSlidingBackRSVP ? 'slide-out-left' : ''}`}>
-          <RSVP onBack={handleRSVPBackClick} />
+        <div className="rsvp-container slide-out-right">
+          <RSVP onBack={handleRSVPBackClick} onEditRSVP={handleEditRSVPClick} />
         </div>
-        {isSlidingBackRSVP && (
+        <div className="edit-rsvp-container slide-in-left">
+          <EditRSVP onBack={() => {}} />
+        </div>
+      </div>
+    )
+  }
+
+  if (showEditRSVP && !isSlidingEditRSVP) {
+    return (
+      <div className="app">
+        <div className={`edit-rsvp-container ${isSlidingBackEditRSVP ? 'slide-out-left' : ''}`}>
+          <EditRSVP onBack={handleEditRSVPBackClick} />
+        </div>
+        {isSlidingBackEditRSVP && (
           <div className="landing-container slide-in-right">
             <nav className="main-nav main-nav-right">
               <button 
                 className="nav-button"
+                onClick={handleStoryClick}
+              >
+                {t.ourStory}
+              </button>
+              <button 
+                className="nav-button"
                 onClick={handleSaveTheDateClick}
               >
-                Save the Date Card
+                {t.saveTheDateCard}
+              </button>
+              <button 
+                className="nav-button"
+                onClick={() => navigate('/guest-book')}
+              >
+                {t.guestBook}
               </button>
             </nav>
             <nav className="main-nav main-nav-left">
@@ -66,6 +141,110 @@ function App() {
                 onClick={handleRSVPClick}
               >
                 RSVP
+              </button>
+              <button 
+                className="nav-button"
+                onClick={toggleLanguage}
+              >
+                {language === 'en' ? 'Español' : 'English'}
+              </button>
+            </nav>
+            <Landing onBack={() => {}} />
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  if (showRSVP && !isSlidingEditRSVP) {
+    return (
+      <div className="app">
+        <div className={`rsvp-container ${isSlidingBackRSVP ? 'slide-out-left' : ''}`}>
+          <RSVP onBack={handleRSVPBackClick} onEditRSVP={handleEditRSVPClick} />
+        </div>
+        {isSlidingBackRSVP && (
+          <div className="landing-container slide-in-right">
+            <nav className="main-nav main-nav-right">
+              <button 
+                className="nav-button"
+                onClick={handleStoryClick}
+              >
+                {t.ourStory}
+              </button>
+              <button 
+                className="nav-button"
+                onClick={handleSaveTheDateClick}
+              >
+                Save the Date
+              </button>
+              <button 
+                className="nav-button"
+                onClick={() => navigate('/guest-book')}
+              >
+                {t.guestBook}
+              </button>
+            </nav>
+            <nav className="main-nav main-nav-left">
+              <button 
+                className="nav-button"
+                onClick={handleRSVPClick}
+              >
+                RSVP
+              </button>
+              <button 
+                className="nav-button"
+                onClick={toggleLanguage}
+              >
+                {language === 'en' ? 'Español' : 'English'}
+              </button>
+            </nav>
+            <Landing onBack={() => {}} />
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  if (showStory) {
+    return (
+      <div className="app">
+        <div className={`story-container ${isSlidingBackStory ? 'slide-out-right' : ''}`}>
+          <Story onBack={handleStoryBackClick} />
+        </div>
+        {isSlidingBackStory && (
+          <div className="landing-container slide-in-left">
+            <nav className="main-nav main-nav-right">
+              <button 
+                className="nav-button"
+                onClick={handleStoryClick}
+              >
+                {t.ourStory}
+              </button>
+              <button 
+                className="nav-button"
+                onClick={handleSaveTheDateClick}
+              >
+                {t.saveTheDateCard}
+              </button>
+              <button 
+                className="nav-button"
+                onClick={() => navigate('/guest-book')}
+              >
+                {t.guestBook}
+              </button>
+            </nav>
+            <nav className="main-nav main-nav-left">
+              <button 
+                className="nav-button"
+                onClick={handleRSVPClick}
+              >
+                RSVP
+              </button>
+              <button 
+                className="nav-button"
+                onClick={toggleLanguage}
+              >
+                {language === 'en' ? 'Español' : 'English'}
               </button>
             </nav>
             <Landing onBack={() => {}} />
@@ -86,9 +265,21 @@ function App() {
             <nav className="main-nav main-nav-right">
               <button 
                 className="nav-button"
+                onClick={handleStoryClick}
+              >
+                {t.ourStory}
+              </button>
+              <button 
+                className="nav-button"
                 onClick={handleSaveTheDateClick}
               >
-                Save the Date Card
+                {t.saveTheDateCard}
+              </button>
+              <button 
+                className="nav-button"
+                onClick={() => navigate('/guest-book')}
+              >
+                {t.guestBook}
               </button>
             </nav>
             <nav className="main-nav main-nav-left">
@@ -97,6 +288,12 @@ function App() {
                 onClick={handleRSVPClick}
               >
                 RSVP
+              </button>
+              <button 
+                className="nav-button"
+                onClick={toggleLanguage}
+              >
+                {language === 'en' ? 'Español' : 'English'}
               </button>
             </nav>
             <Landing onBack={() => {}} />
@@ -108,13 +305,25 @@ function App() {
 
   return (
     <div className="app">
-      <div className={`landing-container ${isSliding ? 'slide-out-left' : isSlidingRSVP ? 'slide-out-right' : ''}`}>
+      <div className={`landing-container ${isSliding ? 'slide-out-left' : isSlidingRSVP ? 'slide-out-right' : isSlidingStory ? 'slide-out-left' : ''}`}>
         <nav className="main-nav main-nav-right">
+          <button 
+            className="nav-button"
+            onClick={handleStoryClick}
+          >
+            {t.ourStory}
+          </button>
           <button 
             className="nav-button"
             onClick={handleSaveTheDateClick}
           >
-            Save the Date Card
+            {t.saveTheDate}
+          </button>
+          <button 
+            className="nav-button"
+            onClick={() => navigate('/guest-book')}
+          >
+            {t.guestBook}
           </button>
         </nav>
         <nav className="main-nav main-nav-left">
@@ -123,6 +332,12 @@ function App() {
             onClick={handleRSVPClick}
           >
             RSVP
+          </button>
+          <button 
+            className="nav-button"
+            onClick={toggleLanguage}
+          >
+            {language === 'en' ? 'Español' : 'English'}
           </button>
         </nav>
         <Landing onBack={() => {}} />
@@ -134,10 +349,30 @@ function App() {
       )}
       {isSlidingRSVP && (
         <div className="rsvp-container slide-in-left">
-          <RSVP onBack={() => {}} />
+          <RSVP onBack={() => {}} onEditRSVP={handleEditRSVPClick} />
+        </div>
+      )}
+      {isSlidingStory && (
+        <div className="story-container slide-in-right">
+          <Story onBack={() => {}} />
+        </div>
+      )}
+      {isSlidingEditRSVP && (
+        <div className="edit-rsvp-container slide-in-left">
+          <EditRSVP onBack={() => {}} />
         </div>
       )}
     </div>
+  )
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/guest-list" element={<GuestList />} />
+      <Route path="/guest-book" element={<GuestBook />} />
+      <Route path="*" element={<AppContent />} />
+    </Routes>
   )
 }
 
