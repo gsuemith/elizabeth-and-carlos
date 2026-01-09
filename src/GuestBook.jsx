@@ -10,7 +10,7 @@ const COMMENTS_PER_PAGE = 11
 
 function GuestBook() {
   const navigate = useNavigate()
-  const { language } = useLanguage()
+  const { language, toggleLanguage } = useLanguage()
   const t = translations[language]
   const [allComments, setAllComments] = useState([])
   const [comments, setComments] = useState([])
@@ -343,6 +343,9 @@ function GuestBook() {
           <div className="guest-book-header-buttons">
             <button className="guest-book-write-button" onClick={handleWriteNoteClick}>
               {t.writeUsANote}
+            </button>
+            <button className="guest-book-language-toggle" onClick={toggleLanguage}>
+              {language === 'en' ? 'Español' : 'English'}
             </button>
             <button className="guest-book-back-button" onClick={handleBackClick}>
               {t.returnToWebsite}

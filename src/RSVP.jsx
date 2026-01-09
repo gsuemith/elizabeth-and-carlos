@@ -363,6 +363,7 @@ function RSVP({ onBack, onEditRSVP }) {
                     className="rsvp-password-toggle"
                     onClick={() => setShowPassword(!showPassword)}
                     aria-label={showPassword ? "Hide password" : "Show password"}
+                    tabIndex={-1}
                   >
                     {showPassword ? "👁️" : "👁️‍🗨️"}
                   </button>
@@ -381,6 +382,7 @@ function RSVP({ onBack, onEditRSVP }) {
                     className="rsvp-password-toggle"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                    tabIndex={-1}
                   >
                     {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
                   </button>

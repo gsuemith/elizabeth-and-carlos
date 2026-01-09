@@ -1949,6 +1949,24 @@
   margin: 0;
 }
 
+.guest-book-language-toggle {
+  font-family: 'Georgia', serif;
+  font-size: 1rem;
+  padding: 12px 24px;
+  border: 2px solid #5a4a3a;
+  border-radius: 0;
+  background: transparent;
+  color: #5a4a3a;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.guest-book-language-toggle:hover {
+  background: #5a4a3a;
+  color: #f5e6d3;
+  transform: translateY(-2px);
+}
+
 .guest-book-back-button {
   font-family: 'Georgia', serif;
   font-size: 1rem;
@@ -2189,6 +2207,10 @@
   }
 
   .guest-book-write-button {
+    width: 100%;
+  }
+
+  .guest-book-language-toggle {
     width: 100%;
   }
 }
