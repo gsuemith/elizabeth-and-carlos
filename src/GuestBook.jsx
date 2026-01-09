@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Landing.css'
+import { useLanguage } from './LanguageContext'
+import { translations } from './translations'
 // import sampleCommentsData from './sampleComments.json'
 
 const API_BASE_URL = 'https://wedding-rsvp-one-gamma.vercel.app'
@@ -8,6 +10,8 @@ const COMMENTS_PER_PAGE = 11
 
 function GuestBook() {
   const navigate = useNavigate()
+  const { language } = useLanguage()
+  const t = translations[language]
   const [allComments, setAllComments] = useState([])
   const [comments, setComments] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -310,8 +314,8 @@ function GuestBook() {
     return (
       <div className="guest-book-container">
         <div className="guest-book-card">
-          <h1 className="guest-book-title">Guest Book</h1>
-          <div className="guest-book-loading">Loading messages...</div>
+          <h1 className="guest-book-title">{t.guestBook}</h1>
+          <div className="guest-book-loading">{t.loadingMessages}</div>
         </div>
       </div>
     )
@@ -321,10 +325,10 @@ function GuestBook() {
     return (
       <div className="guest-book-container">
         <div className="guest-book-card">
-          <h1 className="guest-book-title">Guest Book</h1>
-          <div className="guest-book-error">Error: {error}</div>
+          <h1 className="guest-book-title">{t.guestBook}</h1>
+          <div className="guest-book-error">{t.error}: {error}</div>
           <button className="guest-book-back-button" onClick={handleBackClick}>
-            ← Return to Website
+            {t.returnToWebsite}
           </button>
         </div>
       </div>
@@ -335,20 +339,20 @@ function GuestBook() {
     <div className="guest-book-container">
       <div className="guest-book-card">
         <div className="guest-book-header">
-          <h1 className="guest-book-title">Guest Book</h1>
+          <h1 className="guest-book-title">{t.guestBook}</h1>
           <div className="guest-book-header-buttons">
             <button className="guest-book-write-button" onClick={handleWriteNoteClick}>
-              Write Us a Note
+              {t.writeUsANote}
             </button>
             <button className="guest-book-back-button" onClick={handleBackClick}>
-              ← Return to Website
+              {t.returnToWebsite}
             </button>
           </div>
         </div>
         
         {comments.length === 0 ? (
           <div className="guest-book-empty">
-            <p>No messages yet. Be the first to leave a note!</p>
+            <p>{t.noMessagesYet}</p>
           </div>
         ) : (
           <>
@@ -436,17 +440,17 @@ function GuestBook() {
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 0 || isSliding}
                 >
-                  ← Previous
+                  {t.previous}
                 </button>
                 <span className="guest-book-page-info">
-                  Page {currentPage + 1} of {totalPages}
+                  {t.page} {currentPage + 1} {t.of} {totalPages}
                 </span>
                 <button
                   className="guest-book-page-button"
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage >= totalPages - 1 || isSliding}
                 >
-                  Next →
+                  {t.next}
                 </button>
               </div>
             )}
@@ -459,12 +463,12 @@ function GuestBook() {
         <div className="guest-book-modal-overlay" onClick={handleCloseAuthModal}>
           <div className="guest-book-modal" onClick={(e) => e.stopPropagation()}>
             <div className="guest-book-modal-header">
-              <h2 className="guest-book-modal-title">Write Us a Note</h2>
+              <h2 className="guest-book-modal-title">{t.writeUsANote}</h2>
               <button className="guest-book-modal-close" onClick={handleCloseAuthModal}>×</button>
             </div>
             <form className="guest-book-modal-form" onSubmit={handleAuthSubmit}>
               <div className="guest-book-form-group">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">{t.email}</label>
                 <input
                   type="email"
                   id="email"
@@ -475,7 +479,7 @@ function GuestBook() {
                 />
               </div>
               <div className="guest-book-form-group">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">{t.password}</label>
                 <input
                   type="password"
                   id="password"
@@ -490,10 +494,10 @@ function GuestBook() {
               )}
               <div className="guest-book-modal-actions">
                 <button type="button" className="guest-book-modal-cancel" onClick={handleCloseAuthModal}>
-                  Cancel
+                  {t.cancel}
                 </button>
                 <button type="submit" className="guest-book-modal-submit">
-                  Continue
+                  {t.continue}
                 </button>
               </div>
             </form>
@@ -506,12 +510,12 @@ function GuestBook() {
         <div className="guest-book-modal-overlay" onClick={handleCloseMessageModal}>
           <div className="guest-book-modal" onClick={(e) => e.stopPropagation()}>
             <div className="guest-book-modal-header">
-              <h2 className="guest-book-modal-title">Write Your Message</h2>
+              <h2 className="guest-book-modal-title">{t.writeYourMessage}</h2>
               <button className="guest-book-modal-close" onClick={handleCloseMessageModal}>×</button>
             </div>
             <form className="guest-book-modal-form" onSubmit={handleMessageSubmit}>
               <div className="guest-book-form-group">
-                <label htmlFor="invitee">Your Name</label>
+                <label htmlFor="invitee">{t.yourName}</label>
                 <select
                   id="invitee"
                   value={selectedInviteeId}
@@ -519,7 +523,7 @@ function GuestBook() {
                   required
                   className="guest-book-form-input"
                 >
-                  <option value="">Select your name</option>
+                  <option value="">{t.selectYourName}</option>
                   {invitees.map((invitee) => (
                     <option key={invitee.id} value={invitee.id}>
                       {invitee.name}
@@ -529,7 +533,7 @@ function GuestBook() {
               </div>
               <div className="guest-book-form-group">
                 <label htmlFor="message">
-                  Message ({messageText.length}/1200)
+                  {t.message} ({messageText.length}/1200)
                 </label>
                 <textarea
                   id="message"
@@ -539,7 +543,7 @@ function GuestBook() {
                   rows={8}
                   required
                   className="guest-book-form-textarea"
-                  placeholder="Write your message here..."
+                  placeholder={t.writeYourMessagePlaceholder}
                 />
               </div>
               {messageError && (
@@ -547,10 +551,10 @@ function GuestBook() {
               )}
               <div className="guest-book-modal-actions">
                 <button type="button" className="guest-book-modal-cancel" onClick={handleCloseMessageModal}>
-                  Cancel
+                  {t.cancel}
                 </button>
                 <button type="submit" className="guest-book-modal-submit" disabled={isSubmitting}>
-                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                  {isSubmitting ? t.submitting : t.submit}
                 </button>
               </div>
             </form>
