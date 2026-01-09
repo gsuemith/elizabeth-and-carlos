@@ -1633,11 +1633,46 @@
   border-radius: 0;
 }
 
+.party-member-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
 .party-member-name {
   font-family: 'Georgia', serif;
   font-size: 1rem;
   color: #5a4a3a;
   font-weight: bold;
+  flex: 1;
+}
+
+.guest-delete-button {
+  background: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.guest-delete-button:hover:not(:disabled) {
+  background: #b71c1c;
+  transform: scale(1.1);
+}
+
+.guest-delete-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .party-member-rsvps {

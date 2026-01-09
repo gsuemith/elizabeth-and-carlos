@@ -10,6 +10,7 @@ function GuestList() {
   const [error, setError] = useState(null)
   const [showGuestList, setShowGuestList] = useState(false)
   const [selectedEventId, setSelectedEventId] = useState(null)
+  const [deletingGuestId, setDeletingGuestId] = useState(null)
 
   useEffect(() => {
     const fetchGuestData = async () => {
@@ -35,6 +36,56 @@ function GuestList() {
 
     fetchGuestData()
   }, [])
+
+  const handleDeleteGuest = async (guestId) => {
+    if (!window.confirm('Are you sure you want to delete this guest? This action cannot be undone.')) {
+      return
+    }
+
+    try {
+      setDeletingGuestId(guestId)
+      const response = await fetch(`${API_BASE_URL}/guest/${guestId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete guest')
+      }
+
+      // Remove the deleted guest from the state
+      setGuests(prevGuests => {
+        return prevGuests.map(guest => {
+          const mainEvent = guest.events?.find(e => e.id === MAIN_EVENT_ID)
+          if (mainEvent?.guests) {
+            // Remove the deleted guest from party members
+            const updatedGuests = mainEvent.guests.filter(g => g.id !== guestId)
+            if (updatedGuests.length === 0) {
+              // If no guests left in this party, remove the entire guest entry
+              return null
+            }
+            // Update the guest with remaining party members
+            return {
+              ...guest,
+              events: guest.events.map(e => 
+                e.id === MAIN_EVENT_ID 
+                  ? { ...e, guests: updatedGuests }
+                  : {
+                      ...e,
+                      guests: e.guests?.filter(g => g.id !== guestId) || []
+                    }
+              )
+            }
+          }
+          return guest
+        }).filter(Boolean) // Remove null entries
+      })
+    } catch (err) {
+      console.error('Error deleting guest:', err)
+      alert('Failed to delete guest. Please try again.')
+    } finally {
+      setDeletingGuestId(null)
+    }
+  }
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A'
@@ -290,7 +341,17 @@ function GuestList() {
                       <div className="guest-party-list">
                         {mainEvent.guests.map((partyMember) => (
                           <div key={partyMember.id} className="guest-party-member">
-                            <span className="party-member-name">{partyMember.full_name}</span>
+                            <div className="party-member-header">
+                              <span className="party-member-name">{partyMember.full_name}</span>
+                              <button
+                                className="guest-delete-button"
+                                onClick={() => handleDeleteGuest(partyMember.id)}
+                                disabled={deletingGuestId === partyMember.id}
+                                title="Delete guest"
+                              >
+                                {deletingGuestId === partyMember.id ? 'Deleting...' : '×'}
+                              </button>
+                            </div>
                             <div className="party-member-rsvps">
                               {guest.events?.filter(e => e.id !== MAIN_EVENT_ID).map((event) => {
                                 const memberRSVP = event.guests?.find(g => g.id === partyMember.id)
