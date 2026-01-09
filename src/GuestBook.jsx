@@ -83,7 +83,9 @@ function GuestBook() {
           setDisplayComments(commentsToUse)
           setIncomingComments([])
           // Scroll to top immediately if not transitioning
-          window.scrollTo({ top: 0, behavior: 'smooth' })
+          // Use instant scroll on mobile, smooth on desktop
+          const isMobile = window.innerWidth <= 768
+          window.scrollTo({ top: 0, behavior: isMobile ? 'auto' : 'smooth' })
         }
 
         // Use sample data instead of API (commented out)
@@ -163,7 +165,9 @@ function GuestBook() {
     isTransitioningRef.current = true
     
     // Scroll to top immediately when page change starts
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    // Use instant scroll on mobile, smooth on desktop
+    const isMobile = window.innerWidth <= 768
+    window.scrollTo({ top: 0, behavior: isMobile ? 'auto' : 'smooth' })
     
     // Fade out current page, then fetch new page
     setTimeout(() => {
