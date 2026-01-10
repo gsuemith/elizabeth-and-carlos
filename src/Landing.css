@@ -2367,6 +2367,37 @@
   border-left: 3px solid #c62828;
 }
 
+.guest-book-non-attendee-link {
+  margin-top: 15px;
+  text-align: center;
+  padding-top: 15px;
+  border-top: 1px solid rgba(90, 74, 58, 0.2);
+}
+
+.guest-book-link-button {
+  background: none;
+  border: none;
+  color: #5a4a3a;
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: 'Georgia', serif;
+  font-size: 0.9rem;
+  padding: 0;
+}
+
+.guest-book-link-button:hover {
+  color: #3d3328;
+}
+
+.guest-book-form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.guest-book-form-row .guest-book-form-group {
+  flex: 1;
+}
+
 .guest-book-modal-actions {
   display: flex;
   gap: 15px;
@@ -2429,6 +2460,10 @@
 
   .guest-book-modal-form {
     padding: 20px;
+  }
+
+  .guest-book-form-row {
+    flex-direction: column;
   }
 
   .guest-book-modal-actions {

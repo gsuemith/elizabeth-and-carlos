@@ -7,6 +7,7 @@ import { translations } from './translations'
 
 const API_BASE_URL = 'https://wedding-rsvp-one-gamma.vercel.app'
 const COMMENTS_PER_PAGE = 11
+const MAIN_EVENT_ID = '010e9472-8ea4-4239-9882-f8c3fe676f2b'
 
 function GuestBook() {
   const navigate = useNavigate()
@@ -27,6 +28,7 @@ function GuestBook() {
   
   // Modal states
   const [showAuthModal, setShowAuthModal] = useState(false)
+  const [showNonAttendeeModal, setShowNonAttendeeModal] = useState(false)
   const [showMessageModal, setShowMessageModal] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -36,6 +38,22 @@ function GuestBook() {
   const [messageText, setMessageText] = useState('')
   const [messageError, setMessageError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  // Non-attendee form state
+  const [nonAttendeeForm, setNonAttendeeForm] = useState({
+    name: '',
+    line1: '',
+    line2: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    phone: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  })
+  const [nonAttendeeError, setNonAttendeeError] = useState(null)
+  const [isSubmittingNonAttendee, setIsSubmittingNonAttendee] = useState(false)
 
   useEffect(() => {
     const loadComments = async () => {
@@ -302,6 +320,77 @@ function GuestBook() {
     setAuthError(null)
   }
 
+  const handleCloseNonAttendeeModal = () => {
+    setShowNonAttendeeModal(false)
+    setNonAttendeeForm({
+      name: '',
+      line1: '',
+      line2: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      phone: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    })
+    setNonAttendeeError(null)
+  }
+
+  const handleNonAttendeeSubmit = async (e) => {
+    e.preventDefault()
+    setNonAttendeeError(null)
+    
+    // Validate password match
+    if (nonAttendeeForm.password !== nonAttendeeForm.confirmPassword) {
+      setNonAttendeeError('Passwords do not match. Please try again.')
+      return
+    }
+    
+    setIsSubmittingNonAttendee(true)
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/comments/non_attendee`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          event_id: MAIN_EVENT_ID,
+          name: nonAttendeeForm.name,
+          mailing_address: {
+            address_line_1: nonAttendeeForm.line1,
+            address_line_2: nonAttendeeForm.line2 || '',
+            city: nonAttendeeForm.city,
+            state: nonAttendeeForm.state,
+            postal_code: nonAttendeeForm.postalCode,
+            email: nonAttendeeForm.email,
+            phone_number: nonAttendeeForm.phone,
+            password: nonAttendeeForm.password,
+          }
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.message || 'Registration failed')
+      }
+
+      const data = await response.json()
+      setInvitees(data.invitees || [])
+      setShowNonAttendeeModal(false)
+      setShowMessageModal(true)
+      setSelectedInviteeId('')
+      setMessageText('')
+      setMessageError(null)
+    } catch (err) {
+      console.error('Non-attendee registration error:', err)
+      setNonAttendeeError(err.message || 'Failed to register. Please try again.')
+    } finally {
+      setIsSubmittingNonAttendee(false)
+    }
+  }
+
   const handleCloseMessageModal = () => {
     setShowMessageModal(false)
     setSelectedInviteeId('')
@@ -501,6 +590,154 @@ function GuestBook() {
                 </button>
                 <button type="submit" className="guest-book-modal-submit">
                   {t.continue}
+                </button>
+              </div>
+              <div className="guest-book-non-attendee-link">
+                <button 
+                  type="button" 
+                  className="guest-book-link-button"
+                  onClick={() => {
+                    setShowAuthModal(false)
+                    setShowNonAttendeeModal(true)
+                  }}
+                >
+                  {t.notAttendingButWantToWrite}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Non-Attendee Registration Modal */}
+      {showNonAttendeeModal && (
+        <div className="guest-book-modal-overlay" onClick={handleCloseNonAttendeeModal}>
+          <div className="guest-book-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="guest-book-modal-header">
+              <h2 className="guest-book-modal-title">{t.writeUsANote}</h2>
+              <button className="guest-book-modal-close" onClick={handleCloseNonAttendeeModal}>×</button>
+            </div>
+            <form className="guest-book-modal-form" onSubmit={handleNonAttendeeSubmit}>
+              <div className="guest-book-form-group">
+                <label htmlFor="nonAttendee-name">{t.fullName}</label>
+                <input
+                  type="text"
+                  id="nonAttendee-name"
+                  value={nonAttendeeForm.name}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, name: e.target.value }))}
+                  required
+                  className="guest-book-form-input"
+                />
+              </div>
+              <div className="guest-book-form-group">
+                <label htmlFor="nonAttendee-line1">{t.addressLine1}</label>
+                <input
+                  type="text"
+                  id="nonAttendee-line1"
+                  value={nonAttendeeForm.line1}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, line1: e.target.value }))}
+                  required
+                  className="guest-book-form-input"
+                />
+              </div>
+              <div className="guest-book-form-group">
+                <label htmlFor="nonAttendee-line2">{t.addressLine2}</label>
+                <input
+                  type="text"
+                  id="nonAttendee-line2"
+                  value={nonAttendeeForm.line2}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, line2: e.target.value }))}
+                  className="guest-book-form-input"
+                />
+              </div>
+              <div className="guest-book-form-row">
+                <div className="guest-book-form-group">
+                  <label htmlFor="nonAttendee-city">{t.city}</label>
+                  <input
+                    type="text"
+                    id="nonAttendee-city"
+                    value={nonAttendeeForm.city}
+                    onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, city: e.target.value }))}
+                    required
+                    className="guest-book-form-input"
+                  />
+                </div>
+                <div className="guest-book-form-group">
+                  <label htmlFor="nonAttendee-state">{t.state}</label>
+                  <input
+                    type="text"
+                    id="nonAttendee-state"
+                    value={nonAttendeeForm.state}
+                    onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, state: e.target.value }))}
+                    required
+                    className="guest-book-form-input"
+                  />
+                </div>
+                <div className="guest-book-form-group">
+                  <label htmlFor="nonAttendee-postalCode">{t.postalCode}</label>
+                  <input
+                    type="text"
+                    id="nonAttendee-postalCode"
+                    value={nonAttendeeForm.postalCode}
+                    onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, postalCode: e.target.value }))}
+                    required
+                    className="guest-book-form-input"
+                  />
+                </div>
+              </div>
+              <div className="guest-book-form-group">
+                <label htmlFor="nonAttendee-phone">{t.phone}</label>
+                <input
+                  type="tel"
+                  id="nonAttendee-phone"
+                  value={nonAttendeeForm.phone}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, phone: e.target.value }))}
+                  required
+                  className="guest-book-form-input"
+                />
+              </div>
+              <div className="guest-book-form-group">
+                <label htmlFor="nonAttendee-email">{t.email}</label>
+                <input
+                  type="email"
+                  id="nonAttendee-email"
+                  value={nonAttendeeForm.email}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, email: e.target.value }))}
+                  required
+                  className="guest-book-form-input"
+                />
+              </div>
+              <div className="guest-book-form-group">
+                <label htmlFor="nonAttendee-password">{t.password}</label>
+                <input
+                  type="password"
+                  id="nonAttendee-password"
+                  value={nonAttendeeForm.password}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, password: e.target.value }))}
+                  required
+                  className="guest-book-form-input"
+                />
+              </div>
+              <div className="guest-book-form-group">
+                <label htmlFor="nonAttendee-confirmPassword">{t.confirmPassword}</label>
+                <input
+                  type="password"
+                  id="nonAttendee-confirmPassword"
+                  value={nonAttendeeForm.confirmPassword}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                  required
+                  className="guest-book-form-input"
+                />
+              </div>
+              {nonAttendeeError && (
+                <div className="guest-book-form-error">{nonAttendeeError}</div>
+              )}
+              <div className="guest-book-modal-actions">
+                <button type="button" className="guest-book-modal-cancel" onClick={handleCloseNonAttendeeModal}>
+                  {t.cancel}
+                </button>
+                <button type="submit" className="guest-book-modal-submit" disabled={isSubmittingNonAttendee}>
+                  {isSubmittingNonAttendee ? t.submitting : t.submit}
                 </button>
               </div>
             </form>

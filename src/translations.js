@@ -80,6 +80,7 @@ export const translations = {
     selectYourName: 'Select your name',
     message: 'Message',
     submit: 'Submit',
+    notAttendingButWantToWrite: 'Not attending but would like to write a note?',
     // Story page
     howWeMet: 'How We Met',
     returnToWebsiteStory: '← Return to Website',
@@ -171,6 +172,7 @@ export const translations = {
     selectYourName: 'Selecciona tu nombre',
     message: 'Mensaje',
     submit: 'Enviar',
+    notAttendingButWantToWrite: '¿No asistirás pero te gustaría escribir una nota?',
     // Story page
     howWeMet: 'Cómo Nos Conocimos',
     returnToWebsiteStory: '← Volver al Sitio Web',
