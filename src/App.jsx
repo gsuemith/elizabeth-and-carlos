@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import './App.css'
 import { useLanguage } from './LanguageContext'
@@ -11,10 +11,60 @@ import EditRSVP from './EditRSVP'
 import GuestList from './GuestList'
 import GuestBook from './GuestBook'
 
+function NavButtons({ onStoryClick, onSaveTheDateClick, onRSVPClick, onGuestBookClick, onToggleLanguage }) {
+  const { language } = useLanguage()
+  const t = translations[language]
+  const navigate = useNavigate()
+
+  return (
+    <>
+      <nav className="main-nav main-nav-right">
+        <button 
+          className="nav-button"
+          onClick={onGuestBookClick || (() => navigate('/guest-book'))}
+        >
+          {t.guestBook}
+        </button>
+        <button 
+          className="nav-button"
+          onClick={onSaveTheDateClick}
+        >
+          {t.saveTheDateCard}
+        </button>
+        <button 
+          className="nav-button"
+          onClick={onStoryClick}
+        >
+          {t.ourStory}
+        </button>
+      </nav>
+      <nav className="main-nav main-nav-left">
+        <button 
+          className="nav-button"
+          onClick={onRSVPClick}
+        >
+          RSVP
+        </button>
+        <button 
+          className="nav-button"
+          onClick={onToggleLanguage}
+        >
+          {language === 'en' ? 'Español' : 'English'}
+        </button>
+      </nav>
+    </>
+  )
+}
+
 function AppContent() {
   const { language, toggleLanguage } = useLanguage()
   const t = translations[language]
   const navigate = useNavigate()
+  const touchStartRef = useRef(null)
+  const touchEndRef = useRef(null)
+  const touchStartYRef = useRef(null)
+  const isSwipeRef = useRef(false)
+  const minSwipeDistance = 50
   const [showSaveTheDate, setShowSaveTheDate] = useState(false)
   const [showRSVP, setShowRSVP] = useState(false)
   const [showStory, setShowStory] = useState(false)
@@ -94,13 +144,129 @@ function AppContent() {
     }, 600) // Match animation duration
   }
 
+  const onTouchStart = (e) => {
+    // Only enable swipe on mobile
+    if (window.innerWidth > 768) return
+    // Don't trigger swipe if touching interactive elements (buttons, links, inputs)
+    if (e.target.closest('button') || e.target.closest('a') || e.target.closest('input') || e.target.closest('textarea') || e.target.closest('select')) {
+      return
+    }
+    touchEndRef.current = null
+    touchStartRef.current = e.targetTouches[0].clientX
+    touchStartYRef.current = e.targetTouches[0].clientY
+    isSwipeRef.current = false
+  }
+
+  const onTouchMove = (e) => {
+    // Only enable swipe on mobile
+    if (window.innerWidth > 768) return
+    if (touchStartRef.current !== null && touchStartYRef.current !== null) {
+      const currentX = e.targetTouches[0].clientX
+      const currentY = e.targetTouches[0].clientY
+      const deltaX = Math.abs(currentX - touchStartRef.current)
+      const deltaY = Math.abs(currentY - touchStartYRef.current)
+      
+      // If horizontal movement is greater than vertical, it's a swipe
+      if (deltaX > deltaY && deltaX > 10) {
+        isSwipeRef.current = true
+        touchEndRef.current = currentX
+      }
+    }
+  }
+
+  const onTouchEnd = (e) => {
+    // Only enable swipe on mobile
+    if (window.innerWidth > 768) return
+    
+    if (!touchStartRef.current || touchEndRef.current === null) {
+      touchStartRef.current = null
+      touchEndRef.current = null
+      touchStartYRef.current = null
+      isSwipeRef.current = false
+      return
+    }
+    
+    const distance = touchStartRef.current - touchEndRef.current
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    // Handle swipes on landing page
+    if (isSwipeRef.current && !showRSVP && !showStory && !showSaveTheDate && !showEditRSVP) {
+      if (isLeftSwipe) {
+        // Swipe left → Our Story
+        e.preventDefault()
+        handleStoryClick()
+      } else if (isRightSwipe) {
+        // Swipe right → RSVP
+        e.preventDefault()
+        handleRSVPClick()
+      }
+    }
+    
+    // Handle swipes on RSVP page
+    if (isSwipeRef.current && showRSVP && !showEditRSVP) {
+      if (isLeftSwipe) {
+        // Swipe left → Return to landing page
+        e.preventDefault()
+        handleRSVPBackClick()
+      } else if (isRightSwipe) {
+        // Swipe right → Edit RSVP form
+        e.preventDefault()
+        handleEditRSVPClick()
+      }
+    }
+    
+    // Handle swipes on Edit RSVP page (swipe left to go back to RSVP form)
+    if (isSwipeRef.current && showEditRSVP) {
+      if (isLeftSwipe) {
+        // Swipe left → Return to RSVP form
+        e.preventDefault()
+        handleEditRSVPBackClick()
+      }
+    }
+    
+    // Handle swipes on Story page
+    if (isSwipeRef.current && showStory) {
+      if (isRightSwipe) {
+        // Swipe right → Return to landing page
+        e.preventDefault()
+        handleStoryBackClick()
+      }
+    }
+    
+    // Handle swipes on Save the Date page (swipe left to go back to landing page)
+    if (isSwipeRef.current && showSaveTheDate) {
+      if (isLeftSwipe) {
+        // Swipe left → Return to landing page
+        e.preventDefault()
+        handleBackClick()
+      }
+    }
+    
+    // Reset touch references
+    touchStartRef.current = null
+    touchEndRef.current = null
+    touchStartYRef.current = null
+    isSwipeRef.current = false
+  }
+
   if (showRSVP && isSlidingEditRSVP) {
     return (
       <div className="app">
-        <div className="rsvp-container slide-out-right">
+        <div 
+          className="rsvp-container slide-out-right"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <RSVP onBack={handleRSVPBackClick} onEditRSVP={handleEditRSVPClick} />
         </div>
-        <div className="edit-rsvp-container slide-in-left">
+        <div 
+          className="edit-rsvp-container slide-in-left"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <EditRSVP onBack={() => {}} />
         </div>
       </div>
@@ -110,45 +276,22 @@ function AppContent() {
   if (showEditRSVP && !isSlidingEditRSVP) {
     return (
       <div className="app">
-        <div className={`edit-rsvp-container ${isSlidingBackEditRSVP ? 'slide-out-left' : ''}`}>
+        <div 
+          className={`edit-rsvp-container ${isSlidingBackEditRSVP ? 'slide-out-left' : ''}`}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <EditRSVP onBack={handleEditRSVPBackClick} />
         </div>
         {isSlidingBackEditRSVP && (
           <div className="landing-container slide-in-right">
-            <nav className="main-nav main-nav-right">
-              <button 
-                className="nav-button"
-                onClick={handleStoryClick}
-              >
-                {t.ourStory}
-              </button>
-              <button 
-                className="nav-button"
-                onClick={handleSaveTheDateClick}
-              >
-                {t.saveTheDateCard}
-              </button>
-              <button 
-                className="nav-button"
-                onClick={() => navigate('/guest-book')}
-              >
-                {t.guestBook}
-              </button>
-            </nav>
-            <nav className="main-nav main-nav-left">
-              <button 
-                className="nav-button"
-                onClick={handleRSVPClick}
-              >
-                RSVP
-              </button>
-              <button 
-                className="nav-button"
-                onClick={toggleLanguage}
-              >
-                {language === 'en' ? 'Español' : 'English'}
-              </button>
-            </nav>
+            <NavButtons
+              onStoryClick={handleStoryClick}
+              onSaveTheDateClick={handleSaveTheDateClick}
+              onRSVPClick={handleRSVPClick}
+              onToggleLanguage={toggleLanguage}
+            />
             <Landing onBack={() => {}} />
           </div>
         )}
@@ -159,45 +302,22 @@ function AppContent() {
   if (showRSVP && !isSlidingEditRSVP) {
     return (
       <div className="app">
-        <div className={`rsvp-container ${isSlidingBackRSVP ? 'slide-out-left' : ''}`}>
+        <div 
+          className={`rsvp-container ${isSlidingBackRSVP ? 'slide-out-left' : ''}`}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <RSVP onBack={handleRSVPBackClick} onEditRSVP={handleEditRSVPClick} />
         </div>
         {isSlidingBackRSVP && (
           <div className="landing-container slide-in-right">
-            <nav className="main-nav main-nav-right">
-              <button 
-                className="nav-button"
-                onClick={handleStoryClick}
-              >
-                {t.ourStory}
-              </button>
-              <button 
-                className="nav-button"
-                onClick={handleSaveTheDateClick}
-              >
-                Save the Date
-              </button>
-              <button 
-                className="nav-button"
-                onClick={() => navigate('/guest-book')}
-              >
-                {t.guestBook}
-              </button>
-            </nav>
-            <nav className="main-nav main-nav-left">
-              <button 
-                className="nav-button"
-                onClick={handleRSVPClick}
-              >
-                RSVP
-              </button>
-              <button 
-                className="nav-button"
-                onClick={toggleLanguage}
-              >
-                {language === 'en' ? 'Español' : 'English'}
-              </button>
-            </nav>
+            <NavButtons
+              onStoryClick={handleStoryClick}
+              onSaveTheDateClick={handleSaveTheDateClick}
+              onRSVPClick={handleRSVPClick}
+              onToggleLanguage={toggleLanguage}
+            />
             <Landing onBack={() => {}} />
           </div>
         )}
@@ -208,45 +328,22 @@ function AppContent() {
   if (showStory) {
     return (
       <div className="app">
-        <div className={`story-container ${isSlidingBackStory ? 'slide-out-right' : ''}`}>
+        <div 
+          className={`story-container ${isSlidingBackStory ? 'slide-out-right' : ''}`}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <Story onBack={handleStoryBackClick} />
         </div>
         {isSlidingBackStory && (
           <div className="landing-container slide-in-left">
-            <nav className="main-nav main-nav-right">
-              <button 
-                className="nav-button"
-                onClick={handleStoryClick}
-              >
-                {t.ourStory}
-              </button>
-              <button 
-                className="nav-button"
-                onClick={handleSaveTheDateClick}
-              >
-                {t.saveTheDateCard}
-              </button>
-              <button 
-                className="nav-button"
-                onClick={() => navigate('/guest-book')}
-              >
-                {t.guestBook}
-              </button>
-            </nav>
-            <nav className="main-nav main-nav-left">
-              <button 
-                className="nav-button"
-                onClick={handleRSVPClick}
-              >
-                RSVP
-              </button>
-              <button 
-                className="nav-button"
-                onClick={toggleLanguage}
-              >
-                {language === 'en' ? 'Español' : 'English'}
-              </button>
-            </nav>
+            <NavButtons
+              onStoryClick={handleStoryClick}
+              onSaveTheDateClick={handleSaveTheDateClick}
+              onRSVPClick={handleRSVPClick}
+              onToggleLanguage={toggleLanguage}
+            />
             <Landing onBack={() => {}} />
           </div>
         )}
@@ -257,45 +354,22 @@ function AppContent() {
   if (showSaveTheDate) {
     return (
       <div className="app">
-        <div className={`save-date-container ${isSlidingBack ? 'slide-out-right' : ''}`}>
+        <div 
+          className={`save-date-container ${isSlidingBack ? 'slide-out-right' : ''}`}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <SaveTheDateCard onBack={handleBackClick} />
         </div>
         {isSlidingBack && (
           <div className="landing-container slide-in-left">
-            <nav className="main-nav main-nav-right">
-              <button 
-                className="nav-button"
-                onClick={handleStoryClick}
-              >
-                {t.ourStory}
-              </button>
-              <button 
-                className="nav-button"
-                onClick={handleSaveTheDateClick}
-              >
-                {t.saveTheDateCard}
-              </button>
-              <button 
-                className="nav-button"
-                onClick={() => navigate('/guest-book')}
-              >
-                {t.guestBook}
-              </button>
-            </nav>
-            <nav className="main-nav main-nav-left">
-              <button 
-                className="nav-button"
-                onClick={handleRSVPClick}
-              >
-                RSVP
-              </button>
-              <button 
-                className="nav-button"
-                onClick={toggleLanguage}
-              >
-                {language === 'en' ? 'Español' : 'English'}
-              </button>
-            </nav>
+            <NavButtons
+              onStoryClick={handleStoryClick}
+              onSaveTheDateClick={handleSaveTheDateClick}
+              onRSVPClick={handleRSVPClick}
+              onToggleLanguage={toggleLanguage}
+            />
             <Landing onBack={() => {}} />
           </div>
         )}
@@ -305,60 +379,57 @@ function AppContent() {
 
   return (
     <div className="app">
-      <div className={`landing-container ${isSliding ? 'slide-out-left' : isSlidingRSVP ? 'slide-out-right' : isSlidingStory ? 'slide-out-left' : ''}`}>
-        <nav className="main-nav main-nav-right">
-          <button 
-            className="nav-button"
-            onClick={handleStoryClick}
-          >
-            {t.ourStory}
-          </button>
-          <button 
-            className="nav-button"
-            onClick={handleSaveTheDateClick}
-          >
-            {t.saveTheDate}
-          </button>
-          <button 
-            className="nav-button"
-            onClick={() => navigate('/guest-book')}
-          >
-            {t.guestBook}
-          </button>
-        </nav>
-        <nav className="main-nav main-nav-left">
-          <button 
-            className="nav-button"
-            onClick={handleRSVPClick}
-          >
-            RSVP
-          </button>
-          <button 
-            className="nav-button"
-            onClick={toggleLanguage}
-          >
-            {language === 'en' ? 'Español' : 'English'}
-          </button>
-        </nav>
+      <div 
+        className={`landing-container ${isSliding ? 'slide-out-left' : isSlidingRSVP ? 'slide-out-right' : isSlidingStory ? 'slide-out-left' : ''}`}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
+        <NavButtons
+          onStoryClick={handleStoryClick}
+          onSaveTheDateClick={handleSaveTheDateClick}
+          onRSVPClick={handleRSVPClick}
+          onToggleLanguage={toggleLanguage}
+        />
         <Landing onBack={() => {}} />
       </div>
       {isSliding && (
-        <div className="save-date-container slide-in-right">
+        <div 
+          className="save-date-container slide-in-right"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <SaveTheDateCard onBack={() => {}} />
         </div>
       )}
       {isSlidingRSVP && (
-        <div className="rsvp-container slide-in-left">
+        <div 
+          className="rsvp-container slide-in-left"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <RSVP onBack={() => {}} onEditRSVP={handleEditRSVPClick} />
         </div>
       )}
       {isSlidingStory && (
-        <div className="story-container slide-in-right">
+        <div 
+          className="story-container slide-in-right"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <Story onBack={() => {}} />
         </div>
       )}
       {isSlidingEditRSVP && (
-        <div className="edit-rsvp-container slide-in-left">
+        <div 
+          className="edit-rsvp-container slide-in-left"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <EditRSVP onBack={() => {}} />
         </div>
       )}
