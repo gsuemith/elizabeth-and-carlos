@@ -2318,6 +2318,17 @@
   gap: 20px;
 }
 
+.guest-book-auth-message {
+  font-family: 'Georgia', serif;
+  font-size: 0.9rem;
+  color: #5a4a3a;
+  margin: 0 0 20px 0;
+  padding: 12px;
+  background: #f5e6d3;
+  border-left: 3px solid #5a4a3a;
+  line-height: 1.5;
+}
+
 .guest-book-form-group {
   display: flex;
   flex-direction: column;

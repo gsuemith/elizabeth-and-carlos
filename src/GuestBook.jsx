@@ -559,11 +559,12 @@ function GuestBook() {
               <button className="guest-book-modal-close" onClick={handleCloseAuthModal}>×</button>
             </div>
             <form className="guest-book-modal-form" onSubmit={handleAuthSubmit}>
+              <p className="guest-book-auth-message">{t.authFormMessage}</p>
               <div className="guest-book-form-group">
-                <label htmlFor="email">{t.email}</label>
                 <input
                   type="email"
                   id="email"
+                  placeholder={t.email}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -571,10 +572,10 @@ function GuestBook() {
                 />
               </div>
               <div className="guest-book-form-group">
-                <label htmlFor="password">{t.password}</label>
                 <input
                   type="password"
                   id="password"
+                  placeholder={t.password}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -618,11 +619,12 @@ function GuestBook() {
               <button className="guest-book-modal-close" onClick={handleCloseNonAttendeeModal}>×</button>
             </div>
             <form className="guest-book-modal-form" onSubmit={handleNonAttendeeSubmit}>
+              <p className="guest-book-auth-message">{t.nonAttendeeFormMessage}</p>
               <div className="guest-book-form-group">
-                <label htmlFor="nonAttendee-name">{t.fullName}</label>
                 <input
                   type="text"
                   id="nonAttendee-name"
+                  placeholder={t.fullName}
                   value={nonAttendeeForm.name}
                   onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, name: e.target.value }))}
                   required
@@ -630,10 +632,10 @@ function GuestBook() {
                 />
               </div>
               <div className="guest-book-form-group">
-                <label htmlFor="nonAttendee-line1">{t.addressLine1}</label>
                 <input
                   type="text"
                   id="nonAttendee-line1"
+                  placeholder={t.addressLine1}
                   value={nonAttendeeForm.line1}
                   onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, line1: e.target.value }))}
                   required
@@ -641,10 +643,10 @@ function GuestBook() {
                 />
               </div>
               <div className="guest-book-form-group">
-                <label htmlFor="nonAttendee-line2">{t.addressLine2}</label>
                 <input
                   type="text"
                   id="nonAttendee-line2"
+                  placeholder={t.addressLine2}
                   value={nonAttendeeForm.line2}
                   onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, line2: e.target.value }))}
                   className="guest-book-form-input"
@@ -652,10 +654,10 @@ function GuestBook() {
               </div>
               <div className="guest-book-form-row">
                 <div className="guest-book-form-group">
-                  <label htmlFor="nonAttendee-city">{t.city}</label>
                   <input
                     type="text"
                     id="nonAttendee-city"
+                    placeholder={t.city}
                     value={nonAttendeeForm.city}
                     onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, city: e.target.value }))}
                     required
@@ -663,10 +665,10 @@ function GuestBook() {
                   />
                 </div>
                 <div className="guest-book-form-group">
-                  <label htmlFor="nonAttendee-state">{t.state}</label>
                   <input
                     type="text"
                     id="nonAttendee-state"
+                    placeholder={t.state}
                     value={nonAttendeeForm.state}
                     onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, state: e.target.value }))}
                     required
@@ -674,10 +676,10 @@ function GuestBook() {
                   />
                 </div>
                 <div className="guest-book-form-group">
-                  <label htmlFor="nonAttendee-postalCode">{t.postalCode}</label>
                   <input
                     type="text"
                     id="nonAttendee-postalCode"
+                    placeholder={t.postalCode}
                     value={nonAttendeeForm.postalCode}
                     onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, postalCode: e.target.value }))}
                     required
@@ -686,10 +688,10 @@ function GuestBook() {
                 </div>
               </div>
               <div className="guest-book-form-group">
-                <label htmlFor="nonAttendee-phone">{t.phone}</label>
                 <input
                   type="tel"
                   id="nonAttendee-phone"
+                  placeholder={t.phone}
                   value={nonAttendeeForm.phone}
                   onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, phone: e.target.value }))}
                   required
@@ -697,10 +699,10 @@ function GuestBook() {
                 />
               </div>
               <div className="guest-book-form-group">
-                <label htmlFor="nonAttendee-email">{t.email}</label>
                 <input
                   type="email"
                   id="nonAttendee-email"
+                  placeholder={t.email}
                   value={nonAttendeeForm.email}
                   onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, email: e.target.value }))}
                   required
@@ -708,10 +710,10 @@ function GuestBook() {
                 />
               </div>
               <div className="guest-book-form-group">
-                <label htmlFor="nonAttendee-password">{t.password}</label>
                 <input
                   type="password"
                   id="nonAttendee-password"
+                  placeholder={t.password}
                   value={nonAttendeeForm.password}
                   onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, password: e.target.value }))}
                   required
@@ -719,10 +721,10 @@ function GuestBook() {
                 />
               </div>
               <div className="guest-book-form-group">
-                <label htmlFor="nonAttendee-confirmPassword">{t.confirmPassword}</label>
                 <input
                   type="password"
                   id="nonAttendee-confirmPassword"
+                  placeholder={t.confirmPassword}
                   value={nonAttendeeForm.confirmPassword}
                   onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
                   required
@@ -755,7 +757,6 @@ function GuestBook() {
             </div>
             <form className="guest-book-modal-form" onSubmit={handleMessageSubmit}>
               <div className="guest-book-form-group">
-                <label htmlFor="invitee">{t.yourName}</label>
                 <select
                   id="invitee"
                   value={selectedInviteeId}
@@ -772,9 +773,6 @@ function GuestBook() {
                 </select>
               </div>
               <div className="guest-book-form-group">
-                <label htmlFor="message">
-                  {t.message} ({messageText.length}/1200)
-                </label>
                 <textarea
                   id="message"
                   value={messageText}
@@ -783,7 +781,7 @@ function GuestBook() {
                   rows={8}
                   required
                   className="guest-book-form-textarea"
-                  placeholder={t.writeYourMessagePlaceholder}
+                  placeholder={`${t.message} (${messageText.length}/1200)`}
                 />
               </div>
               {messageError && (
