@@ -11,6 +11,8 @@ function GuestList() {
   const [showGuestList, setShowGuestList] = useState(false)
   const [selectedEventId, setSelectedEventId] = useState(null)
   const [deletingGuestId, setDeletingGuestId] = useState(null)
+  const [guestBookNotesCount, setGuestBookNotesCount] = useState(0)
+  const [isLoadingComments, setIsLoadingComments] = useState(false)
 
   useEffect(() => {
     const fetchGuestData = async () => {
@@ -25,7 +27,23 @@ function GuestList() {
         }
         
         const guestDataArray = await response.json()
-        setGuests(guestDataArray || [])
+        
+        // Filter out guests who RSVP'd "no" for the main event
+        const filteredGuests = (guestDataArray || []).filter(guest => {
+          const mainEvent = guest.events?.find(e => e.id === MAIN_EVENT_ID)
+          if (!mainEvent?.guests || mainEvent.guests.length === 0) {
+            // If no main event or no guests, include them (edge case)
+            return true
+          }
+          
+          // Check if all party members RSVP'd "no" for the main event
+          const allNo = mainEvent.guests.every(partyMember => partyMember.rsvp_response === 'no')
+          
+          // Exclude if all party members said "no"
+          return !allNo
+        })
+        
+        setGuests(filteredGuests)
       } catch (err) {
         console.error('Error fetching guest data:', err)
         setError(err.message || 'Failed to load guest data')
@@ -35,6 +53,24 @@ function GuestList() {
     }
 
     fetchGuestData()
+  }, [])
+
+  // Fetch guest book notes count (just one comment to get total)
+  useEffect(() => {
+    const fetchNotesCount = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/comments?page=1&page_size=1`)
+        if (response.ok) {
+          const data = await response.json()
+          setGuestBookNotesCount(data.total || 0)
+        }
+      } catch (err) {
+        console.error('Error fetching notes count:', err)
+        // Don't show error, just leave count at 0
+      }
+    }
+
+    fetchNotesCount()
   }, [])
 
   const handleDeleteGuest = async (guestId) => {
@@ -214,7 +250,98 @@ function GuestList() {
     return names.join('\n')
   }
 
+  const fetchAllComments = async () => {
+    setIsLoadingComments(true)
+    try {
+      let allComments = []
+      let currentPage = 1
+      let hasMore = true
+      
+      // Fetch all pages of comments
+      while (hasMore) {
+        const response = await fetch(`${API_BASE_URL}/comments?page=${currentPage}&page_size=100`)
+        const data = await response.json()
+        
+        if (data.comments && data.comments.length > 0) {
+          allComments = [...allComments, ...data.comments]
+          currentPage++
+          hasMore = currentPage <= (data.total_pages || 0)
+        } else {
+          hasMore = false
+        }
+      }
+      
+      return allComments
+    } catch (err) {
+      console.error('Error fetching all comments:', err)
+      throw err
+    } finally {
+      setIsLoadingComments(false)
+    }
+  }
+
+  const generateGuestBookNotesList = async () => {
+    try {
+      const comments = await fetchAllComments()
+      
+      // Create a map of invitee_id to guest data for quick lookup
+      const inviteeToGuestMap = new Map()
+      guests.forEach(guest => {
+        const mainEvent = guest.events?.find(e => e.id === MAIN_EVENT_ID)
+        if (mainEvent?.guests) {
+          mainEvent.guests.forEach(partyMember => {
+            inviteeToGuestMap.set(partyMember.id, {
+              name: partyMember.full_name,
+              mailingAddress: guest.mailing_address
+            })
+          })
+        }
+      })
+      
+      // Generate Excel-copiable list
+      const lines = ['Author Name\tAddress\tCity\tState\tZip Code\tComment Text']
+      
+      comments.forEach(comment => {
+        const guestData = inviteeToGuestMap.get(comment.invitee_id)
+        const authorName = comment.invitee_name || guestData?.name || 'Anonymous'
+        
+        let address = 'N/A'
+        let city = 'N/A'
+        let state = 'N/A'
+        let zipCode = 'N/A'
+        
+        if (guestData?.mailingAddress) {
+          const addr = guestData.mailingAddress
+          const addressLines = [
+            addr.address_line_1 || '',
+            addr.address_line_2 || ''
+          ].filter(Boolean).join(', ')
+          address = addressLines || 'N/A'
+          city = addr.city || 'N/A'
+          state = addr.state || 'N/A'
+          zipCode = addr.postal_code || 'N/A'
+        }
+        
+        // Escape tabs and newlines in comment text for Excel
+        const commentText = (comment.message_text || '').replace(/\t/g, ' ').replace(/\n/g, ' ')
+        
+        lines.push(`${authorName}\t${address}\t${city}\t${state}\t${zipCode}\t${commentText}`)
+      })
+      
+      return lines.join('\n')
+    } catch (err) {
+      console.error('Error generating guest book notes list:', err)
+      return 'Error loading guest book notes. Please try again.'
+    }
+  }
+
+  const handleGuestBookNotesClick = async () => {
+    setSelectedEventId('guest-book-notes')
+    setShowGuestList(true)
+  }
+
   const getSelectedEventName = () => {
+    if (selectedEventId === 'guest-book-notes') return 'Guest Book Notes'
     if (!selectedEventId || !guests || guests.length === 0) return 'Guest List'
     
     const subEvents = guests[0]?.events?.filter(e => e.id !== MAIN_EVENT_ID) || []
@@ -222,18 +349,35 @@ function GuestList() {
     return selectedEvent?.name || 'Guest List'
   }
 
+  const [guestBookNotesContent, setGuestBookNotesContent] = useState('')
+
   const getModalContent = () => {
+    if (selectedEventId === 'guest-book-notes') {
+      return guestBookNotesContent
+    }
     if (selectedEventId) {
       return generateEventNameList(selectedEventId)
     }
     return generateExcelList()
   }
 
+  // Load guest book notes when modal opens for guest book notes
+  useEffect(() => {
+    if (showGuestList && selectedEventId === 'guest-book-notes' && !guestBookNotesContent && !isLoadingComments) {
+      generateGuestBookNotesList().then(content => {
+        setGuestBookNotesContent(content)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showGuestList, selectedEventId])
+
   const handleCopyToClipboard = () => {
     const text = getModalContent()
-    const message = selectedEventId 
-      ? 'Attendee list copied to clipboard!'
-      : 'Guest list copied to clipboard! You can paste it into Excel.'
+    const message = selectedEventId === 'guest-book-notes'
+      ? 'Guest book notes copied to clipboard! You can paste it into Excel.'
+      : selectedEventId 
+        ? 'Attendee list copied to clipboard!'
+        : 'Guest list copied to clipboard! You can paste it into Excel.'
     
     navigator.clipboard.writeText(text).then(() => {
       alert(message)
@@ -303,6 +447,14 @@ function GuestList() {
               <span className="guest-stat-value">{eventTotal.count}</span>
             </div>
           ))}
+          <div 
+            className="guest-stat guest-stat-clickable"
+            onClick={handleGuestBookNotesClick}
+            title="Click to view Excel-copiable list of guest book notes"
+          >
+            <span className="guest-stat-label">Guest Book Notes:</span>
+            <span className="guest-stat-value">{guestBookNotesCount}</span>
+          </div>
         </div>
         
         <div className="guest-list-scroll">
@@ -382,30 +534,44 @@ function GuestList() {
         <div className="guest-list-modal-overlay" onClick={() => {
           setShowGuestList(false)
           setSelectedEventId(null)
+          if (selectedEventId === 'guest-book-notes') {
+            setGuestBookNotesContent('')
+          }
         }}>
           <div className="guest-list-modal" onClick={(e) => e.stopPropagation()}>
             <div className="guest-list-modal-header">
               <h2 className="guest-list-modal-title">
-                {selectedEventId ? `${getSelectedEventName()} Attendees` : 'Guest List (Excel Format)'}
+                {selectedEventId === 'guest-book-notes' 
+                  ? 'Guest Book Notes (Excel Format)'
+                  : selectedEventId 
+                    ? `${getSelectedEventName()} Attendees`
+                    : 'Guest List (Excel Format)'}
               </h2>
               <button 
                 className="guest-list-modal-close"
                 onClick={() => {
                   setShowGuestList(false)
                   setSelectedEventId(null)
+                  if (selectedEventId === 'guest-book-notes') {
+                    setGuestBookNotesContent('')
+                  }
                 }}
               >
                 ×
               </button>
             </div>
             <div className="guest-list-modal-content">
-              <textarea
-                id="guest-list-textarea"
-                className="guest-list-textarea"
-                value={getModalContent()}
-                readOnly
-                onClick={(e) => e.target.select()}
-              />
+              {isLoadingComments && selectedEventId === 'guest-book-notes' ? (
+                <div className="guest-list-loading">Loading guest book notes...</div>
+              ) : (
+                <textarea
+                  id="guest-list-textarea"
+                  className="guest-list-textarea"
+                  value={getModalContent()}
+                  readOnly
+                  onClick={(e) => e.target.select()}
+                />
+              )}
               <div className="guest-list-modal-actions">
                 <button 
                   className="guest-list-copy-button"

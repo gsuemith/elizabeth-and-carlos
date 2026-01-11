@@ -80,6 +80,9 @@ export const translations = {
     selectYourName: 'Select your name',
     message: 'Message',
     submit: 'Submit',
+    notAttendingButWantToWrite: 'Not attending but would like to write a note?',
+    authFormMessage: 'Please sign in with the email and password from your RSVP.',
+    nonAttendeeFormMessage: 'Please enter the following. We promise not to share your information with anyone else!',
     // Story page
     howWeMet: 'How We Met',
     returnToWebsiteStory: '← Return to Website',
@@ -171,6 +174,9 @@ export const translations = {
     selectYourName: 'Selecciona tu nombre',
     message: 'Mensaje',
     submit: 'Enviar',
+    notAttendingButWantToWrite: '¿No asistirás pero te gustaría escribir una nota?',
+    authFormMessage: 'Por favor, inicia sesión con el correo electrónico y la contraseña de tu RSVP.',
+    nonAttendeeFormMessage: 'Por favor, ingresa lo siguiente. ¡Prometemos no compartir tu información con nadie más!',
     // Story page
     howWeMet: 'Cómo Nos Conocimos',
     returnToWebsiteStory: '← Volver al Sitio Web',

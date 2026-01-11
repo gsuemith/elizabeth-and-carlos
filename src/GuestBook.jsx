@@ -6,7 +6,9 @@ import { translations } from './translations'
 // import sampleCommentsData from './sampleComments.json'
 
 const API_BASE_URL = 'https://wedding-rsvp-one-gamma.vercel.app'
-const COMMENTS_PER_PAGE = 11
+const COMMENTS_PER_PAGE_DESKTOP = 11
+const COMMENTS_PER_PAGE_MOBILE = 5
+const MAIN_EVENT_ID = '010e9472-8ea4-4239-9882-f8c3fe676f2b'
 
 function GuestBook() {
   const navigate = useNavigate()
@@ -18,6 +20,9 @@ function GuestBook() {
   const [error, setError] = useState(null)
   const [currentPage, setCurrentPage] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
+  const [commentsPerPage, setCommentsPerPage] = useState(() => {
+    return window.innerWidth <= 768 ? COMMENTS_PER_PAGE_MOBILE : COMMENTS_PER_PAGE_DESKTOP
+  })
   const [isSliding, setIsSliding] = useState(false)
   const [displayComments, setDisplayComments] = useState([])
   const [incomingComments, setIncomingComments] = useState([])
@@ -25,8 +30,16 @@ function GuestBook() {
   const isTransitioningRef = useRef(false)
   const isInitialLoadRef = useRef(true)
   
+  // Swipe gesture refs for pagination
+  const touchStartRef = useRef(null)
+  const touchEndRef = useRef(null)
+  const touchStartYRef = useRef(null)
+  const isSwipeRef = useRef(false)
+  const minSwipeDistance = 50
+  
   // Modal states
   const [showAuthModal, setShowAuthModal] = useState(false)
+  const [showNonAttendeeModal, setShowNonAttendeeModal] = useState(false)
   const [showMessageModal, setShowMessageModal] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -36,6 +49,37 @@ function GuestBook() {
   const [messageText, setMessageText] = useState('')
   const [messageError, setMessageError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  // Non-attendee form state
+  const [nonAttendeeForm, setNonAttendeeForm] = useState({
+    name: '',
+    line1: '',
+    line2: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    phone: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  })
+  const [nonAttendeeError, setNonAttendeeError] = useState(null)
+  const [isSubmittingNonAttendee, setIsSubmittingNonAttendee] = useState(false)
+
+  // Update comments per page based on window width
+  useEffect(() => {
+    const handleResize = () => {
+      const newPageSize = window.innerWidth <= 768 ? COMMENTS_PER_PAGE_MOBILE : COMMENTS_PER_PAGE_DESKTOP
+      if (newPageSize !== commentsPerPage) {
+        setCommentsPerPage(newPageSize)
+        // Reset to first page when switching between mobile/desktop
+        setCurrentPage(0)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [commentsPerPage])
 
   useEffect(() => {
     const loadComments = async () => {
@@ -48,7 +92,7 @@ function GuestBook() {
         setError(null)
 
         // Fetch comments from API (pagination is 1-indexed)
-        const response = await fetch(`${API_BASE_URL}/comments?page=${currentPage + 1}&page_size=${COMMENTS_PER_PAGE}`)
+        const response = await fetch(`${API_BASE_URL}/comments?page=${currentPage + 1}&page_size=${commentsPerPage}`)
         if (!response.ok) {
           throw new Error('Failed to fetch comments')
         }
@@ -119,7 +163,7 @@ function GuestBook() {
 
     loadComments()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage])
+  }, [currentPage, commentsPerPage])
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A'
@@ -178,6 +222,72 @@ function GuestBook() {
       setCurrentPage(newPage)
       setIsSlidingIn(true)
     }, 300) // Half of fade-out duration
+  }
+
+  const onTouchStart = (e) => {
+    // Only enable swipe on mobile
+    if (window.innerWidth > 768) return
+    // Don't trigger swipe if touching interactive elements (buttons, links, inputs, textareas, selects)
+    if (e.target.closest('button') || e.target.closest('a') || e.target.closest('input') || e.target.closest('textarea') || e.target.closest('select')) {
+      return
+    }
+    touchEndRef.current = null
+    touchStartRef.current = e.targetTouches[0].clientX
+    touchStartYRef.current = e.targetTouches[0].clientY
+    isSwipeRef.current = false
+  }
+
+  const onTouchMove = (e) => {
+    // Only enable swipe on mobile
+    if (window.innerWidth > 768) return
+    if (touchStartRef.current !== null && touchStartYRef.current !== null) {
+      const currentX = e.targetTouches[0].clientX
+      const currentY = e.targetTouches[0].clientY
+      const deltaX = Math.abs(currentX - touchStartRef.current)
+      const deltaY = Math.abs(currentY - touchStartYRef.current)
+      
+      // If horizontal movement is greater than vertical, it's a swipe
+      if (deltaX > deltaY && deltaX > 10) {
+        isSwipeRef.current = true
+        touchEndRef.current = currentX
+      }
+    }
+  }
+
+  const onTouchEnd = (e) => {
+    // Only enable swipe on mobile
+    if (window.innerWidth > 768) return
+    
+    if (!touchStartRef.current || touchEndRef.current === null) {
+      touchStartRef.current = null
+      touchEndRef.current = null
+      touchStartYRef.current = null
+      isSwipeRef.current = false
+      return
+    }
+    
+    const distance = touchStartRef.current - touchEndRef.current
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    // Only trigger pagination if it was a swipe and we're not in a modal
+    if (isSwipeRef.current && !showAuthModal && !showNonAttendeeModal && !showMessageModal) {
+      if (isLeftSwipe) {
+        // Swipe left → next page
+        e.preventDefault()
+        handlePageChange(currentPage + 1)
+      } else if (isRightSwipe) {
+        // Swipe right → previous page
+        e.preventDefault()
+        handlePageChange(currentPage - 1)
+      }
+    }
+    
+    // Reset touch references
+    touchStartRef.current = null
+    touchEndRef.current = null
+    touchStartYRef.current = null
+    isSwipeRef.current = false
   }
 
   const handleBackClick = () => {
@@ -302,6 +412,77 @@ function GuestBook() {
     setAuthError(null)
   }
 
+  const handleCloseNonAttendeeModal = () => {
+    setShowNonAttendeeModal(false)
+    setNonAttendeeForm({
+      name: '',
+      line1: '',
+      line2: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      phone: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    })
+    setNonAttendeeError(null)
+  }
+
+  const handleNonAttendeeSubmit = async (e) => {
+    e.preventDefault()
+    setNonAttendeeError(null)
+    
+    // Validate password match
+    if (nonAttendeeForm.password !== nonAttendeeForm.confirmPassword) {
+      setNonAttendeeError('Passwords do not match. Please try again.')
+      return
+    }
+    
+    setIsSubmittingNonAttendee(true)
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/comments/non_attendee`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          event_id: MAIN_EVENT_ID,
+          name: nonAttendeeForm.name,
+          mailing_address: {
+            address_line_1: nonAttendeeForm.line1,
+            address_line_2: nonAttendeeForm.line2 || '',
+            city: nonAttendeeForm.city,
+            state: nonAttendeeForm.state,
+            postal_code: nonAttendeeForm.postalCode,
+            email: nonAttendeeForm.email,
+            phone_number: nonAttendeeForm.phone,
+            password: nonAttendeeForm.password,
+          }
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.message || 'Registration failed')
+      }
+
+      const data = await response.json()
+      setInvitees(data.invitees || [])
+      setShowNonAttendeeModal(false)
+      setShowMessageModal(true)
+      setSelectedInviteeId('')
+      setMessageText('')
+      setMessageError(null)
+    } catch (err) {
+      console.error('Non-attendee registration error:', err)
+      setNonAttendeeError(err.message || 'Failed to register. Please try again.')
+    } finally {
+      setIsSubmittingNonAttendee(false)
+    }
+  }
+
   const handleCloseMessageModal = () => {
     setShowMessageModal(false)
     setSelectedInviteeId('')
@@ -359,7 +540,12 @@ function GuestBook() {
           </div>
         ) : (
           <>
-            <div className="guest-book-notes-container">
+            <div 
+              className="guest-book-notes-container"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
               {/* Outgoing comments (fading out) */}
               {isSliding && !isSlidingIn && displayComments.length > 0 && (
                 <div className="guest-book-notes fade-out">
@@ -470,11 +656,12 @@ function GuestBook() {
               <button className="guest-book-modal-close" onClick={handleCloseAuthModal}>×</button>
             </div>
             <form className="guest-book-modal-form" onSubmit={handleAuthSubmit}>
+              <p className="guest-book-auth-message">{t.authFormMessage}</p>
               <div className="guest-book-form-group">
-                <label htmlFor="email">{t.email}</label>
                 <input
                   type="email"
                   id="email"
+                  placeholder={t.email}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -482,10 +669,10 @@ function GuestBook() {
                 />
               </div>
               <div className="guest-book-form-group">
-                <label htmlFor="password">{t.password}</label>
                 <input
                   type="password"
                   id="password"
+                  placeholder={t.password}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -503,6 +690,155 @@ function GuestBook() {
                   {t.continue}
                 </button>
               </div>
+              <div className="guest-book-non-attendee-link">
+                <button 
+                  type="button" 
+                  className="guest-book-link-button"
+                  onClick={() => {
+                    setShowAuthModal(false)
+                    setShowNonAttendeeModal(true)
+                  }}
+                >
+                  {t.notAttendingButWantToWrite}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Non-Attendee Registration Modal */}
+      {showNonAttendeeModal && (
+        <div className="guest-book-modal-overlay" onClick={handleCloseNonAttendeeModal}>
+          <div className="guest-book-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="guest-book-modal-header">
+              <h2 className="guest-book-modal-title">{t.writeUsANote}</h2>
+              <button className="guest-book-modal-close" onClick={handleCloseNonAttendeeModal}>×</button>
+            </div>
+            <form className="guest-book-modal-form" onSubmit={handleNonAttendeeSubmit}>
+              <p className="guest-book-auth-message">{t.nonAttendeeFormMessage}</p>
+              <div className="guest-book-form-group">
+                <input
+                  type="text"
+                  id="nonAttendee-name"
+                  placeholder={t.fullName}
+                  value={nonAttendeeForm.name}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, name: e.target.value }))}
+                  required
+                  className="guest-book-form-input"
+                />
+              </div>
+              <div className="guest-book-form-group">
+                <input
+                  type="text"
+                  id="nonAttendee-line1"
+                  placeholder={t.addressLine1}
+                  value={nonAttendeeForm.line1}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, line1: e.target.value }))}
+                  required
+                  className="guest-book-form-input"
+                />
+              </div>
+              <div className="guest-book-form-group">
+                <input
+                  type="text"
+                  id="nonAttendee-line2"
+                  placeholder={t.addressLine2}
+                  value={nonAttendeeForm.line2}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, line2: e.target.value }))}
+                  className="guest-book-form-input"
+                />
+              </div>
+              <div className="guest-book-form-row">
+                <div className="guest-book-form-group">
+                  <input
+                    type="text"
+                    id="nonAttendee-city"
+                    placeholder={t.city}
+                    value={nonAttendeeForm.city}
+                    onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, city: e.target.value }))}
+                    required
+                    className="guest-book-form-input"
+                  />
+                </div>
+                <div className="guest-book-form-group">
+                  <input
+                    type="text"
+                    id="nonAttendee-state"
+                    placeholder={t.state}
+                    value={nonAttendeeForm.state}
+                    onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, state: e.target.value }))}
+                    required
+                    className="guest-book-form-input"
+                  />
+                </div>
+                <div className="guest-book-form-group">
+                  <input
+                    type="text"
+                    id="nonAttendee-postalCode"
+                    placeholder={t.postalCode}
+                    value={nonAttendeeForm.postalCode}
+                    onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, postalCode: e.target.value }))}
+                    required
+                    className="guest-book-form-input"
+                  />
+                </div>
+              </div>
+              <div className="guest-book-form-group">
+                <input
+                  type="tel"
+                  id="nonAttendee-phone"
+                  placeholder={t.phone}
+                  value={nonAttendeeForm.phone}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, phone: e.target.value }))}
+                  required
+                  className="guest-book-form-input"
+                />
+              </div>
+              <div className="guest-book-form-group">
+                <input
+                  type="email"
+                  id="nonAttendee-email"
+                  placeholder={t.email}
+                  value={nonAttendeeForm.email}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, email: e.target.value }))}
+                  required
+                  className="guest-book-form-input"
+                />
+              </div>
+              <div className="guest-book-form-group">
+                <input
+                  type="password"
+                  id="nonAttendee-password"
+                  placeholder={t.password}
+                  value={nonAttendeeForm.password}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, password: e.target.value }))}
+                  required
+                  className="guest-book-form-input"
+                />
+              </div>
+              <div className="guest-book-form-group">
+                <input
+                  type="password"
+                  id="nonAttendee-confirmPassword"
+                  placeholder={t.confirmPassword}
+                  value={nonAttendeeForm.confirmPassword}
+                  onChange={(e) => setNonAttendeeForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                  required
+                  className="guest-book-form-input"
+                />
+              </div>
+              {nonAttendeeError && (
+                <div className="guest-book-form-error">{nonAttendeeError}</div>
+              )}
+              <div className="guest-book-modal-actions">
+                <button type="button" className="guest-book-modal-cancel" onClick={handleCloseNonAttendeeModal}>
+                  {t.cancel}
+                </button>
+                <button type="submit" className="guest-book-modal-submit" disabled={isSubmittingNonAttendee}>
+                  {isSubmittingNonAttendee ? t.submitting : t.submit}
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -518,7 +854,6 @@ function GuestBook() {
             </div>
             <form className="guest-book-modal-form" onSubmit={handleMessageSubmit}>
               <div className="guest-book-form-group">
-                <label htmlFor="invitee">{t.yourName}</label>
                 <select
                   id="invitee"
                   value={selectedInviteeId}
@@ -535,9 +870,6 @@ function GuestBook() {
                 </select>
               </div>
               <div className="guest-book-form-group">
-                <label htmlFor="message">
-                  {t.message} ({messageText.length}/1200)
-                </label>
                 <textarea
                   id="message"
                   value={messageText}
@@ -546,7 +878,7 @@ function GuestBook() {
                   rows={8}
                   required
                   className="guest-book-form-textarea"
-                  placeholder={t.writeYourMessagePlaceholder}
+                  placeholder={`${t.message} (${messageText.length}/1200)`}
                 />
               </div>
               {messageError && (
