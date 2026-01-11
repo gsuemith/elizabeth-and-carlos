@@ -6,7 +6,8 @@ import { translations } from './translations'
 // import sampleCommentsData from './sampleComments.json'
 
 const API_BASE_URL = 'https://wedding-rsvp-one-gamma.vercel.app'
-const COMMENTS_PER_PAGE = 11
+const COMMENTS_PER_PAGE_DESKTOP = 11
+const COMMENTS_PER_PAGE_MOBILE = 5
 const MAIN_EVENT_ID = '010e9472-8ea4-4239-9882-f8c3fe676f2b'
 
 function GuestBook() {
@@ -19,6 +20,9 @@ function GuestBook() {
   const [error, setError] = useState(null)
   const [currentPage, setCurrentPage] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
+  const [commentsPerPage, setCommentsPerPage] = useState(() => {
+    return window.innerWidth <= 768 ? COMMENTS_PER_PAGE_MOBILE : COMMENTS_PER_PAGE_DESKTOP
+  })
   const [isSliding, setIsSliding] = useState(false)
   const [displayComments, setDisplayComments] = useState([])
   const [incomingComments, setIncomingComments] = useState([])
@@ -62,6 +66,21 @@ function GuestBook() {
   const [nonAttendeeError, setNonAttendeeError] = useState(null)
   const [isSubmittingNonAttendee, setIsSubmittingNonAttendee] = useState(false)
 
+  // Update comments per page based on window width
+  useEffect(() => {
+    const handleResize = () => {
+      const newPageSize = window.innerWidth <= 768 ? COMMENTS_PER_PAGE_MOBILE : COMMENTS_PER_PAGE_DESKTOP
+      if (newPageSize !== commentsPerPage) {
+        setCommentsPerPage(newPageSize)
+        // Reset to first page when switching between mobile/desktop
+        setCurrentPage(0)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [commentsPerPage])
+
   useEffect(() => {
     const loadComments = async () => {
       try {
@@ -73,7 +92,7 @@ function GuestBook() {
         setError(null)
 
         // Fetch comments from API (pagination is 1-indexed)
-        const response = await fetch(`${API_BASE_URL}/comments?page=${currentPage + 1}&page_size=${COMMENTS_PER_PAGE}`)
+        const response = await fetch(`${API_BASE_URL}/comments?page=${currentPage + 1}&page_size=${commentsPerPage}`)
         if (!response.ok) {
           throw new Error('Failed to fetch comments')
         }
@@ -144,7 +163,7 @@ function GuestBook() {
 
     loadComments()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage])
+  }, [currentPage, commentsPerPage])
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A'
