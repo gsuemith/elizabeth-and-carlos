@@ -26,6 +26,13 @@ function GuestBook() {
   const isTransitioningRef = useRef(false)
   const isInitialLoadRef = useRef(true)
   
+  // Swipe gesture refs for pagination
+  const touchStartRef = useRef(null)
+  const touchEndRef = useRef(null)
+  const touchStartYRef = useRef(null)
+  const isSwipeRef = useRef(false)
+  const minSwipeDistance = 50
+  
   // Modal states
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showNonAttendeeModal, setShowNonAttendeeModal] = useState(false)
@@ -196,6 +203,72 @@ function GuestBook() {
       setCurrentPage(newPage)
       setIsSlidingIn(true)
     }, 300) // Half of fade-out duration
+  }
+
+  const onTouchStart = (e) => {
+    // Only enable swipe on mobile
+    if (window.innerWidth > 768) return
+    // Don't trigger swipe if touching interactive elements (buttons, links, inputs, textareas, selects)
+    if (e.target.closest('button') || e.target.closest('a') || e.target.closest('input') || e.target.closest('textarea') || e.target.closest('select')) {
+      return
+    }
+    touchEndRef.current = null
+    touchStartRef.current = e.targetTouches[0].clientX
+    touchStartYRef.current = e.targetTouches[0].clientY
+    isSwipeRef.current = false
+  }
+
+  const onTouchMove = (e) => {
+    // Only enable swipe on mobile
+    if (window.innerWidth > 768) return
+    if (touchStartRef.current !== null && touchStartYRef.current !== null) {
+      const currentX = e.targetTouches[0].clientX
+      const currentY = e.targetTouches[0].clientY
+      const deltaX = Math.abs(currentX - touchStartRef.current)
+      const deltaY = Math.abs(currentY - touchStartYRef.current)
+      
+      // If horizontal movement is greater than vertical, it's a swipe
+      if (deltaX > deltaY && deltaX > 10) {
+        isSwipeRef.current = true
+        touchEndRef.current = currentX
+      }
+    }
+  }
+
+  const onTouchEnd = (e) => {
+    // Only enable swipe on mobile
+    if (window.innerWidth > 768) return
+    
+    if (!touchStartRef.current || touchEndRef.current === null) {
+      touchStartRef.current = null
+      touchEndRef.current = null
+      touchStartYRef.current = null
+      isSwipeRef.current = false
+      return
+    }
+    
+    const distance = touchStartRef.current - touchEndRef.current
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    // Only trigger pagination if it was a swipe and we're not in a modal
+    if (isSwipeRef.current && !showAuthModal && !showNonAttendeeModal && !showMessageModal) {
+      if (isLeftSwipe) {
+        // Swipe left → next page
+        e.preventDefault()
+        handlePageChange(currentPage + 1)
+      } else if (isRightSwipe) {
+        // Swipe right → previous page
+        e.preventDefault()
+        handlePageChange(currentPage - 1)
+      }
+    }
+    
+    // Reset touch references
+    touchStartRef.current = null
+    touchEndRef.current = null
+    touchStartYRef.current = null
+    isSwipeRef.current = false
   }
 
   const handleBackClick = () => {
@@ -448,7 +521,12 @@ function GuestBook() {
           </div>
         ) : (
           <>
-            <div className="guest-book-notes-container">
+            <div 
+              className="guest-book-notes-container"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
               {/* Outgoing comments (fading out) */}
               {isSliding && !isSlidingIn && displayComments.length > 0 && (
                 <div className="guest-book-notes fade-out">
