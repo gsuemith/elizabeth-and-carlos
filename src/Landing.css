@@ -47,6 +47,13 @@
   transform: translateX(3px);
 }
 
+@media (max-width: 768px) {
+  .back-button-right {
+    top: 60px;
+    right: 10px;
+  }
+}
+
 .edit-rsvp-button {
   top: 20px;
   left: 20px;
@@ -681,6 +688,12 @@
     left: 10px;
     padding: 8px 16px;
     font-size: 0.9rem;
+  }
+
+  .back-button.back-button-right {
+    top: 10px;
+    left: auto;
+    right: 10px;
   }
 
   .rsvp-page-buttons .back-button {

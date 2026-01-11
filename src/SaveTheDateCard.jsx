@@ -14,6 +14,12 @@ function SaveTheDateCard({ onBack }) {
       <button className="back-button" onClick={onBack}>
         ← Return to Website
       </button>
+      <button 
+        className="back-button back-button-right" 
+        onClick={() => window.open('/save-the-date.pdf', '_blank')}
+      >
+        Download PDF
+      </button>
       <div className="invitation-container">
         <div 
           className={`invitation-card portrait ${isOpen ? 'open' : ''}`}
