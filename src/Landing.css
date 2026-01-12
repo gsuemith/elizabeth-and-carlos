@@ -1,7 +1,8 @@
 .invitation-page {
   min-height: 100vh;
   background: transparent;
-  padding: 40px 20px;
+  padding: 40px 10px;
+  padding-top: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1265,7 +1266,6 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 40px 20px;
   gap: 30px;
 }
 
@@ -1281,7 +1281,6 @@
   background: linear-gradient(135deg, #ffffff 0%, #ede5d8 100%);
   border-radius: 0;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-  padding: 40px;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -1294,19 +1293,20 @@
 
 .story-image-placeholder {
   width: 100%;
-  height: 500px;
-  aspect-ratio: 1;
-  overflow: hidden;
+  height: fit-content;
+  flex: 1;
+  overflow: visible;
   border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 0;
 }
 
 .story-image {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   border-radius: 8px;
   transition: transform 0.3s ease;
@@ -1385,7 +1385,6 @@
 
 @media (max-width: 768px) {
   .story-content-container {
-    padding: 15px 10px;
     gap: 15px;
   }
 
@@ -1395,15 +1394,14 @@
   }
 
   .story-card {
-    padding: 20px 15px;
     gap: 15px;
     width: 100%;
     box-sizing: border-box;
+    height: fit-content;
   }
 
   .story-image-placeholder {
-    height: 250px;
-    aspect-ratio: 1;
+    height: fit-content;
   }
 
   .story-content {
