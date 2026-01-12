@@ -47,6 +47,13 @@
   transform: translateX(3px);
 }
 
+@media (max-width: 768px) {
+  .back-button-right {
+    top: 60px;
+    right: 10px;
+  }
+}
+
 .edit-rsvp-button {
   top: 20px;
   left: 20px;
@@ -681,6 +688,12 @@
     left: 10px;
     padding: 8px 16px;
     font-size: 0.9rem;
+  }
+
+  .back-button.back-button-right {
+    top: 10px;
+    left: auto;
+    right: 10px;
   }
 
   .rsvp-page-buttons .back-button {
@@ -2318,6 +2331,17 @@
   gap: 20px;
 }
 
+.guest-book-auth-message {
+  font-family: 'Georgia', serif;
+  font-size: 0.9rem;
+  color: #5a4a3a;
+  margin: 0 0 20px 0;
+  padding: 12px;
+  background: #f5e6d3;
+  border-left: 3px solid #5a4a3a;
+  line-height: 1.5;
+}
+
 .guest-book-form-group {
   display: flex;
   flex-direction: column;
@@ -2365,6 +2389,37 @@
   padding: 10px;
   background: rgba(198, 40, 40, 0.1);
   border-left: 3px solid #c62828;
+}
+
+.guest-book-non-attendee-link {
+  margin-top: 15px;
+  text-align: center;
+  padding-top: 15px;
+  border-top: 1px solid rgba(90, 74, 58, 0.2);
+}
+
+.guest-book-link-button {
+  background: none;
+  border: none;
+  color: #5a4a3a;
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: 'Georgia', serif;
+  font-size: 0.9rem;
+  padding: 0;
+}
+
+.guest-book-link-button:hover {
+  color: #3d3328;
+}
+
+.guest-book-form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.guest-book-form-row .guest-book-form-group {
+  flex: 1;
 }
 
 .guest-book-modal-actions {
@@ -2429,6 +2484,10 @@
 
   .guest-book-modal-form {
     padding: 20px;
+  }
+
+  .guest-book-form-row {
+    flex-direction: column;
   }
 
   .guest-book-modal-actions {
