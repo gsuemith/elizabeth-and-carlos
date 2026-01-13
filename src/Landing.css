@@ -398,7 +398,7 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  gap: 10px;
   align-items: start;
   width: 100%;
 }
@@ -677,7 +677,7 @@
 
   .wedding-info {
     grid-template-columns: 1fr;
-    gap: 25px;
+    gap: 5px;
   }
 
   /* Reorder brunch to appear last in mobile view */
@@ -687,6 +687,10 @@
 
   .info-section-brunch {
     order: 4;
+  }
+
+  .info-closing {
+    order: 5;
   }
 
   .info-title {
