@@ -92,7 +92,7 @@ function Landing({ onBack }) {
                     {language === 'es' ? 'Jueves, 16 de julio' : 'Thursday, July 16th'} <span className="info-time">7:00 PM</span>
                   </a>
                 </div>
-                <div className="info-section">
+                <div className="info-section info-section-brunch">
                   <h3 className="info-heading">{t.brunch}</h3>
                   <p className="info-venue">{t.locationTBD}</p>
                   <a 
@@ -136,6 +136,7 @@ function Landing({ onBack }) {
                   >
                     {language === 'es' ? 'Viernes, 17 de julio' : 'Friday, July 17th'} <span className="info-time">5:30 PM</span>
                   </a>
+                  <p>{t.receptionToFollow}</p>
                 </div>
 
                 <div className="info-section">

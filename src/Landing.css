@@ -680,6 +680,15 @@
     gap: 25px;
   }
 
+  /* Reorder brunch to appear last in mobile view */
+  .info-section {
+    order: 1;
+  }
+
+  .info-section-brunch {
+    order: 4;
+  }
+
   .info-title {
     font-size: 1.5rem;
   }
