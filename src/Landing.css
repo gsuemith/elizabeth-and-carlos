@@ -2093,13 +2093,13 @@
   border: none;
   border-radius: 0;
   padding: 15px 20px;
-  margin-bottom: 1.2em;
   display: inline-block;
   flex: 0 1 auto;
-  height: 300px;
+  height: calc(300px + 2em);
   position: relative;
   overflow: visible;
   vertical-align: top;
+  padding-top: 30px;
 }
 
 .guest-book-note-content {
@@ -2204,13 +2204,13 @@
 
 @media (max-width: 1200px) {
   .guest-book-notes {
-    gap: 20px 25px;
+    gap: 40px 25px;
   }
   
   .guest-book-note {
     min-width: 160px;
     max-width: 500px;
-    height: 280px;
+    height: calc(280px + 3em);
   }
 }
 

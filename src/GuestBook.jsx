@@ -181,11 +181,11 @@ function GuestBook() {
     if (!messageText) return 180
     const charCount = messageText.length
     
-    // Calculate width so text fills the row height (300px)
-    // Available height for text: ~250px (300px - 30px padding - 20px for name/date lines)
+    // Calculate width so text fills the row height (300px + 2em = ~332px)
+    // Available height for text: ~282px (332px - 30px padding - 20px for name/date lines)
     // Line height: ~25.6px (1.6 * 16px font-size)
-    // Target lines: ~9-10 lines to fill the height (leaving room for name/date)
-    const availableHeight = 250
+    // Target lines: ~11 lines to fill the height (leaving room for name/date)
+    const availableHeight = 282
     const lineHeight = 25.6
     const targetLines = Math.floor(availableHeight / lineHeight) // ~9-10 lines
     
@@ -194,7 +194,7 @@ function GuestBook() {
     // But we want to fit the text across targetLines, so:
     const charsPerLine = Math.ceil(charCount / targetLines)
     const avgCharWidth = 8.5
-    const calculatedWidth = charsPerLine * avgCharWidth + 40 // +40 for padding
+    const calculatedWidth = charsPerLine * avgCharWidth + 130 // +40 for padding
     
     // Ensure minimum width to fit the date on one line
     // Date format is typically ~30-40 characters, estimate ~300-350px needed

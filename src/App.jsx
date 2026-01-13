@@ -29,7 +29,7 @@ function NavButtons({ onStoryClick, onSaveTheDateClick, onRSVPClick, onGuestBook
           className="nav-button"
           onClick={onSaveTheDateClick}
         >
-          {t.saveTheDateCard}
+          {t.saveTheDate}
         </button>
         <button 
           className="nav-button"
