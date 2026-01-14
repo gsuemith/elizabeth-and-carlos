@@ -433,9 +433,14 @@
 }
 
 .info-section {
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #e8d5c4;
+  margin: 0 20px;
+  margin-bottom: 10px;
+  padding-top: 1em;
+  border-top: 1px solid #e8d5c4;
+}
+
+.info-section > *:last-child {
+  margin-bottom: 15px;
 }
 
 .ceremony-section {
@@ -446,13 +451,15 @@
 }
 
 .portrait .info-section {
-  margin-bottom: 20px;
-  padding-bottom: 15px;
+  padding: 0 10px;
+  margin-bottom: 10px;
+  padding-top: 1em;
 }
 
-.info-section:last-of-type {
-  border-bottom: 1px solid #e8d5c4;
+.portrait .info-section > *:last-child {
+  margin-bottom: 15px;
 }
+
 
 .info-heading {
   font-size: 1.3rem;

@@ -92,20 +92,7 @@ function Landing({ onBack }) {
                     {language === 'es' ? 'Jueves, 16 de julio' : 'Thursday, July 16th'} <span className="info-time">7:00 PM</span>
                   </a>
                 </div>
-                <div className="info-section info-section-brunch">
-                  <h3 className="info-heading">{t.brunch}</h3>
-                  <p className="info-venue">{t.locationTBD}</p>
-                  <a 
-                    href="https://www.google.com/calendar/render?action=TEMPLATE&text=Brunch+-+Elizabeth+%26+Carlos+Wedding&dates=20260718T120000/20260718T140000&details=Brunch+for+Elizabeth+%26+Carlos+Wedding&location=Location+TBD"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="info-date info-date-link"
-                    data-tooltip={t.addToCalendar}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {language === 'es' ? 'Sábado, 18 de julio' : 'Saturday, July 18th'} <span className="info-time">{t.timeTBD}</span>
-                  </a>
-                </div>
+                
 
                 <div className="info-section">
                   <h3 className="info-heading">{t.ceremony}</h3>
@@ -138,6 +125,8 @@ function Landing({ onBack }) {
                   </a>
                   <p>{t.receptionToFollow}</p>
                 </div>
+
+                
 
                 <div className="info-section">
                   <h3 className="info-heading">{t.reception}</h3>
@@ -172,6 +161,20 @@ function Landing({ onBack }) {
                   <p className="info-dress-note">{t.cocktailAttireNote}</p>
                 </div>
 
+                <div className="info-section info-section-brunch">
+                  <h3 className="info-heading">{t.brunch}</h3>
+                  <p className="info-venue">{t.locationTBD}</p>
+                  <a 
+                    href="https://www.google.com/calendar/render?action=TEMPLATE&text=Brunch+-+Elizabeth+%26+Carlos+Wedding&dates=20260718T120000/20260718T140000&details=Brunch+for+Elizabeth+%26+Carlos+Wedding&location=Location+TBD"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="info-date info-date-link"
+                    data-tooltip={t.addToCalendar}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {language === 'es' ? 'Sábado, 18 de julio' : 'Saturday, July 18th'} <span className="info-time">{t.timeTBD}</span>
+                  </a>
+                </div>
                 
 
                 <p className="info-closing">{t.closing}</p>
