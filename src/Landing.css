@@ -231,7 +231,8 @@
 }
 
 .back-photo-card,
-.back-details-card {
+.back-details-card,
+.back-accommodations-card {
   position: absolute;
   top: 0;
   left: 0;
@@ -247,7 +248,8 @@
 }
 
 .back-photo-card.active,
-.back-details-card.active {
+.back-details-card.active,
+.back-accommodations-card.active {
   opacity: 1;
   pointer-events: all;
 }
@@ -359,6 +361,22 @@
   justify-content: center;
 }
 
+.back-accommodations-card {
+  padding: 30px 50px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  cursor: pointer;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.back-accommodations-card::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 .page-nav-button {
   position: absolute;
   top: 50%;
@@ -416,6 +434,21 @@
 
 .portrait .info-title {
   font-size: 1.6rem;
+  margin-bottom: 20px;
+}
+
+.info-subheader {
+  font-size: 1.2rem;
+  color: #5a4a3a;
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 400;
+  font-family: 'Georgia', serif;
+  grid-column: 1 / -1;
+}
+
+.portrait .info-subheader {
+  font-size: 1.1rem;
   margin-bottom: 20px;
 }
 
@@ -480,6 +513,7 @@
   color: #5a4a3a;
   font-weight: 500;
   margin-bottom: 6px;
+  display: block;
 }
 
 .info-date {
@@ -501,6 +535,34 @@
 .info-date-link:hover {
   color: #7a6a5a;
   text-decoration: underline;
+}
+
+.info-section-accommodations {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #d4c4b3;
+}
+
+.info-accommodation-link {
+  color: #5a4a3a;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  display: inline-block;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.info-accommodation-link:hover {
+  color: #7a6a5a;
+  text-decoration: underline;
+}
+
+.info-accommodation-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .info-address-container {
@@ -617,8 +679,8 @@
 }
 
 .invitation-hint {
-  color: #7a6a5a;
-  font-size: 0.9rem;
+  color: #3a2a1a;
+  font-size: 1.2rem;
   font-style: italic;
   margin-top: 10px;
 }
@@ -679,6 +741,18 @@
   }
 
   .back-details-card::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  .back-accommodations-card {
+    padding: 25px 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  .back-accommodations-card::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
   }
 

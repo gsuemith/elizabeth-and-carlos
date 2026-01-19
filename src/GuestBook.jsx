@@ -167,8 +167,17 @@ function GuestBook() {
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A'
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
+    // Parse the UTC timestamp - if no timezone indicator, assume UTC
+    let dateStringToParse = dateString
+    // If the string doesn't have timezone info (no 'Z', '+', or '-' after the time part), assume UTC
+    if (!dateString.endsWith('Z') && !dateString.match(/[+-]\d{2}:\d{2}$/)) {
+      // Append 'Z' to indicate UTC
+      dateStringToParse = dateString + 'Z'
+    }
+    // new Date() automatically converts UTC to local timezone
+    const date = new Date(dateStringToParse)
+    // toLocaleString formats in the user's local timezone and locale
+    return date.toLocaleString(undefined, { 
       year: 'numeric', 
       month: 'long', 
       day: 'numeric',

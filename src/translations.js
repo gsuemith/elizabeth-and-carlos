@@ -15,6 +15,10 @@ export const translations = {
     addToCalendar: 'Add to Calendar',
     locationTBD: 'Location TBD',
     timeTBD: 'Time TBD',
+    guestAccommodations: 'Guest Accommodations',
+    bookRoom: 'Book a Room at Lambuth Inn at Lake Junaluska',
+    bookHouse: 'Reserve an Entire House',
+    accommodationsNote: 'Rooms and houses are available for booking near Lake Junaluska.',
     // Dates
     thursday: 'Thursday',
     friday: 'Friday',
@@ -110,6 +114,10 @@ export const translations = {
     addToCalendar: 'Agregar al Calendario',
     locationTBD: 'Ubicación por determinar',
     timeTBD: 'Hora por determinar',
+    guestAccommodations: 'Alojamiento para Invitados',
+    bookRoom: 'Reservar una Habitación en Lambuth Inn en Lake Junaluska',
+    bookHouse: 'Reservar una Casa Completa',
+    accommodationsNote: 'Habitaciones y casas están disponibles para reservar cerca de Lake Junaluska.',
     // Dates
     thursday: 'Jueves',
     friday: 'Viernes',
