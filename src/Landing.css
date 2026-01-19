@@ -543,6 +543,16 @@
   border-top: 2px solid #d4c4b3;
 }
 
+.info-accommodation-image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  margin: 15px 0;
+  display: block;
+}
+
 .info-accommodation-link {
   color: #5a4a3a;
   text-decoration: none;
@@ -754,6 +764,11 @@
 
   .back-accommodations-card::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
+  }
+
+  .info-accommodation-image {
+    max-width: 100%;
+    margin: 12px 0;
   }
 
   .wedding-info {

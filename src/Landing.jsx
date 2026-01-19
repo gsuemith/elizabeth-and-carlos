@@ -194,6 +194,11 @@ function Landing({ onBack }) {
                 
                 <div className="info-section">
                   <h3 className="info-heading">{t.bookRoom}</h3>
+                  <img 
+                    src="https://www.reseze.net/cassets/mkt/1593/img/rmgrp_b2.jpg"
+                    alt="Lambuth Inn at Lake Junaluska"
+                    className="info-accommodation-image"
+                  />
                   <a 
                     href="https://www.reseze.net/servlet/SendPage?hotelid=1593&skipfirstpage=true&page=227394"
                     target="_blank"
@@ -207,6 +212,11 @@ function Landing({ onBack }) {
 
                 <div className="info-section">
                   <h3 className="info-heading">{t.bookHouse}</h3>
+                  <img 
+                    src="https://vacasa-units.imgix.net/6642016.jpg?w=1024&fit=max&q=40&auto=format"
+                    alt="Vacation rental house at Lake Junaluska"
+                    className="info-accommodation-image"
+                  />
                   <div className="info-accommodation-links">
                     <a 
                       href="https://www.vacasa.com/search?adults=2&arrival=07%2F16%2F2026&departure=07%2F19%2F2026&nights=2&place=/usa/North-Carolina/Lake-Junaluska/"
