@@ -16,7 +16,7 @@ export const translations = {
     locationTBD: 'Location TBD',
     timeTBD: 'Time TBD',
     guestAccommodations: 'Guest Accommodations',
-    bookRoom: 'Book a Room at Lambuth Inn at Lake Junaluska',
+    bookRoom: 'Book a Room at Lambuth Inn',
     bookHouse: 'Reserve an Entire House',
     accommodationsNote: 'Rooms and houses are available for booking near Lake Junaluska.',
     // Dates
@@ -71,6 +71,7 @@ export const translations = {
     saveTheDate: 'Save the Date',
     saveTheDateCard: 'Save the Date Card',
     guestBook: 'Guest Book',
+    registry: 'Registry',
     loadingMessages: 'Loading messages...',
     error: 'Error',
     writeUsANote: 'Write Us a Note',
@@ -115,7 +116,7 @@ export const translations = {
     locationTBD: 'Ubicación por determinar',
     timeTBD: 'Hora por determinar',
     guestAccommodations: 'Alojamiento para Invitados',
-    bookRoom: 'Reservar una Habitación en Lambuth Inn en Lake Junaluska',
+    bookRoom: 'Reservar una Habitación en Lambuth Inn',
     bookHouse: 'Reservar una Casa Completa',
     accommodationsNote: 'Habitaciones y casas están disponibles para reservar cerca de Lake Junaluska.',
     // Dates
@@ -170,6 +171,7 @@ export const translations = {
     saveTheDate: 'Reserve la Fecha',
     saveTheDateCard: 'Tarjeta de Reserve la Fecha',
     guestBook: 'Libro de Invitados',
+    registry: 'Registro',
     loadingMessages: 'Cargando mensajes...',
     error: 'Error',
     writeUsANote: 'Escríbenos una Nota',

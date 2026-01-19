@@ -45,6 +45,14 @@ function NavButtons({ onStoryClick, onSaveTheDateClick, onRSVPClick, onGuestBook
         >
           RSVP
         </button>
+        <a
+          href="https://www.zola.com/registry/elizabethandcarlosjuly17"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-button"
+        >
+          {t.registry}
+        </a>
         <button 
           className="nav-button"
           onClick={onToggleLanguage}
