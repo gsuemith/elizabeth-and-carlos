@@ -1,7 +1,8 @@
 .invitation-page {
   min-height: 100vh;
   background: transparent;
-  padding: 40px 20px;
+  padding: 40px 10px;
+  padding-top: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -230,7 +231,8 @@
 }
 
 .back-photo-card,
-.back-details-card {
+.back-details-card,
+.back-accommodations-card {
   position: absolute;
   top: 0;
   left: 0;
@@ -246,7 +248,8 @@
 }
 
 .back-photo-card.active,
-.back-details-card.active {
+.back-details-card.active,
+.back-accommodations-card.active {
   opacity: 1;
   pointer-events: all;
 }
@@ -358,6 +361,22 @@
   justify-content: center;
 }
 
+.back-accommodations-card {
+  padding: 30px 50px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  cursor: pointer;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.back-accommodations-card::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 .page-nav-button {
   position: absolute;
   top: 50%;
@@ -397,7 +416,7 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  gap: 10px;
   align-items: start;
   width: 100%;
 }
@@ -418,6 +437,21 @@
   margin-bottom: 20px;
 }
 
+.info-subheader {
+  font-size: 1.2rem;
+  color: #5a4a3a;
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 400;
+  font-family: 'Georgia', serif;
+  grid-column: 1 / -1;
+}
+
+.portrait .info-subheader {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
 .info-website {
   font-size: 1rem;
   color: #5a4a3a;
@@ -432,9 +466,14 @@
 }
 
 .info-section {
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #e8d5c4;
+  margin: 0 20px;
+  margin-bottom: 10px;
+  padding-top: 1em;
+  border-top: 1px solid #e8d5c4;
+}
+
+.info-section > *:last-child {
+  margin-bottom: 15px;
 }
 
 .ceremony-section {
@@ -445,13 +484,15 @@
 }
 
 .portrait .info-section {
-  margin-bottom: 20px;
-  padding-bottom: 15px;
+  padding: 0 10px;
+  margin-bottom: 10px;
+  padding-top: 1em;
 }
 
-.info-section:last-of-type {
-  border-bottom: 1px solid #e8d5c4;
+.portrait .info-section > *:last-child {
+  margin-bottom: 15px;
 }
+
 
 .info-heading {
   font-size: 1.3rem;
@@ -472,6 +513,7 @@
   color: #5a4a3a;
   font-weight: 500;
   margin-bottom: 6px;
+  display: block;
 }
 
 .info-date {
@@ -493,6 +535,44 @@
 .info-date-link:hover {
   color: #7a6a5a;
   text-decoration: underline;
+}
+
+.info-section-accommodations {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #d4c4b3;
+}
+
+.info-accommodation-image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  margin: 15px 0;
+  display: block;
+}
+
+.info-accommodation-link {
+  color: #5a4a3a;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  display: inline-block;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.info-accommodation-link:hover {
+  color: #7a6a5a;
+  text-decoration: underline;
+}
+
+.info-accommodation-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .info-address-container {
@@ -609,8 +689,8 @@
 }
 
 .invitation-hint {
-  color: #7a6a5a;
-  font-size: 0.9rem;
+  color: #3a2a1a;
+  font-size: 1.2rem;
   font-style: italic;
   margin-top: 10px;
 }
@@ -674,9 +754,39 @@
     display: none; /* Chrome, Safari, Opera */
   }
 
+  .back-accommodations-card {
+    padding: 25px 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  .back-accommodations-card::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  .info-accommodation-image {
+    max-width: 100%;
+    margin: 12px 0;
+  }
+
   .wedding-info {
     grid-template-columns: 1fr;
-    gap: 25px;
+    gap: 5px;
+  }
+
+  /* Reorder brunch to appear last in mobile view */
+  .info-section {
+    order: 1;
+  }
+
+  .info-section-brunch {
+    order: 4;
+  }
+
+  .info-closing {
+    order: 5;
   }
 
   .info-title {
@@ -1265,7 +1375,6 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 40px 20px;
   gap: 30px;
 }
 
@@ -1281,7 +1390,6 @@
   background: linear-gradient(135deg, #ffffff 0%, #ede5d8 100%);
   border-radius: 0;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-  padding: 40px;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -1294,19 +1402,20 @@
 
 .story-image-placeholder {
   width: 100%;
-  height: 500px;
-  aspect-ratio: 1;
-  overflow: hidden;
+  height: fit-content;
+  flex: 1;
+  overflow: visible;
   border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 0;
 }
 
 .story-image {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   border-radius: 8px;
   transition: transform 0.3s ease;
@@ -1385,7 +1494,6 @@
 
 @media (max-width: 768px) {
   .story-content-container {
-    padding: 15px 10px;
     gap: 15px;
   }
 
@@ -1395,15 +1503,14 @@
   }
 
   .story-card {
-    padding: 20px 15px;
     gap: 15px;
     width: 100%;
     box-sizing: border-box;
+    height: fit-content;
   }
 
   .story-image-placeholder {
-    height: 250px;
-    aspect-ratio: 1;
+    height: fit-content;
   }
 
   .story-content {
@@ -2082,13 +2189,13 @@
   border: none;
   border-radius: 0;
   padding: 15px 20px;
-  margin-bottom: 1.2em;
   display: inline-block;
   flex: 0 1 auto;
-  height: 300px;
+  height: calc(300px + 2em);
   position: relative;
   overflow: visible;
   vertical-align: top;
+  padding-top: 30px;
 }
 
 .guest-book-note-content {
@@ -2193,13 +2300,13 @@
 
 @media (max-width: 1200px) {
   .guest-book-notes {
-    gap: 20px 25px;
+    gap: 40px 25px;
   }
   
   .guest-book-note {
     min-width: 160px;
     max-width: 500px;
-    height: 280px;
+    height: calc(280px + 3em);
   }
 }
 

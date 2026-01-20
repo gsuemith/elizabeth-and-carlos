@@ -29,7 +29,7 @@ function NavButtons({ onStoryClick, onSaveTheDateClick, onRSVPClick, onGuestBook
           className="nav-button"
           onClick={onSaveTheDateClick}
         >
-          {t.saveTheDateCard}
+          {t.saveTheDate}
         </button>
         <button 
           className="nav-button"
@@ -45,6 +45,14 @@ function NavButtons({ onStoryClick, onSaveTheDateClick, onRSVPClick, onGuestBook
         >
           RSVP
         </button>
+        <a
+          href="https://www.zola.com/registry/elizabethandcarlosjuly17"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-button"
+        >
+          {t.registry}
+        </a>
         <button 
           className="nav-button"
           onClick={onToggleLanguage}
@@ -147,8 +155,8 @@ function AppContent() {
   const onTouchStart = (e) => {
     // Only enable swipe on mobile
     if (window.innerWidth > 768) return
-    // Don't trigger swipe if touching interactive elements (buttons, links, inputs)
-    if (e.target.closest('button') || e.target.closest('a') || e.target.closest('input') || e.target.closest('textarea') || e.target.closest('select')) {
+    // Don't trigger swipe if touching interactive elements (buttons, links, inputs) or image modal
+    if (e.target.closest('button') || e.target.closest('a') || e.target.closest('input') || e.target.closest('textarea') || e.target.closest('select') || e.target.closest('.story-image-modal-overlay') || e.target.closest('.story-image-modal')) {
       return
     }
     touchEndRef.current = null
@@ -225,8 +233,12 @@ function AppContent() {
       }
     }
     
-    // Handle swipes on Story page
+    // Handle swipes on Story page (but not when image modal is open)
     if (isSwipeRef.current && showStory) {
+      // Don't trigger swipe if touching the image modal
+      if (e.target.closest('.story-image-modal-overlay') || e.target.closest('.story-image-modal')) {
+        return
+      }
       if (isRightSwipe) {
         // Swipe right → Return to landing page
         e.preventDefault()
