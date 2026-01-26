@@ -198,8 +198,13 @@
   font-family: 'Georgia', serif;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  height: 48px;
+  box-sizing: border-box;
+  vertical-align: top;
 }
 
 .nav-button:hover {
