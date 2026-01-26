@@ -2,7 +2,7 @@
   min-height: 100vh;
   background: transparent;
   padding: 40px 10px;
-  padding-top: 70px;
+  padding-top: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,6 +11,16 @@
   overflow-x: hidden;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
+}
+
+@media (min-width: 769px) {
+  .invitation-page {
+    min-height: 100vh;
+    height: auto;
+    overflow-y: visible;
+    padding-bottom: 40px;
+    flex-shrink: 0;
+  }
 }
 
 .invitation-page::-webkit-scrollbar {
@@ -121,6 +131,14 @@
   width: 100%;
   background: transparent;
   box-shadow: none;
+}
+
+@media (min-width: 769px) {
+  .invitation-container {
+    min-height: calc(100vh - 80px);
+    padding-bottom: 40px;
+    flex: 0 0 auto;
+  }
 }
 
 .invitation-card {
