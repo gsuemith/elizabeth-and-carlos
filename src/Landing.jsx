@@ -7,7 +7,7 @@ function Landing({ onBack }) {
   const { language } = useLanguage()
   const t = translations[language]
   const [isOpen, setIsOpen] = useState(false)
-  const [backPage, setBackPage] = useState('photo') // 'photo', 'details', or 'accommodations'
+  const [backPage, setBackPage] = useState('accommodations') // 'photo', 'details', or 'accommodations'
   const photoCardRef = useRef(null)
 
   useEffect(() => {
@@ -47,9 +47,13 @@ function Landing({ onBack }) {
         <div 
           className={`invitation-card ${isOpen ? 'open' : ''}`}
           onClick={() => {
-            setIsOpen(!isOpen)
             if (!isOpen) {
-              setBackPage('details')
+              // Opening card: always start on accommodations
+              setBackPage('accommodations')
+              setIsOpen(true)
+            } else {
+              // Closing card
+              setIsOpen(false)
             }
           }}
         >
@@ -69,10 +73,70 @@ function Landing({ onBack }) {
           
           <div className="card-back">
             <div 
+              className={`back-accommodations-card ${backPage === 'accommodations' ? 'active' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                setBackPage('details')
+              }}
+            >
+              <div className="wedding-info">
+                <h2 className="info-title">{t.guestAccommodations}</h2>
+                <h3 className="info-subheader">{t.accommodationsNote}</h3>
+                
+                
+                <div className="info-section">
+                  <h3 className="info-heading">{t.bookRoom}</h3>
+                  <img 
+                    src="https://www.reseze.net/cassets/mkt/1593/img/rmgrp_b2.jpg"
+                    alt="Lambuth Inn at Lake Junaluska"
+                    className="info-accommodation-image"
+                  />
+                  <a 
+                    href="https://www.reseze.net/servlet/SendPage?hotelid=1593&skipfirstpage=true&page=227394"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="info-accommodation-link"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {t.bookRoom} →
+                  </a>
+                </div>
+
+                <div className="info-section">
+                  <h3 className="info-heading">{t.bookHouse}</h3>
+                  <img 
+                    src="https://vacasa-units.imgix.net/6642016.jpg?w=1024&fit=max&q=40&auto=format"
+                    alt="Vacation rental house at Lake Junaluska"
+                    className="info-accommodation-image"
+                  />
+                  <div className="info-accommodation-links">
+                    <a 
+                      href="https://www.vacasa.com/search?adults=2&arrival=07%2F16%2F2026&departure=07%2F19%2F2026&nights=2&place=/usa/North-Carolina/Lake-Junaluska/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="info-accommodation-link"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Vacasa →
+                    </a>
+                    <a 
+                      href="https://www.vrbo.com/search?destination=Lake+Junaluska%2C+North+Carolina%2C+United+States+of+America&regionId=6052328&latLong=35.525827%2C-82.970386&flexibility=1_DAY&d1=2026-07-17&startDate=2026-07-17&d2=2026-07-18&endDate=2026-07-18&adults=2"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="info-accommodation-link"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      VRBO →
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div 
               className={`back-details-card ${backPage === 'details' ? 'active' : ''}`}
               onClick={(e) => {
                 e.stopPropagation()
-                setBackPage('accommodations')
+                setBackPage('photo')
               }}
             >
               <div className="wedding-info">
@@ -178,66 +242,6 @@ function Landing({ onBack }) {
                 
 
                 <p className="info-closing">{t.closing}</p>
-              </div>
-            </div>
-            <div 
-              className={`back-accommodations-card ${backPage === 'accommodations' ? 'active' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation()
-                setBackPage('photo')
-              }}
-            >
-              <div className="wedding-info">
-                <h2 className="info-title">{t.guestAccommodations}</h2>
-                <h3 className="info-subheader">{t.accommodationsNote}</h3>
-                
-                
-                <div className="info-section">
-                  <h3 className="info-heading">{t.bookRoom}</h3>
-                  <img 
-                    src="https://www.reseze.net/cassets/mkt/1593/img/rmgrp_b2.jpg"
-                    alt="Lambuth Inn at Lake Junaluska"
-                    className="info-accommodation-image"
-                  />
-                  <a 
-                    href="https://www.reseze.net/servlet/SendPage?hotelid=1593&skipfirstpage=true&page=227394"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="info-accommodation-link"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {t.bookRoom} →
-                  </a>
-                </div>
-
-                <div className="info-section">
-                  <h3 className="info-heading">{t.bookHouse}</h3>
-                  <img 
-                    src="https://vacasa-units.imgix.net/6642016.jpg?w=1024&fit=max&q=40&auto=format"
-                    alt="Vacation rental house at Lake Junaluska"
-                    className="info-accommodation-image"
-                  />
-                  <div className="info-accommodation-links">
-                    <a 
-                      href="https://www.vacasa.com/search?adults=2&arrival=07%2F16%2F2026&departure=07%2F19%2F2026&nights=2&place=/usa/North-Carolina/Lake-Junaluska/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="info-accommodation-link"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      Vacasa →
-                    </a>
-                    <a 
-                      href="https://www.vrbo.com/search?destination=Lake+Junaluska%2C+North+Carolina%2C+United+States+of+America&regionId=6052328&latLong=35.525827%2C-82.970386&flexibility=1_DAY&d1=2026-07-17&startDate=2026-07-17&d2=2026-07-18&endDate=2026-07-18&adults=2"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="info-accommodation-link"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      VRBO →
-                    </a>
-                  </div>
-                </div>
               </div>
             </div>
             <div 
